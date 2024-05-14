@@ -1,0 +1,70 @@
+import 'package:flutter/material.dart';
+import 'package:lumin_business/common/app_colors.dart';
+import 'package:lumin_business/common/app_responsive.dart';
+import 'package:lumin_business/controllers/product_controller.dart';
+import 'package:provider/provider.dart';
+
+import 'widgets/calender_widget.dart';
+import 'widgets/header_widget.dart';
+import 'widgets/notification_card_widget.dart';
+import 'widgets/categories_card_widget.dart';
+import 'widgets/product_data_widget.dart';
+
+class Inventory extends StatefulWidget {
+  @override
+  _InventoryState createState() => _InventoryState();
+}
+
+class _InventoryState extends State<Inventory> {
+  @override
+  void initState() {
+    super.initState(); 
+    // Provider.of<ProductController>(context, listen: false).fetchProducts(); 
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.all(10),
+      padding: EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: AppColor.bgColor,
+        borderRadius: BorderRadius.circular(30),
+      ),
+      child: Column(
+        children: [
+          HeaderWidget(), //done
+          Expanded(
+            child: SingleChildScrollView(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: Container(
+                      child: Column(
+                        children: [
+                          NotificationCardWidget(),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          if (AppResponsive.isMobile(context)) ...{
+                            OrderWidget(),
+                            SizedBox(
+                              height: 20,
+                            ),
+                          },
+                          ProductDataWidget(),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
