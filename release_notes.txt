@@ -1,0 +1,17 @@
+Lumin Business Version 1.0.1 Release Notes 
+
+Greetings from Lumin!
+
+We're excited to announce the release of Version 1.0.1 of Lumin Business. 
+You can explore the platform via: [Lumin Business](https://lumin.business/#/sign-in)
+
+Here's what's new:
+- Daily orders are updated in real-time and can be viewed on the side panel.
+- Daily sales is updated in real-time and can be viewed on the side panel.
+- Initial implementation of access control (admin and regular roles)
+
+A full list of the features available in this release can be viewed by tapping the megaphone icon (📢) by the "Inventory" heading
+
+As always, we value your feedback! Share your thoughts on features, refinement and bugs via email (allen@luminllc.com).
+
+Happy testing!
