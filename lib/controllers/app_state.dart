@@ -48,7 +48,6 @@ class AppState with ChangeNotifier {
     );
 
     fetchBusiness(user!.businessId);
-
     notifyListeners();
   }
 
