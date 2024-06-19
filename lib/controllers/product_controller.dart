@@ -1,12 +1,13 @@
-import 'package:cloud_firestore/cloud_firestore.dart'; 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:lumin_business/models/category.dart'; 
+import 'package:lumin_business/models/category.dart';
 import 'package:lumin_business/models/product.dart';
 
 class ProductController with ChangeNotifier {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  String? selectedCategory;
   Map<Product, int> openOrder = {};
   String? quantityError;
   bool isProductFetched = false;
@@ -17,6 +18,11 @@ class ProductController with ChangeNotifier {
   List<Product> searchResults = [];
   List<ProductCategory> productCategories = [];
 
+  void setSelectedCategory(String category) {
+    selectedCategory = category;
+    notifyListeners();
+  }
+
   searchProduct(String query) {
     searchResults = allProdcuts
         .where((element) =>
@@ -25,19 +31,20 @@ class ProductController with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> addProduct(Product p, String businessID) async {
+  Future<void> addProduct(
+      Product p, String businessID, String productCode) async {
+    // String productCode = generateProductCode(categoryCode, p);
     try {
       await _firestore
           .collection('businesses')
           .doc(businessID)
-          .collection("inventory")
-          .doc("all_products")
-          .update({
-        p.category: FieldValue.arrayUnion([
-          {
-            p.name: {"id": p.id, "qty": p.quantity, "unit_price": p.unitPrice}
-          }
-        ])
+          .collection("products")
+          .doc(productCode)
+          .set({
+        "name": p.name,
+        "quantity": p.quantity,
+        "category": p.category,
+        "unitPrice": p.unitPrice
       });
       allProdcuts.add(p);
     } catch (e) {
@@ -206,13 +213,15 @@ class ProductController with ChangeNotifier {
     return categories.length;
   }
 
-  createNewCategory(ProductCategory c, String businessID) async {
-    _firestore
+  Future<String> createNewCategory(String c, String businessID) async {
+    String newCategory = generateCategoryCode(c, _getCategoryCount());
+    await _firestore
         .collection('businesses')
         .doc(businessID)
         .collection("product_categories")
-        .doc(c.name)
-        .set({"code": generateCategoryCode(c.name, _getCategoryCount())});
+        .doc(c)
+        .set({"code": newCategory});
+    return newCategory;
   }
 
   String getCategoryCode(Product p) {

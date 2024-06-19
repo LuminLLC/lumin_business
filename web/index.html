@@ -26,24 +26,26 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="Lumin Business">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
-
+  <link rel="stylesheet" type="text/css" href="./style.css">
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png" />
 
   <title>Lumin Business</title>
   <link rel="manifest" href="manifest.json">
 
-  <script>
-    // The value below is injected by flutter build, do not touch.
-    const serviceWorkerVersion = null;
-  </script>
-  <!-- This script adds the flutter initialization JS code -->
-  <script src="flutter.js" defer></script>
+
 </head>
 
 <body>
-  <script>
-    var firebaseConfig = {
+  <img src="img/logo.png" class="splash-image" />
+  <script src="flutter_bootstrap.js" async></script>
+
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+
+    const firebaseConfig = {
       apiKey: "AIzaSyB6Vg6taakUfEj2uqs1HAdFg_uG4_J7aeQ",
       authDomain: "lumin-business.firebaseapp.com",
       projectId: "lumin-business",
@@ -51,22 +53,12 @@
       messagingSenderId: "464928903616",
       appId: "1:464928903616:web:739a12155d82eef89d7825"
     };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
   </script>
-  <script>
-    window.addEventListener('load', function (ev) {
-      // Download main.dart.js
-      _flutter.loader.loadEntrypoint({
-        serviceWorker: {
-          serviceWorkerVersion: serviceWorkerVersion,
-        },
-        onEntrypointLoaded: function (engineInitializer) {
-          engineInitializer.initializeEngine().then(function (appRunner) {
-            appRunner.runApp();
-          });
-        }
-      });
-    });
-  </script>
+
 </body>
 
 </html>

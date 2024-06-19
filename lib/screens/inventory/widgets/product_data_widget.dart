@@ -4,7 +4,7 @@ import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/controllers/app_state.dart';
 import 'package:lumin_business/controllers/product_controller.dart';
 import 'package:lumin_business/models/product.dart';
-import 'package:lumin_business/screens/inventory/widgets/new_product.dart';
+import 'package:lumin_business/widgets/new_product.dart';
 import 'package:lumin_business/widgets/open_order.dart';
 import 'package:lumin_business/widgets/lumin_texticon_button.dart';
 import 'package:lumin_business/widgets/product_list_tile.dart';
@@ -71,19 +71,20 @@ class _ProductDataWidgetState extends State<ProductDataWidget> {
                               icon: Icon(Icons.shopping_bag),
                             )
                           : SizedBox(),
-                      // LuminTextIconButton(
-                      //   text: "Add Product",
-                      //   onPressed: () {
-                      //     showDialog(
-                      //         context: context,
-                      //         builder: (context) {
-                      //           return NewProduct(
-                      //             productController: productController,
-                      //           );
-                      //         });
-                      //   },
-                      //   icon: Icons.add,
-                      // ),
+                      LuminTextIconButton(
+                        text: "Add Product",
+                        onPressed: () {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return NewProduct(
+                                  appState: appState,
+                                  productController: productController,
+                                );
+                              });
+                        },
+                        icon: Icons.add,
+                      ),
                       SizedBox(
                         width: sp.getWidth(20, width),
                       ),
