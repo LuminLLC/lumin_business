@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage> {
             /// Main Body Part
             Expanded(
                 // width: screenWidth *0.8,
-                child: Inventory()),
+                child: PageView(children: [Inventory()])),
           ],
         ),
       ),

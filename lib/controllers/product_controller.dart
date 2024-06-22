@@ -5,24 +5,85 @@ import 'package:intl/intl.dart';
 import 'package:lumin_business/models/category.dart';
 import 'package:lumin_business/models/product.dart';
 
+List<Product> dummyProductData = [
+  Product(
+      id: "id",
+      name: "name",
+      quantity: 20,
+      category: "category",
+      unitPrice: 1.2),
+  Product(
+      id: "id",
+      name: "name",
+      quantity: 20,
+      category: "category",
+      unitPrice: 1.2),
+  Product(
+      id: "id",
+      name: "name",
+      quantity: 20,
+      category: "category",
+      unitPrice: 1.2),
+  Product(
+      id: "id",
+      name: "name",
+      quantity: 20,
+      category: "category",
+      unitPrice: 1.2),
+  Product(
+      id: "id",
+      name: "name",
+      quantity: 20,
+      category: "category",
+      unitPrice: 1.2),
+  Product(
+      id: "id",
+      name: "name",
+      quantity: 20,
+      category: "category",
+      unitPrice: 1.2),
+  Product(
+      id: "id",
+      name: "name",
+      quantity: 20,
+      category: "category",
+      unitPrice: 1.2),
+  Product(
+      id: "id",
+      name: "name",
+      quantity: 20,
+      category: "category",
+      unitPrice: 1.2),
+  Product(
+      id: "id",
+      name: "name",
+      quantity: 20,
+      category: "category",
+      unitPrice: 1.2),
+  Product(
+      id: "id",
+      name: "name",
+      quantity: 20,
+      category: "category",
+      unitPrice: 1.2),
+];
+
 class ProductController with ChangeNotifier {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   String? selectedCategory;
   Map<Product, int> openOrder = {};
   String? quantityError;
-  bool isProductFetched = false;
+  bool isProductFetched = true; //TODO: put this back to true
 
-  List<Product> allProdcuts = [];
+  List<Product> allProdcuts = dummyProductData;
   List<ProductCategory> categories = [];
-  Map<String, List<Product>> productMap = {}; 
+  Map<String, List<Product>> productMap = {};
   List<ProductCategory> productCategories = [];
 
   void setSelectedCategory(String category) {
     selectedCategory = category;
     notifyListeners();
   }
-
-   
 
   Future<void> addProduct(
       Product p, String businessID, String productCode) async {

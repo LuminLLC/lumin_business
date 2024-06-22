@@ -42,15 +42,7 @@ class _HeaderWidgetState extends State<HeaderWidget> {
                   fontWeight: FontWeight.bold,
                   color: Colors.black),
             ),
-            IconButton(
-              onPressed: () {
-                showDialog(
-                    context: context,
-                    builder: ((context) => ReleaseNotesWidget()));
-              },
-              icon: Icon(Icons.campaign),
-              color: Colors.grey,
-            ),
+          
             if (!AppResponsive.isMobile(context)) ...{
               Spacer(),
               Row(

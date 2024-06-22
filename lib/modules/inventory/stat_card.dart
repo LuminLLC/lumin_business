@@ -22,7 +22,7 @@ class StatCardWidget extends StatelessWidget {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
     return Container(
-      width: screenWidth / 5.5,
+      width: (screenWidth - (screenWidth * 0.15)) / 4.5,
       decoration: BoxDecoration(
           color: AppColor.yellow, borderRadius: BorderRadius.circular(20)),
       padding: EdgeInsets.all(20),
@@ -33,8 +33,7 @@ class StatCardWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(statName,
-                  style:
-                      TextStyle(fontSize: sp.getFontSize(18, screenWidth))),
+                  style: TextStyle(fontSize: sp.getFontSize(18, screenWidth))),
               SizedBox(
                 height: sp.getHeight(10, screenHeight, screenWidth),
               ),
@@ -52,8 +51,7 @@ class StatCardWidget extends StatelessWidget {
             Spacer(),
             Icon(
               icon,
-              size: sp.getWidth(50
-              , screenWidth),
+              size: sp.getWidth(50, screenWidth),
               color: Colors.yellow,
             )
           }

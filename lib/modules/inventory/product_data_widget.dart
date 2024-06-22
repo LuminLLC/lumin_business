@@ -41,8 +41,7 @@ class _ProductDataWidgetState extends State<ProductDataWidget> {
     return Consumer2<ProductController, AppState>(
       builder: (context, productController, appState, _) => Container(
         decoration: BoxDecoration(
-            color: !productController.isProductFetched ? null : AppColor.white,
-            borderRadius: BorderRadius.circular(20)),
+            color: AppColor.white, borderRadius: BorderRadius.circular(20)),
         padding: EdgeInsets.all(20),
         child: !productController.isProductFetched
             ? Column(
@@ -56,7 +55,7 @@ class _ProductDataWidgetState extends State<ProductDataWidget> {
             : Column(
                 children: [
                   Padding(
-                    padding: EdgeInsets.only(bottom: 25),
+                    padding:   EdgeInsets.only(bottom: sp.getHeight(15, height, width)),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -131,16 +130,16 @@ class _ProductDataWidgetState extends State<ProductDataWidget> {
                     ),
                   ),
                   SizedBox(
-                    height: height / 1.75,
+                       height: height * 0.6,
                     child: ListView.separated(
-                        shrinkWrap: true,
+                      shrinkWrap: true,
                         padding: EdgeInsets.zero,
                         itemBuilder: (context, index) {
                           //TODO: move this function out of widget tree and factor in different filter options
                           productController.allProdcuts.sort((a, b) => a.name
                               .toLowerCase()
                               .compareTo(b.name.toLowerCase())); //
-
+                    
                           return ProductListTile(
                             product: searchText.isEmpty
                                 ? productController.allProdcuts[index]
@@ -152,7 +151,7 @@ class _ProductDataWidgetState extends State<ProductDataWidget> {
                           );
                         },
                         separatorBuilder: (context, index) => Divider(
-                              color: Colors.grey[100],
+                              color: Colors.grey[300],
                             ),
                         itemCount: searchText.isEmpty
                             ? productController.allProdcuts.length
