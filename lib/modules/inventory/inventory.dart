@@ -4,11 +4,11 @@ import 'package:lumin_business/common/app_responsive.dart';
 import 'package:lumin_business/controllers/product_controller.dart';
 import 'package:provider/provider.dart';
 
-import 'widgets/calender_widget.dart';
-import 'widgets/header_widget.dart';
-import 'widgets/stat_card.dart';
-import 'widgets/categories_card_widget.dart';
-import 'widgets/product_data_widget.dart';
+import 'calender_widget.dart';
+import 'header_widget.dart';
+import 'stat_card.dart';
+import 'categories_card_widget.dart';
+import 'product_data_widget.dart';
 
 class Inventory extends StatefulWidget {
   @override
@@ -27,11 +27,13 @@ class _InventoryState extends State<Inventory> {
     return Consumer<ProductController>(
         builder: (context, productController, _) {
       return Container(
-        margin: EdgeInsets.all(10),
-        padding: EdgeInsets.all(10),
+        margin: AppResponsive.isDesktop(context) ? EdgeInsets.all(10) : null,
+        padding: AppResponsive.isDesktop(context) ? EdgeInsets.all(10) : null,
         decoration: BoxDecoration(
           color: AppColor.bgColor,
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: AppResponsive.isDesktop(context)
+              ? BorderRadius.circular(30)
+              : null,
         ),
         child: Column(
           children: [

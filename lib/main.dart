@@ -6,7 +6,7 @@ import 'package:lumin_business/controllers/app_state.dart';
 import 'package:lumin_business/controllers/menu_controller.dart';
 import 'package:lumin_business/controllers/product_controller.dart';
 import 'package:provider/provider.dart';
-import 'screens/home_page.dart';
+import 'modules/general_platform/home_page.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -84,8 +84,6 @@ class LuminBusiness extends StatelessWidget {
             ],
           );
         },
-
-        // '/': (context) => const HomePage(),
       },
       initialRoute: '/sign-in',
     );

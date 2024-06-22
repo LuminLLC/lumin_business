@@ -10,6 +10,12 @@ class AppState with ChangeNotifier {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   Business? businessInfo;
   LuminUser? user;
+  int index = 0;
+
+  void setIndex(int i) {
+    index = i;
+    notifyListeners();
+  }
 
   Future<void> fetchBusiness(String businessID) async {
     DocumentSnapshot<Map<String, dynamic>> temp =
