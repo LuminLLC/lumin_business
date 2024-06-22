@@ -1,5 +1,19 @@
 {
   "projects": {
     "default": "lumin-business"
-  }
+  },
+  "targets": {
+    "lumin-business": {
+      "hosting": {
+        "default": [
+          "lumin-business"
+        ],
+        "staging-lumin-business": [
+          "staging-lumin-business"
+        ]
+      }
+    }
+  },
+  "etags": {},
+  "dataconnectEmulatorConfig": {}
 }
