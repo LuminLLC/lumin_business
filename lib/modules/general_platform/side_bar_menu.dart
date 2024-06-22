@@ -157,7 +157,7 @@ class _MenuState extends State<Menu> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
+                  Container( 
                     margin: EdgeInsets.symmetric(horizontal: 20, vertical: 50),
                     child: Text(
                       appState.businessInfo == null ||
