@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lumin_business/common/app_colors.dart';
 import 'package:lumin_business/common/app_responsive.dart';
@@ -16,7 +17,8 @@ class Menu extends StatefulWidget {
 class _MenuState extends State<Menu> {
   final SizeAndSpacing sp = SizeAndSpacing();
   bool isSigningOut = false;
-  List<Widget> menuItems = [];
+  List<dynamic> menuItems = [];
+  List<BottomNavigationBarItem> menuItemsTabAndMobile = [];
 
   @override
   void initState() {
@@ -25,7 +27,7 @@ class _MenuState extends State<Menu> {
 
   void _getMenuItems(BuildContext context, AppState appState) {
     menuItems = [
-      menuItem(
+      menuItemDesktop(
         title: "Dashboard",
         context: context,
         icon: Icon(Icons.home),
@@ -35,7 +37,7 @@ class _MenuState extends State<Menu> {
           appState.setIndex(0);
         },
       ),
-      menuItem(
+      menuItemDesktop(
         title: "Accounts",
         context: context,
         icon: Icon(FontAwesomeIcons.cashRegister),
@@ -45,7 +47,7 @@ class _MenuState extends State<Menu> {
           appState.setIndex(1);
         },
       ),
-      menuItem(
+      menuItemDesktop(
         title: "Inventory",
         context: context,
         icon: Icon(FontAwesomeIcons.store),
@@ -55,7 +57,7 @@ class _MenuState extends State<Menu> {
           appState.setIndex(2);
         },
       ),
-      menuItem(
+      menuItemDesktop(
         title: "Customers",
         context: context,
         icon: Icon(FontAwesomeIcons.person),
@@ -65,7 +67,7 @@ class _MenuState extends State<Menu> {
           appState.setIndex(3);
         },
       ),
-      menuItem(
+      menuItemDesktop(
         title: "Suppliers",
         context: context,
         icon: Icon(FontAwesomeIcons.peopleCarryBox),
@@ -75,7 +77,7 @@ class _MenuState extends State<Menu> {
           appState.setIndex(4);
         },
       ),
-      menuItem(
+      menuItemDesktop(
         title: "Settings",
         context: context,
         appState: appState,
@@ -85,6 +87,59 @@ class _MenuState extends State<Menu> {
           appState.setIndex(5);
         },
       )
+    ];
+
+    menuItemsTabAndMobile = [
+      menuItemTabAndMobile(
+        title: "Dashboard",
+        context: context,
+        icon: Icon(Icons.home),
+        hasTrailing: true,
+        appState: appState,
+        press: () {
+          appState.setIndex(0);
+        },
+      ),
+      menuItemTabAndMobile(
+        title: "Accounts",
+        context: context,
+        icon: Icon(FontAwesomeIcons.cashRegister),
+        hasTrailing: true,
+        appState: appState,
+        press: () {
+          appState.setIndex(1);
+        },
+      ),
+      menuItemTabAndMobile(
+        title: "Inventory",
+        context: context,
+        icon: Icon(FontAwesomeIcons.store),
+        hasTrailing: true,
+        appState: appState,
+        press: () {
+          appState.setIndex(2);
+        },
+      ),
+      menuItemTabAndMobile(
+        title: "Customers",
+        context: context,
+        icon: Icon(FontAwesomeIcons.person),
+        hasTrailing: true,
+        appState: appState,
+        press: () {
+          appState.setIndex(3);
+        },
+      ),
+      menuItemTabAndMobile(
+        title: "Suppliers",
+        context: context,
+        icon: Icon(FontAwesomeIcons.peopleCarryBox),
+        hasTrailing: true,
+        appState: appState,
+        press: () {
+          appState.setIndex(4);
+        },
+      ),
     ];
   }
 
@@ -96,12 +151,7 @@ class _MenuState extends State<Menu> {
     return Consumer<AppState>(builder: (context, appState, _) {
       _getMenuItems(context, appState);
       return !AppResponsive.isDesktop(context)
-          ? BottomNavigationBar(items: [
-              BottomNavigationBarItem(icon: Icon(Icons.abc), label: "Some"),
-              BottomNavigationBarItem(icon: Icon(Icons.abc), label: "Some"),
-              BottomNavigationBarItem(icon: Icon(Icons.abc), label: "Some"),
-              BottomNavigationBarItem(icon: Icon(Icons.abc), label: "Some")
-            ])
+          ? BottomNavigationBar(items: menuItemsTabAndMobile)
           : Container(
               color: AppColor.bgSideMenu,
               child: Column(
@@ -152,7 +202,7 @@ class _MenuState extends State<Menu> {
                   Spacer(),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 15),
-                    child: menuItem(
+                    child: menuItemDesktop(
                       title: "Logout",
                       context: context,
                       appState: appState,
@@ -192,7 +242,7 @@ class _MenuState extends State<Menu> {
                   //       )
                   //     : SizedBox(),
                   appState.user != null && appState.user!.access == "admin"
-                      ? menuItem(
+                      ? menuItemDesktop(
                           title: "Order History",
                           context: context,
                           appState: appState,
@@ -302,7 +352,18 @@ class _MenuState extends State<Menu> {
     });
   }
 
-  Widget menuItem(
+  BottomNavigationBarItem menuItemTabAndMobile(
+      {required String title,
+      required Icon icon,
+      required VoidCallback press,
+      required AppState appState,
+      required BuildContext context,
+      required bool hasTrailing}) {
+    return BottomNavigationBarItem(
+        icon: icon, label: title, backgroundColor: Colors.white);
+  }
+
+  Widget menuItemDesktop(
       {required String title,
       required Icon icon,
       required VoidCallback press,
