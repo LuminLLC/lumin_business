@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:lumin_business/controllers/product_controller.dart';
 import 'package:lumin_business/models/business.dart';
 import 'package:lumin_business/models/lumin_user.dart';
-import 'package:lumin_business/models/product.dart';
 import 'package:provider/provider.dart';
 
 class AppState with ChangeNotifier {
@@ -29,7 +28,6 @@ class AppState with ChangeNotifier {
     );
     print(businessInfo!.accounts);
     user!.access = businessInfo!.accounts[user!.email];
-
     notifyListeners();
   }
 

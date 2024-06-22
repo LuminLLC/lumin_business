@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 
 import 'widgets/calender_widget.dart';
 import 'widgets/header_widget.dart';
-import 'widgets/notification_card_widget.dart';
+import 'widgets/stat_card.dart';
 import 'widgets/categories_card_widget.dart';
 import 'widgets/product_data_widget.dart';
 
@@ -18,24 +18,25 @@ class Inventory extends StatefulWidget {
 class _InventoryState extends State<Inventory> {
   @override
   void initState() {
-    super.initState(); 
-    // Provider.of<ProductController>(context, listen: false).fetchProducts(); 
+    super.initState();
+    // Provider.of<ProductController>(context, listen: false).fetchProducts();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.all(10),
-      padding: EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: AppColor.bgColor,
-        borderRadius: BorderRadius.circular(30),
-      ),
-      child: Column(
-        children: [
-          HeaderWidget(), //done
-          Expanded(
-            child: SingleChildScrollView(
+    return Consumer<ProductController>(
+        builder: (context, productController, _) {
+      return Container(
+        margin: EdgeInsets.all(10),
+        padding: EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: AppColor.bgColor,
+          borderRadius: BorderRadius.circular(30),
+        ),
+        child: Column(
+          children: [
+            HeaderWidget(), //module name
+            Expanded(
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -44,7 +45,38 @@ class _InventoryState extends State<Inventory> {
                     child: Container(
                       child: Column(
                         children: [
-                          NotificationCardWidget(),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              StatCardWidget(
+                                statName: "Inventory Count",
+                                value:
+                                    "${productController.allProdcuts.length}",
+                                icon: Icons.inventory,
+                              ),
+                              Spacer(),
+                              StatCardWidget(
+                                statName: "Today's Sales",
+                                value:
+                                    "GHS${productController.calculateOutofStock()}",
+                                icon: Icons.attach_money,
+                              ),
+                              Spacer(),
+                              StatCardWidget(
+                                statName: "Critical Level",
+                                value:
+                                    "GHS${productController.calculateOutofStock()}",
+                                icon: Icons.warning,
+                              ),
+                              Spacer(),
+                              StatCardWidget(
+                                statName: "Out of Stock",
+                                value:
+                                    "GHS${productController.calculateOutofStock()}",
+                                icon: Icons.check_box_outline_blank_sharp,
+                              ),
+                            ],
+                          ),
                           SizedBox(
                             height: 20,
                           ),
@@ -62,9 +94,9 @@ class _InventoryState extends State<Inventory> {
                 ],
               ),
             ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
+    });
   }
 }

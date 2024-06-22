@@ -14,8 +14,7 @@ class ProductController with ChangeNotifier {
 
   List<Product> allProdcuts = [];
   List<ProductCategory> categories = [];
-  Map<String, List<Product>> productMap = {};
-  List<Product> searchResults = [];
+  Map<String, List<Product>> productMap = {}; 
   List<ProductCategory> productCategories = [];
 
   void setSelectedCategory(String category) {
@@ -23,13 +22,7 @@ class ProductController with ChangeNotifier {
     notifyListeners();
   }
 
-  searchProduct(String query) {
-    searchResults = allProdcuts
-        .where((element) =>
-            element.name.toLowerCase().contains(query.toLowerCase()))
-        .toList();
-    notifyListeners();
-  }
+   
 
   Future<void> addProduct(
       Product p, String businessID, String productCode) async {
