@@ -13,8 +13,10 @@ class AppState with ChangeNotifier {
   int index = 0;
 
   void setIndex(int i) {
-    index = i;
-    notifyListeners();
+    if (index != i) {
+      index = i;
+      notifyListeners();
+    }
   }
 
   Future<void> fetchBusiness(String businessID) async {

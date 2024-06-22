@@ -20,7 +20,7 @@ class _HomePageState extends State<HomePage> {
     // final double screenHeight = MediaQuery.of(context).size.height;
     print(sp.isDesktop(screenWidth));
     return Scaffold(
-      bottomNavigationBar: AppResponsive.isDesktop(context) ? null : SideBar(),
+      bottomNavigationBar: AppResponsive.isDesktop(context) ? null : Menu(),
       key: Provider.of<PlatformMenuController>(context, listen: false)
           .scaffoldKey,
       backgroundColor: AppColor.bgSideMenu,
@@ -29,7 +29,7 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (AppResponsive.isDesktop(context))
-              Container(width: screenWidth * 0.15, child: SideBar()),
+              Container(width: screenWidth * 0.15, child: Menu()),
 
             /// Main Body Part
             Expanded(

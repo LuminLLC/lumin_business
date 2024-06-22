@@ -8,12 +8,12 @@ import 'package:lumin_business/controllers/app_state.dart';
 import 'package:lumin_business/controllers/product_controller.dart';
 import 'package:provider/provider.dart';
 
-class SideBar extends StatefulWidget {
+class Menu extends StatefulWidget {
   @override
-  _SideBarState createState() => _SideBarState();
+  _MenuState createState() => _MenuState();
 }
 
-class _SideBarState extends State<SideBar> {
+class _MenuState extends State<Menu> {
   final SizeAndSpacing sp = SizeAndSpacing();
   bool isSigningOut = false;
   List<Widget> menuItems = [];
@@ -23,50 +23,67 @@ class _SideBarState extends State<SideBar> {
     super.initState();
   }
 
-  void _getMenuItems(BuildContext context) {
+  void _getMenuItems(BuildContext context, AppState appState) {
     menuItems = [
       menuItem(
         title: "Dashboard",
         context: context,
         icon: Icon(Icons.home),
-        // trailing: Text("Coming Soon"),
         hasTrailing: true,
-        press: () {},
+        appState: appState,
+        press: () {
+          appState.setIndex(0);
+        },
       ),
       menuItem(
         title: "Accounts",
         context: context,
         icon: Icon(FontAwesomeIcons.cashRegister),
         hasTrailing: true,
-        press: () {},
+        appState: appState,
+        press: () {
+          appState.setIndex(1);
+        },
       ),
       menuItem(
         title: "Inventory",
         context: context,
         icon: Icon(FontAwesomeIcons.store),
         hasTrailing: true,
-        press: () {},
+        appState: appState,
+        press: () {
+          appState.setIndex(2);
+        },
       ),
       menuItem(
         title: "Customers",
         context: context,
         icon: Icon(FontAwesomeIcons.person),
         hasTrailing: true,
-        press: () {},
+        appState: appState,
+        press: () {
+          appState.setIndex(3);
+        },
       ),
       menuItem(
         title: "Suppliers",
         context: context,
         icon: Icon(FontAwesomeIcons.peopleCarryBox),
         hasTrailing: true,
-        press: () {},
+        appState: appState,
+        press: () {
+          appState.setIndex(4);
+        },
       ),
       menuItem(
         title: "Settings",
         context: context,
+        appState: appState,
         icon: Icon(Icons.settings),
         hasTrailing: true,
-        press: () {},
+        press: () {
+          appState.setIndex(5);
+        },
       )
     ];
   }
@@ -77,7 +94,7 @@ class _SideBarState extends State<SideBar> {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
     return Consumer<AppState>(builder: (context, appState, _) {
-      _getMenuItems(context);
+      _getMenuItems(context, appState);
       return !AppResponsive.isDesktop(context)
           ? BottomNavigationBar(items: [
               BottomNavigationBarItem(icon: Icon(Icons.abc), label: "Some"),
@@ -138,6 +155,7 @@ class _SideBarState extends State<SideBar> {
                     child: menuItem(
                       title: "Logout",
                       context: context,
+                      appState: appState,
                       hasTrailing: false,
                       icon: Icon(
                         FontAwesomeIcons.arrowRightFromBracket,
@@ -177,6 +195,7 @@ class _SideBarState extends State<SideBar> {
                       ? menuItem(
                           title: "Order History",
                           context: context,
+                          appState: appState,
                           icon: Icon(Icons.list),
                           hasTrailing: false,
                           press: () {},
@@ -287,6 +306,7 @@ class _SideBarState extends State<SideBar> {
       {required String title,
       required Icon icon,
       required VoidCallback press,
+      required AppState appState,
       required BuildContext context,
       required bool hasTrailing}) {
     final double screenWidth = MediaQuery.of(context).size.width;
