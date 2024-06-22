@@ -162,7 +162,7 @@ class _MenuState extends State<Menu> {
                     child: Text(
                       appState.businessInfo == null ||
                               appState.businessInfo!.businessName == ""
-                          ? "Lumin Business"
+                          ? "Lumin Business "
                           : appState.businessInfo!.businessName,
                       style: AppTextTheme.textTheme.headlineLarge,
                     ),
