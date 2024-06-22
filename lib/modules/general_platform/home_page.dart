@@ -5,7 +5,7 @@ import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:provider/provider.dart';
 import '../../controllers/menu_controller.dart';
 import '../inventory/inventory.dart';
-import 'side_bar_menu.dart';
+import 'menu.dart';
 
 class HomePage extends StatefulWidget {
   @override

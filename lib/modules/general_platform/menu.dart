@@ -96,9 +96,6 @@ class _MenuState extends State<Menu> {
         icon: Icon(Icons.home),
         hasTrailing: true,
         appState: appState,
-        press: () {
-          appState.setIndex(0);
-        },
       ),
       menuItemTabAndMobile(
         title: "Accounts",
@@ -106,9 +103,6 @@ class _MenuState extends State<Menu> {
         icon: Icon(FontAwesomeIcons.cashRegister),
         hasTrailing: true,
         appState: appState,
-        press: () {
-          appState.setIndex(1);
-        },
       ),
       menuItemTabAndMobile(
         title: "Inventory",
@@ -116,9 +110,6 @@ class _MenuState extends State<Menu> {
         icon: Icon(FontAwesomeIcons.store),
         hasTrailing: true,
         appState: appState,
-        press: () {
-          appState.setIndex(2);
-        },
       ),
       menuItemTabAndMobile(
         title: "Customers",
@@ -126,9 +117,6 @@ class _MenuState extends State<Menu> {
         icon: Icon(FontAwesomeIcons.person),
         hasTrailing: true,
         appState: appState,
-        press: () {
-          appState.setIndex(3);
-        },
       ),
       menuItemTabAndMobile(
         title: "Suppliers",
@@ -136,9 +124,6 @@ class _MenuState extends State<Menu> {
         icon: Icon(FontAwesomeIcons.peopleCarryBox),
         hasTrailing: true,
         appState: appState,
-        press: () {
-          appState.setIndex(4);
-        },
       ),
     ];
   }
@@ -151,13 +136,30 @@ class _MenuState extends State<Menu> {
     return Consumer<AppState>(builder: (context, appState, _) {
       _getMenuItems(context, appState);
       return !AppResponsive.isDesktop(context)
-          ? BottomNavigationBar(items: menuItemsTabAndMobile)
+          ? BottomNavigationBar(
+              items: menuItemsTabAndMobile,
+              onTap: (index) => appState.setIndex(index),
+              currentIndex: appState.index,
+              backgroundColor: AppColor.bgSideMenu,
+              showUnselectedLabels: true,
+              type: BottomNavigationBarType.shifting,
+              showSelectedLabels: true,
+              iconSize: sp.getWidth(15, screenWidth),
+              selectedItemColor: Colors.white,
+              unselectedItemColor: Colors.white,
+              selectedLabelStyle: AppTextTheme.textTheme.labelSmall!.copyWith(
+                color: Colors.white,
+              ),
+              unselectedLabelStyle: AppTextTheme.textTheme.labelSmall!.copyWith(
+                color: Colors.white,
+              ),
+            )
           : Container(
               color: AppColor.bgSideMenu,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container( 
+                  Container(
                     margin: EdgeInsets.symmetric(horizontal: 20, vertical: 50),
                     child: Text(
                       appState.businessInfo == null ||
@@ -355,12 +357,16 @@ class _MenuState extends State<Menu> {
   BottomNavigationBarItem menuItemTabAndMobile(
       {required String title,
       required Icon icon,
-      required VoidCallback press,
       required AppState appState,
       required BuildContext context,
       required bool hasTrailing}) {
     return BottomNavigationBarItem(
-        icon: icon, label: title, backgroundColor: Colors.white);
+        icon: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: icon,
+        ),
+        label: title,
+        backgroundColor: AppColor.bgSideMenu);
   }
 
   Widget menuItemDesktop(
