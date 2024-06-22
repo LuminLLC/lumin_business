@@ -8,12 +8,12 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     return FirebaseOptions(
-      apiKey: dotenv.env['API_KEY']!,
-      appId: dotenv.env['APP_ID']!,
-      messagingSenderId: dotenv.env['MESSAGING_SENDER_ID']!,
-      projectId: dotenv.env['PROJECT_ID']!,
-      authDomain: dotenv.env['AUTH_DOMAIN']!,
-      storageBucket: dotenv.env['STORAGE_BUCKET']!,
+      apiKey: 'AIzaSyB6Vg6taakUfEj2uqs1HAdFg_uG4_J7aeQ',
+      appId: '1:464928903616:web:739a12155d82eef89d7825',
+      messagingSenderId: '464928903616',
+      projectId: 'lumin-business',
+      authDomain: 'lumin-business.firebaseapp.com',
+      storageBucket: 'lumin-business.appspot.com',
     );
   }
 }
