@@ -1,14 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/controllers/app_state.dart';
 import 'package:lumin_business/controllers/menu_controller.dart';
-import 'package:lumin_business/controllers/product_controller.dart'; 
+import 'package:lumin_business/controllers/product_controller.dart';
 import 'package:provider/provider.dart';
 import 'screens/home_page.dart';
-import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
