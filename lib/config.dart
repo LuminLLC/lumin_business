@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 class Config {
-  bool isStaging = true;
+  bool isStaging = false;
 
   FirebaseFirestore get firestoreEnv => isStaging
       ? FirebaseFirestore.instanceFor(
