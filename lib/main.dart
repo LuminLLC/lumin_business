@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/controllers/app_state.dart';
 import 'package:lumin_business/controllers/menu_controller.dart';
+import 'package:lumin_business/controllers/order_controller.dart';
 import 'package:lumin_business/controllers/product_controller.dart';
 import 'package:provider/provider.dart';
 import 'modules/general_platform/home_page.dart';
@@ -31,6 +32,8 @@ class LuminBusiness extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    OrderController testController = OrderController();
+    testController.testWrite();
     final providers = [EmailAuthProvider()];
     return MaterialApp(
       title: 'Lumin Business',

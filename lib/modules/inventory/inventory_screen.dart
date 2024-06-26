@@ -3,16 +3,16 @@ import 'package:lumin_business/common/app_colors.dart';
 import 'package:lumin_business/common/app_responsive.dart';
 import 'package:lumin_business/controllers/product_controller.dart';
 import 'package:provider/provider.dart';
-import 'header_widget.dart';
+import '../general_platform/header_widget.dart';
 import 'stat_card.dart';
 import 'product_data_widget.dart';
 
-class Inventory extends StatefulWidget {
+class InventoryScreen extends StatefulWidget {
   @override
-  _InventoryState createState() => _InventoryState();
+  _InventoryScreenState createState() => _InventoryScreenState();
 }
 
-class _InventoryState extends State<Inventory> {
+class _InventoryScreenState extends State<InventoryScreen> {
   @override
   void initState() {
     super.initState();

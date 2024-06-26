@@ -40,6 +40,7 @@ class _ProductDataWidgetState extends State<ProductDataWidget> {
 
     return Consumer2<ProductController, AppState>(
       builder: (context, productController, appState, _) => Container(
+        // height: double.infinity,
         decoration: BoxDecoration(
             color: AppColor.white, borderRadius: BorderRadius.circular(20)),
         padding: EdgeInsets.all(20),
@@ -53,114 +54,115 @@ class _ProductDataWidgetState extends State<ProductDataWidget> {
                 ],
               )
             : Column(
-                children: [
-                  Padding(
-                    padding:   EdgeInsets.only(bottom: sp.getHeight(15, height, width)),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: TextField(
-                            controller: searchController,
-                            onChanged: (s) {
-                              setState(() {
-                                searchText = s;
-                              });
-                            },
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: AppColor.black,
-                              fontSize: sp.getFontSize(22, width),
-                            ),
-                            decoration: InputDecoration(
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey),
-                                ),
-                                border: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey),
-                                ),
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey),
-                                ),
-                                hintStyle: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColor.black,
-                                  fontSize: sp.getFontSize(22, width),
-                                ),
-                                hintText: "All Products",
-                                suffixIcon: Icon(Icons.search)),
-                          ),
-                        ),
-                        Spacer(),
-                        productController.openOrder.isNotEmpty
-                            ? TextButton.icon(
-                                onPressed: () {
-                                  print(productController.fetchOpenOrder());
-                                  showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return OpenOrder(
-                                            appState: appState,
-                                            productController:
-                                                productController);
-                                      });
-                                },
-                                label: Text(
-                                  "View Open Order",
-                                  style: TextStyle(color: Colors.black),
-                                ),
-                                icon: Icon(Icons.shopping_bag),
-                              )
-                            : SizedBox(),
-                        LuminTextIconButton(
-                          text: "Add Product",
-                          onPressed: () {
-                            showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return NewProduct(
-                                    appState: appState,
-                                    productController: productController,
-                                  );
-                                });
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(
+                      bottom: sp.getHeight(15, height, width)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: searchController,
+                          onChanged: (s) {
+                            setState(() {
+                              searchText = s;
+                            });
                           },
-                          icon: Icons.add,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: AppColor.black,
+                            fontSize: sp.getFontSize(22, width),
+                          ),
+                          decoration: InputDecoration(
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.grey),
+                              ),
+                              border: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.grey),
+                              ),
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.grey),
+                              ),
+                              hintStyle: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: AppColor.black,
+                                fontSize: sp.getFontSize(22, width),
+                              ),
+                              hintText: "All Products",
+                              suffixIcon: Icon(Icons.search)),
                         ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                       height: height * 0.6,
-                    child: ListView.separated(
-                      shrinkWrap: true,
-                        padding: EdgeInsets.zero,
-                        itemBuilder: (context, index) {
-                          //TODO: move this function out of widget tree and factor in different filter options
-                          productController.allProdcuts.sort((a, b) => a.name
-                              .toLowerCase()
-                              .compareTo(b.name.toLowerCase())); //
-                    
-                          return ProductListTile(
-                            product: searchText.isEmpty
-                                ? productController.allProdcuts[index]
-                                : productController.allProdcuts
-                                    .where((p) => p.name.contains(searchText))
-                                    .elementAt(index),
-                            appState: appState,
-                            productController: productController,
-                          );
+                      ),
+                      Spacer(),
+                      productController.openOrder.isNotEmpty
+                          ? TextButton.icon(
+                              onPressed: () {
+                                print(productController.fetchOpenOrder());
+                                showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return OpenOrder(
+                                          appState: appState,
+                                          productController:
+                                              productController);
+                                    });
+                              },
+                              label: Text(
+                                "View Open Order",
+                                style: TextStyle(color: Colors.black),
+                              ),
+                              icon: Icon(Icons.shopping_bag),
+                            )
+                          : SizedBox(),
+                      LuminTextIconButton(
+                        text: "Add Product",
+                        onPressed: () {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return NewProduct(
+                                  appState: appState,
+                                  productController: productController,
+                                );
+                              });
                         },
-                        separatorBuilder: (context, index) => Divider(
-                              color: Colors.grey[300],
-                            ),
-                        itemCount: searchText.isEmpty
-                            ? productController.allProdcuts.length
-                            : productController.allProdcuts
-                                .where((p) => p.name.contains(searchText))
-                                .length),
+                        icon: Icons.add,
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+                SizedBox(
+                  height: sp.getHeight(670, height, width),
+                  child: ListView.separated(
+                      shrinkWrap: true,
+                      padding: EdgeInsets.zero,
+                      itemBuilder: (context, index) {
+                        //TODO: move this function out of widget tree and factor in different filter options
+                        productController.allProdcuts.sort((a, b) => a.name
+                            .toLowerCase()
+                            .compareTo(b.name.toLowerCase())); //
+                              
+                        return ProductListTile(
+                          product: searchText.isEmpty
+                              ? productController.allProdcuts[index]
+                              : productController.allProdcuts
+                                  .where((p) => p.name.contains(searchText))
+                                  .elementAt(index),
+                          appState: appState,
+                          productController: productController,
+                        );
+                      },
+                      separatorBuilder: (context, index) => Divider(
+                            color: Colors.grey[300],
+                          ),
+                      itemCount: searchText.isEmpty
+                          ? productController.allProdcuts.length
+                          : productController.allProdcuts
+                              .where((p) => p.name.contains(searchText))
+                              .length),
+                ),
+              ],
+            ),
       ),
     );
   }

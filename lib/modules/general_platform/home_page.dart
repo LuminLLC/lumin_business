@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:lumin_business/common/app_colors.dart';
 import 'package:lumin_business/common/app_responsive.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
+import 'package:lumin_business/modules/accounting/accounts_screen.dart';
+import 'package:lumin_business/modules/dashboard/dashboad_screen.dart';
 import 'package:provider/provider.dart';
 import '../../controllers/menu_controller.dart';
-import '../inventory/inventory.dart';
+import '../inventory/inventory_screen.dart';
 import 'menu.dart';
 
 class HomePage extends StatefulWidget {
@@ -34,7 +36,11 @@ class _HomePageState extends State<HomePage> {
             /// Main Body Part
             Expanded(
                 // width: screenWidth *0.8,
-                child: PageView(children: [Inventory()])),
+                child: PageView(children: [
+              DashboadScreen(),
+              AccountsScreen(),
+              InventoryScreen()
+            ])),
           ],
         ),
       ),
