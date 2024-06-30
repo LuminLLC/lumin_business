@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lumin_business/config.dart';
-import 'package:lumin_business/providers/product_controller.dart';
+import 'package:lumin_business/modules/inventory/product_controller.dart';
 import 'package:lumin_business/models/business.dart';
 import 'package:lumin_business/models/lumin_user.dart';
 import 'package:provider/provider.dart';

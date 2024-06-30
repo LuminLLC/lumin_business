@@ -3,11 +3,11 @@ import 'package:lumin_business/common/app_colors.dart';
 import 'package:lumin_business/common/app_responsive.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/customers/customer_screen.dart';
-import 'package:lumin_business/providers/app_state.dart';
+import 'package:lumin_business/modules/general_platform/app_state.dart';
 import 'package:lumin_business/modules/accounting/accounts_screen.dart';
 import 'package:lumin_business/modules/dashboard/dashboad_screen.dart';
 import 'package:provider/provider.dart';
-import '../../providers/menu_controller.dart';
+import 'menu_controller.dart';
 import '../inventory/inventory_screen.dart';
 import 'menu.dart';
 

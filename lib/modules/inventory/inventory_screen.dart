@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lumin_business/common/app_colors.dart';
 import 'package:lumin_business/common/app_responsive.dart';
-import 'package:lumin_business/providers/product_controller.dart';
+import 'package:lumin_business/modules/inventory/product_controller.dart';
 import 'package:provider/provider.dart';
 import '../general_platform/header_widget.dart';
 import 'stat_card.dart';

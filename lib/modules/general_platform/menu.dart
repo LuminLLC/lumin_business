@@ -4,8 +4,8 @@ import 'package:lumin_business/common/app_colors.dart';
 import 'package:lumin_business/common/app_responsive.dart';
 import 'package:lumin_business/common/app_text_theme.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
-import 'package:lumin_business/providers/app_state.dart';
-import 'package:lumin_business/providers/product_controller.dart';
+import 'package:lumin_business/modules/general_platform/app_state.dart';
+import 'package:lumin_business/modules/inventory/product_controller.dart';
 import 'package:provider/provider.dart';
 
 class Menu extends StatefulWidget {
@@ -164,58 +164,74 @@ class _MenuState extends State<Menu> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    margin: AppResponsive.isDesktop(context)
-                        ? EdgeInsets.all(10)
-                        : null,
-                    padding: AppResponsive.isDesktop(context)
-                        ? EdgeInsets.all(10)
-                        : null,
-                    decoration: BoxDecoration(
-                      color: AppColor.bgColor,
-                      borderRadius: AppResponsive.isDesktop(context)
-                          ? BorderRadius.circular(30)
-                          : null,
-                    ),
-                    child: ListTile(
-                      contentPadding: EdgeInsets.symmetric(horizontal: sp.getWidth(5, screenWidth)),
-                      tileColor: Colors.white,
-                      title: Text(
-                        appState.user == null || appState.user!.name == ""
-                            ? ""
-                            : "Hello, ${appState.user!.name}",
-                        style: AppTextTheme.textTheme.bodyLarge!
-                            .copyWith(color: Colors.black),
-                      ),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            appState.businessInfo == null ||
-                                    appState.businessInfo!.businessName == ""
-                                ? "Lumin Business"
-                                : appState.businessInfo!.businessName,
-                            style: AppTextTheme.textTheme.labelSmall!
-                                .copyWith(color: AppColor.blue),
+                  appState.businessInfo == null
+                      ? Image.asset(
+                          "assets/logo_white_nobg.png",
+                          height: sp.getHeight(200, screenHeight, screenWidth),
+                          width: double.infinity,
+                        )
+                      : Container(
+                          margin: AppResponsive.isDesktop(context)
+                              ? EdgeInsets.all(10)
+                              : null,
+                          padding: AppResponsive.isDesktop(context)
+                              ? EdgeInsets.all(10)
+                              : null,
+                          decoration: BoxDecoration(
+                            color: AppColor.bgColor,
+                            borderRadius: AppResponsive.isDesktop(context)
+                                ? BorderRadius.circular(30)
+                                : null,
                           ),
-                          Text(
-                              appState.user == null ||
-                                      appState.user!.name == "" ||
-                                      appState.user!.access == null
+                          child: ListTile(
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: sp.getWidth(5, screenWidth)),
+                            tileColor: Colors.white,
+                            title: Text(
+                              appState.user == null || appState.user!.name == ""
                                   ? ""
-                                  : "${appState.user!.access}",
-                              style: AppTextTheme.textTheme.labelSmall!
-                                  .copyWith(color: AppColor.blue))
-                        ],
-                      ),
-                      trailing: IconButton(
-                        icon: Icon(Icons.settings),
-                        iconSize: sp.getWidth(20, screenWidth),
-                        onPressed: () {},
-                      ),
-                    ),
-                  ),
+                                  : "Hello, ${appState.user!.name}",
+                              style: AppTextTheme.textTheme.bodyLarge!
+                                  .copyWith(color: Colors.black),
+                            ),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Divider(
+                                  color: Colors.black.withOpacity(0.5),
+                                  thickness: .25,
+                                ),
+                                Text(
+                                  appState.businessInfo == null ||
+                                          appState.businessInfo!.businessName ==
+                                              ""
+                                      ? "Lumin Business"
+                                      : appState.businessInfo!.businessName,
+                                  style: AppTextTheme.textTheme.labelSmall!
+                                      .copyWith(color: AppColor.blue),
+                                ),
+                                SizedBox(
+                                  height: sp.getHeight(
+                                      2, screenHeight, screenWidth),
+                                ),
+                                Text(
+                                    appState.user == null ||
+                                            appState.user!.name == "" ||
+                                            appState.user!.access == null
+                                        ? ""
+                                        : "${appState.user!.access}",
+                                    style: AppTextTheme.textTheme.labelSmall!
+                                        .copyWith(color: AppColor.blue))
+                              ],
+                            ),
+                            trailing: IconButton(
+                              icon: Icon(Icons.settings),
+                              iconSize: sp.getWidth(20, screenWidth),
+                              onPressed: () {},
+                            ),
+                          ),
+                        ),
                   SizedBox(
                     height: screenHeight * 0.175,
                   ),

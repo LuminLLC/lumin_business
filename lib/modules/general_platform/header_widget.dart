@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:lumin_business/common/app_colors.dart';
 import 'package:lumin_business/common/app_responsive.dart';
 import 'package:lumin_business/common/app_text_theme.dart';
-import 'package:lumin_business/providers/app_state.dart';
-import 'package:lumin_business/providers/menu_controller.dart';
+import 'package:lumin_business/modules/general_platform/app_state.dart';
+import 'package:lumin_business/modules/general_platform/menu_controller.dart';
 import 'package:lumin_business/widgets/release_notes_widget.dart';
 import 'package:provider/provider.dart';
 

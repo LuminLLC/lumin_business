@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:lumin_business/providers/app_state.dart';
-import 'package:lumin_business/providers/product_controller.dart';
+import 'package:lumin_business/modules/general_platform/app_state.dart';
+import 'package:lumin_business/modules/inventory/product_controller.dart';
 import 'package:lumin_business/models/category.dart';
 import 'package:provider/provider.dart';
 

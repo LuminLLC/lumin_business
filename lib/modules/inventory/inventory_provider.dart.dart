@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lumin_business/config.dart';
 
-class OrderController with ChangeNotifier {
+class InventoryProvider with ChangeNotifier {
   final FirebaseFirestore _firestore = Config().firestoreEnv;
 
  
