@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:lumin_business/controllers/app_state.dart';
-import 'package:lumin_business/controllers/product_controller.dart';
+import 'package:lumin_business/providers/app_state.dart';
+import 'package:lumin_business/providers/product_controller.dart';
 import 'package:lumin_business/models/product.dart';
 
 class OpenOrder extends StatefulWidget {

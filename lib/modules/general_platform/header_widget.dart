@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:lumin_business/common/app_colors.dart';
 import 'package:lumin_business/common/app_responsive.dart';
-import 'package:lumin_business/controllers/app_state.dart';
-import 'package:lumin_business/controllers/menu_controller.dart';
+import 'package:lumin_business/common/app_text_theme.dart';
+import 'package:lumin_business/providers/app_state.dart';
+import 'package:lumin_business/providers/menu_controller.dart';
 import 'package:lumin_business/widgets/release_notes_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -16,7 +17,7 @@ class _HeaderWidgetState extends State<HeaderWidget> {
     if (index == 0) {
       return "Dashboard";
     } else if (index == 1) {
-      return "Accounts";
+      return "Accounting";
     } else if (index == 2) {
       return "Inventory";
     } else if (index == 3) {
@@ -35,14 +36,10 @@ class _HeaderWidgetState extends State<HeaderWidget> {
         margin: EdgeInsets.all(10),
         child: Row(
           children: [
-            Text(
-              _getHeaderTitle(appState.index),
-              style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black),
-            ),
-          
+            Text(_getHeaderTitle(appState.index),
+                style: AppTextTheme.textTheme.displayMedium!.copyWith(
+                  color: AppColor.black,
+                )),
             if (!AppResponsive.isMobile(context)) ...{
               Spacer(),
               Row(
@@ -70,7 +67,8 @@ class _HeaderWidgetState extends State<HeaderWidget> {
         ),
         label: Text(
           text,
-          style: TextStyle(color: Colors.black),
+          style: AppTextTheme.textTheme.bodyMedium!
+              .copyWith(color: AppColor.black),
         ),
         onPressed: () {},
       ),

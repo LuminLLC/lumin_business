@@ -2,18 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lumin_business/common/app_colors.dart';
 import 'package:lumin_business/common/app_responsive.dart';
-import 'package:lumin_business/providers/product_controller.dart';
 import 'package:lumin_business/modules/inventory/product_data_widget.dart';
-import 'package:lumin_business/modules/inventory/stat_card.dart';
+import 'package:lumin_business/providers/product_controller.dart';
 import 'package:provider/provider.dart';
 import '../general_platform/header_widget.dart';
 
-class AccountingScreen extends StatefulWidget {
+class CustomerScreen extends StatefulWidget {
   @override
-  _AccountingScreenState createState() => _AccountingScreenState();
+  _CustomerScreenState createState() => _CustomerScreenState();
 }
 
-class _AccountingScreenState extends State<AccountingScreen> {
+class _CustomerScreenState extends State<CustomerScreen> {
   @override
   void initState() {
     super.initState();
@@ -35,8 +34,8 @@ class _AccountingScreenState extends State<AccountingScreen> {
         ),
         child: Column(
           children: [
-            HeaderWidget(), //module name
-              Spacer(),
+            HeaderWidget(),
+            Spacer(),
             Icon(
               FontAwesomeIcons.clock,
               color: Colors.black,

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lumin_business/common/app_colors.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
-import 'package:lumin_business/controllers/app_state.dart';
-import 'package:lumin_business/controllers/product_controller.dart';
+import 'package:lumin_business/providers/app_state.dart';
+import 'package:lumin_business/providers/product_controller.dart';
 import 'package:lumin_business/widgets/new_product.dart';
 import 'package:lumin_business/widgets/open_order.dart';
 import 'package:lumin_business/widgets/lumin_texticon_button.dart';

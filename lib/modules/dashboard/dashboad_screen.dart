@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lumin_business/common/app_colors.dart';
 import 'package:lumin_business/common/app_responsive.dart';
-import 'package:lumin_business/controllers/product_controller.dart';
 import 'package:lumin_business/modules/inventory/product_data_widget.dart';
-import 'package:lumin_business/modules/inventory/stat_card.dart';
+import 'package:lumin_business/providers/product_controller.dart';
 import 'package:provider/provider.dart';
 import '../general_platform/header_widget.dart';
 
@@ -34,39 +34,21 @@ class _DashboadScreenState extends State<DashboadScreen> {
         ),
         child: Column(
           children: [
-            HeaderWidget(), //module name
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.start,
-            //   children: [
-            //     StatCardWidget(
-            //       statName: "Inventory Count",
-            //       value: "${productController.allProdcuts.length}",
-            //       icon: Icons.inventory,
-            //     ),
-            //     Spacer(),
-            //     StatCardWidget(
-            //       statName: "Today's Sales",
-            //       value: "GHS${productController.calculateOutofStock()}",
-            //       icon: Icons.attach_money,
-            //     ),
-            //     Spacer(),
-            //     StatCardWidget(
-            //       statName: "Critical Level",
-            //       value: "GHS${productController.calculateOutofStock()}",
-            //       icon: Icons.warning,
-            //     ),
-            //     Spacer(),
-            //     StatCardWidget(
-            //       statName: "Out of Stock",
-            //       value: "GHS${productController.calculateOutofStock()}",
-            //       icon: Icons.check_box_outline_blank_sharp,
-            //     ),
-            //   ],
-            // ),
-            // SizedBox(
-            //   height: 20,
-            // ),
-            // ProductDataWidget(),
+            HeaderWidget(),
+            Spacer(),
+            Icon(
+              FontAwesomeIcons.clock,
+              color: Colors.black,
+              size: 50,
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Text(
+              'Feature Coming Soon!',
+              style: TextStyle(color: Colors.black),
+            ),
+            Spacer(),
           ],
         ),
       );

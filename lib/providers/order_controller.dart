@@ -7,14 +7,7 @@ import 'package:lumin_business/config.dart';
 class OrderController with ChangeNotifier {
   final FirebaseFirestore _firestore = Config().firestoreEnv;
 
-  Future<void> testWrite() async {
-    try {
-      await _firestore.collection("collectionPath").doc().set({"data": ""});
-    } catch (e) {
-      print(e);
-      print("caught");
-    }
-  }
+ 
 
   Stream<DocumentSnapshot<Map<String, dynamic>>> getTodaysOrders(
       String businessID) {

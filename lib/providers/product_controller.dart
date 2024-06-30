@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:lumin_business/config.dart';
 import 'package:lumin_business/models/category.dart';
 import 'package:lumin_business/models/product.dart';
 
@@ -69,7 +70,7 @@ List<Product> dummyProductData = [
 ];
 
 class ProductController with ChangeNotifier {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+   final FirebaseFirestore _firestore = Config().firestoreEnv;
   String? selectedCategory;
   Map<Product, int> openOrder = {};
   String? quantityError;
@@ -295,6 +296,7 @@ class ProductController with ChangeNotifier {
   }
 
   Future<void> fetchProducts(String businessID) async {
+    print("called");
     QuerySnapshot<Map<String, dynamic>> tempList = await _firestore
         .collection('businesses')
         .doc(businessID)

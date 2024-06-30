@@ -34,12 +34,10 @@ class SizeAndSpacing {
 
   double getWidth(double elementWidth, double screenWidth) {
     if (isDesktop(screenWidth)) {
-      print("screen widht: $screenWidth");
-      print("desktop widht: $desktopWidth");
+      
       return elementWidth * (screenWidth / desktopWidth);
     } else if (isTablet(screenWidth)) {
-      print("screen widht: $screenWidth");
-      print("tab widht: $tabletWidth");
+    
       return elementWidth * (screenWidth / tabletWidth);
     } else {
       return elementWidth * (screenWidth / mobileWidth);

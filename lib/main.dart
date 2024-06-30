@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
-import 'package:lumin_business/controllers/app_state.dart';
-import 'package:lumin_business/controllers/menu_controller.dart';
-import 'package:lumin_business/controllers/order_controller.dart';
-import 'package:lumin_business/controllers/product_controller.dart';
+import 'package:lumin_business/providers/app_state.dart';
+import 'package:lumin_business/providers/menu_controller.dart';
+import 'package:lumin_business/providers/order_controller.dart';
+import 'package:lumin_business/providers/product_controller.dart';
 import 'package:provider/provider.dart';
 import 'modules/general_platform/home_page.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
@@ -32,8 +32,6 @@ class LuminBusiness extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    OrderController testController = OrderController();
-    testController.testWrite();
     final providers = [EmailAuthProvider()];
     return MaterialApp(
       title: 'Lumin Business',
@@ -65,7 +63,7 @@ class LuminBusiness extends StatelessWidget {
             showPasswordVisibilityToggle: true,
             subtitleBuilder: (context, action) {
               return const Text(
-                "Welcome to Lumin Business! Please sign in to continue.",
+                "Hi to Lumin Business! Please sign in to continue.",
                 style: TextStyle(color: Colors.white),
               );
             },

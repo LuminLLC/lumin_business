@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart'; 
+import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lumin_business/common/app_colors.dart';
 import 'package:lumin_business/common/app_responsive.dart';
 import 'package:lumin_business/common/app_text_theme.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
-import 'package:lumin_business/controllers/app_state.dart';
-import 'package:lumin_business/controllers/product_controller.dart';
+import 'package:lumin_business/providers/app_state.dart';
+import 'package:lumin_business/providers/product_controller.dart';
 import 'package:provider/provider.dart';
 
 class Menu extends StatefulWidget {
@@ -29,6 +29,7 @@ class _MenuState extends State<Menu> {
       menuItemDesktop(
         title: "Dashboard",
         context: context,
+        index: 0,
         icon: Icon(Icons.home),
         hasTrailing: true,
         appState: appState,
@@ -37,8 +38,9 @@ class _MenuState extends State<Menu> {
         },
       ),
       menuItemDesktop(
-        title: "Accounts",
+        title: "Accounting",
         context: context,
+        index: 1,
         icon: Icon(FontAwesomeIcons.cashRegister),
         hasTrailing: true,
         appState: appState,
@@ -51,6 +53,7 @@ class _MenuState extends State<Menu> {
         context: context,
         icon: Icon(FontAwesomeIcons.store),
         hasTrailing: true,
+        index: 2,
         appState: appState,
         press: () {
           appState.setIndex(2);
@@ -61,6 +64,7 @@ class _MenuState extends State<Menu> {
         context: context,
         icon: Icon(FontAwesomeIcons.person),
         hasTrailing: true,
+        index: 3,
         appState: appState,
         press: () {
           appState.setIndex(3);
@@ -69,6 +73,7 @@ class _MenuState extends State<Menu> {
       menuItemDesktop(
         title: "Suppliers",
         context: context,
+        index: 4,
         icon: Icon(FontAwesomeIcons.peopleCarryBox),
         hasTrailing: true,
         appState: appState,
@@ -77,8 +82,9 @@ class _MenuState extends State<Menu> {
         },
       ),
       menuItemDesktop(
-        title: "Settings",
+        title: "Utilites",
         context: context,
+        index: 5,
         appState: appState,
         icon: Icon(Icons.settings),
         hasTrailing: true,
@@ -97,7 +103,7 @@ class _MenuState extends State<Menu> {
         appState: appState,
       ),
       menuItemTabAndMobile(
-        title: "Accounts",
+        title: "Accounting",
         context: context,
         icon: Icon(FontAwesomeIcons.cashRegister),
         hasTrailing: true,
@@ -159,45 +165,59 @@ class _MenuState extends State<Menu> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    margin: EdgeInsets.symmetric(horizontal: 20, vertical: 50),
-                    child: Text(
-                      appState.businessInfo == null ||
-                              appState.businessInfo!.businessName == ""
-                          ? "Lumin Business "
-                          : appState.businessInfo!.businessName,
-                      style: AppTextTheme.textTheme.headlineLarge,
+                    margin: AppResponsive.isDesktop(context)
+                        ? EdgeInsets.all(10)
+                        : null,
+                    padding: AppResponsive.isDesktop(context)
+                        ? EdgeInsets.all(10)
+                        : null,
+                    decoration: BoxDecoration(
+                      color: AppColor.bgColor,
+                      borderRadius: AppResponsive.isDesktop(context)
+                          ? BorderRadius.circular(30)
+                          : null,
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 20,
-                    ),
-                    child: Text(
-                      appState.user == null || appState.user!.name == ""
-                          ? ""
-                          : "Welcome, ${appState.user!.name}",
-                      style: TextStyle(
-                        color: AppColor.yellow,
-                        fontSize: sp.getFontSize(20, screenWidth),
-                        fontWeight: FontWeight.bold,
+                    child: ListTile(
+                      contentPadding: EdgeInsets.symmetric(horizontal: sp.getWidth(5, screenWidth)),
+                      tileColor: Colors.white,
+                      title: Text(
+                        appState.user == null || appState.user!.name == ""
+                            ? ""
+                            : "Hello, ${appState.user!.name}",
+                        style: AppTextTheme.textTheme.bodyLarge!
+                            .copyWith(color: Colors.black),
                       ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 20, top: 50),
-                    child: Text(
-                      appState.user == null || appState.user!.name == ""
-                          ? ""
-                          : "Account type: ${appState.user!.access}",
-                      style: TextStyle(
-                        color: AppColor.yellow,
-                        fontSize: sp.getFontSize(14, screenWidth),
-                        fontWeight: FontWeight.w300,
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            appState.businessInfo == null ||
+                                    appState.businessInfo!.businessName == ""
+                                ? "Lumin Business"
+                                : appState.businessInfo!.businessName,
+                            style: AppTextTheme.textTheme.labelSmall!
+                                .copyWith(color: AppColor.blue),
+                          ),
+                          Text(
+                              appState.user == null ||
+                                      appState.user!.name == "" ||
+                                      appState.user!.access == null
+                                  ? ""
+                                  : "${appState.user!.access}",
+                              style: AppTextTheme.textTheme.labelSmall!
+                                  .copyWith(color: AppColor.blue))
+                        ],
+                      ),
+                      trailing: IconButton(
+                        icon: Icon(Icons.settings),
+                        iconSize: sp.getWidth(20, screenWidth),
+                        onPressed: () {},
                       ),
                     ),
                   ),
                   SizedBox(
-                    height: screenHeight * 0.025,
+                    height: screenHeight * 0.175,
                   ),
                   for (Widget w in menuItems) w,
                   Spacer(),
@@ -235,13 +255,6 @@ class _MenuState extends State<Menu> {
                       },
                     ),
                   ),
-                  // appState.user != null && appState.user!.access == "admin"
-                  //     ? DrawerListTile(
-                  //         title: "Inventory",
-                  //         icon: "assets/menu_recruitment.png",
-                  //         press: () {},
-                  //       )
-                  //     : SizedBox(),
                   appState.user != null && appState.user!.access == "admin"
                       ? menuItemDesktop(
                           title: "Order History",
@@ -252,101 +265,6 @@ class _MenuState extends State<Menu> {
                           press: () {},
                         )
                       : SizedBox(),
-
-                  // appState.user != null && appState.user!.access == "regular"
-                  //     ? ListTile(
-                  //         leading: Icon(
-                  //           Icons.receipt_long,
-                  //           color: AppColor.white,
-                  //         ),
-                  //         title: Center(
-                  //           child: Text(
-                  //             "Today's Orders",
-                  //             style: TextStyle(color: AppColor.white),
-                  //           ),
-                  //         ),
-                  //       )
-                  //     : SizedBox(),
-                  // appState.user != null && appState.user!.access == "regular"
-                  //     ? Divider()
-                  //     : SizedBox(),
-
-                  // appState.user != null && appState.user!.access == "regular"
-                  //     ? Padding(
-                  //         padding: EdgeInsets.only(
-                  //             bottom: sp.getHeight(40, screenHeight, screenWidth)),
-                  //         child:
-                  //             StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-                  //                 stream: OrderController().getTodaysOrders(
-                  //                     appState.businessInfo!.businessId),
-                  //                 builder: (context, snapshot) {
-                  //                   print("data here ${snapshot.data}");
-
-                  //                   if (snapshot.data == null ||
-                  //                       snapshot.data!.data() == null) {
-                  //                     return Center(
-                  //                         child: Padding(
-                  //                       padding: const EdgeInsets.all(15),
-                  //                       child: Text("No Orders Today"),
-                  //                     ));
-                  //                   } else {
-                  //                     return Column(
-                  //                       children: [
-                  //                         ListView.builder(
-                  //                           shrinkWrap: true,
-                  //                           itemCount: snapshot.data == null
-                  //                               ? 0
-                  //                               : snapshot.data!.data()!.length,
-                  //                           itemBuilder: (context, index) {
-                  //                             if (snapshot.hasError) {
-                  //                               return Text("Error");
-                  //                             } else if (snapshot.data == null) {
-                  //                               return Text("No Orders");
-                  //                             } else if (snapshot.hasData) {
-                  //                               print("here");
-                  //                               return ListTile(
-                  //                                 leading: Text(snapshot.data!
-                  //                                     .data()!
-                  //                                     .keys
-                  //                                     .toList()[index]),
-                  //                                 title: Text(
-                  //                                   "Total: GHS${OrderController().getOrderTotal(snapshot.data!.data()![snapshot.data!.data()!.keys.toList()[index]])}",
-                  //                                   style: TextStyle(
-                  //                                       color: AppColor.white),
-                  //                                 ),
-                  //                                 trailing: OrderController()
-                  //                                     .getOrderStatus(snapshot.data!
-                  //                                             .data()![
-                  //                                         snapshot.data!
-                  //                                             .data()!
-                  //                                             .keys
-                  //                                             .toList()[index]]),
-                  //                               );
-                  //                             } else {
-                  //                               return CircularProgressIndicator();
-                  //                             }
-                  //                           },
-                  //                         ),
-                  //                         Padding(
-                  //                           padding: const EdgeInsets.only(
-                  //                               top: 8.0, left: 8, right: 8),
-                  //                           child: Divider(),
-                  //                         ),
-                  //                         Padding(
-                  //                           padding:
-                  //                               const EdgeInsets.only(bottom: 10.0),
-                  //                           child: ListTile(
-                  //                             title: Text("Today's Sales:"),
-                  //                             trailing: Text(
-                  //                                 " GHS${snapshot.data!.data()!.values.map((e) => OrderController().getOrderTotal(e)).reduce((value, element) => value + element)}"),
-                  //                           ),
-                  //                         )
-                  //                       ],
-                  //                     );
-                  //                   }
-                  //                 }),
-                  // )
-                  // : SizedBox(),
                 ],
               ),
             );
@@ -371,6 +289,7 @@ class _MenuState extends State<Menu> {
   Widget menuItemDesktop(
       {required String title,
       required Icon icon,
+      int? index,
       required VoidCallback press,
       required AppState appState,
       required BuildContext context,
@@ -386,6 +305,12 @@ class _MenuState extends State<Menu> {
           ),
           left: sp.getWidth(10, screenWidth)),
       child: Container(
+        decoration: BoxDecoration(
+          color: appState.index == index
+              ? AppColor.blue.withOpacity(0.5)
+              : AppColor.bgSideMenu,
+          borderRadius: BorderRadius.circular(10),
+        ),
         child: ListTile(
           onTap: press,
           horizontalTitleGap: sp.getWidth(20, screenWidth),

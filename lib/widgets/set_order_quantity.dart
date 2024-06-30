@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
-import 'package:lumin_business/controllers/product_controller.dart';
+import 'package:lumin_business/providers/product_controller.dart';
 import 'package:lumin_business/models/product.dart';
 import 'package:provider/provider.dart';
 
