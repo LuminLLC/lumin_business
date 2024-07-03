@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lumin_business/common/app_colors.dart';
-import 'package:lumin_business/common/app_responsive.dart';
+import 'package:lumin_business/common/app_colors.dart'; 
 import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/customers/customer_screen.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
@@ -35,7 +34,7 @@ class _HomePageState extends State<HomePage> {
     print(sp.isDesktop(screenWidth));
     return Consumer<AppState>(builder: (context, appState, _) {
       return Scaffold(
-        bottomNavigationBar: AppResponsive.isDesktop(context) ? null : Menu(),
+        bottomNavigationBar: sp.isDesktop(screenWidth) ? null : Menu(),
         key: Provider.of<PlatformMenuController>(context, listen: false)
             .scaffoldKey,
         backgroundColor: AppColor.bgSideMenu,
@@ -43,7 +42,7 @@ class _HomePageState extends State<HomePage> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (AppResponsive.isDesktop(context))
+              if (sp.isDesktop(screenWidth))
                 Container(width: screenWidth * 0.15, child: Menu()),
 
               /// Main Body Part

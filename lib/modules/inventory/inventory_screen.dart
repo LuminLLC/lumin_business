@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lumin_business/common/app_colors.dart';
-import 'package:lumin_business/common/app_responsive.dart';
+import 'package:lumin_business/common/app_colors.dart'; 
 import 'package:lumin_business/common/app_text_theme.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
@@ -17,6 +16,7 @@ class InventoryScreen extends StatefulWidget {
 }
 
 class _InventoryScreenState extends State<InventoryScreen> {
+  final AppTextTheme textTheme = AppTextTheme();
   final SizeAndSpacing sp = SizeAndSpacing();
   late TextEditingController searchController;
   late TextEditingController quantityController;
@@ -30,17 +30,17 @@ class _InventoryScreenState extends State<InventoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final double height = MediaQuery.of(context).size.height;
-    final double width = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
+    final double screenWidth = MediaQuery.of(context).size.width;
 
     return Consumer2<InventoryProvider, AppState>(
         builder: (context, invetoryProvider, appState, _) {
       return Container(
-        margin: AppResponsive.isDesktop(context) ? EdgeInsets.all(20) : null,
-        padding: AppResponsive.isDesktop(context) ? EdgeInsets.all(20) : null,
+        margin:sp.isDesktop(screenWidth) ? EdgeInsets.all(20) : null,
+        padding: sp.isDesktop(screenWidth) ? EdgeInsets.all(20) : null,
         decoration: BoxDecoration(
           color: AppColor.bgColor,
-          borderRadius: AppResponsive.isDesktop(context)
+          borderRadius: sp.isDesktop(screenWidth)
               ? BorderRadius.circular(30)
               : null,
         ),
@@ -48,7 +48,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: EdgeInsets.only(bottom: sp.getHeight(20, height, width)),
+              padding: EdgeInsets.only(bottom: sp.getHeight(20, screenHeight, screenWidth)),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -61,7 +61,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                           searchText = s;
                         });
                       },
-                      style: AppTextTheme.textTheme.headlineMedium!
+                      style: textTheme.textTheme(screenWidth).headlineMedium!
                           .copyWith(color: Colors.black),
                       decoration: InputDecoration(
                           focusedBorder: UnderlineInputBorder(
@@ -73,12 +73,12 @@ class _InventoryScreenState extends State<InventoryScreen> {
                           enabledBorder: UnderlineInputBorder(
                             borderSide: BorderSide(color: AppColor.bgSideMenu),
                           ),
-                          hintStyle: AppTextTheme.textTheme.bodyLarge!
+                          hintStyle: textTheme.textTheme(screenWidth).bodyLarge!
                               .copyWith(color: Colors.black),
                           hintText: "All Products",
                           suffixIcon: Icon(
                             Icons.search,
-                            size: sp.getWidth(25, width),
+                            size: sp.getWidth(25, screenWidth),
                             color: AppColor.bgSideMenu,
                           )),
                     ),
@@ -87,7 +87,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                   invetoryProvider.openOrder.isNotEmpty
                       ? Padding(
                           padding: EdgeInsets.symmetric(
-                              horizontal: sp.getWidth(10, width)),
+                              horizontal: sp.getWidth(10, screenWidth)),
                           child: LuminTextIconButton(
                             text: "Open Order",
                             onPressed: () {
@@ -149,13 +149,13 @@ class _InventoryScreenState extends State<InventoryScreen> {
                           .where((p) => p.name.contains(searchText))
                           .length),
             ),
-            SizedBox(height: sp.getHeight(30, height, width)),
+            SizedBox(height: sp.getHeight(30, screenHeight, screenWidth)),
             SizedBox(
               child: Row(
                 children: [
                   Container(
-                    height: sp.getWidth(10, width),
-                    width: sp.getWidth(10, width),
+                    height: sp.getWidth(10, screenWidth),
+                    width: sp.getWidth(10, screenWidth),
                     decoration: BoxDecoration(
                       color: Colors.green,
                     ),
@@ -165,18 +165,18 @@ class _InventoryScreenState extends State<InventoryScreen> {
                   ),
                   Text(
                     "Above critical level (${invetoryProvider.calculateAboveCriticalLevel()})",
-                    style: AppTextTheme.textTheme.bodySmall!
+                    style: textTheme.textTheme(screenWidth).bodySmall!
                         .copyWith(color: Colors.black),
                   ),
                   SizedBox(
-                    height: sp.getHeight(20, height, width),
+                    height: sp.getHeight(20, screenHeight, screenWidth),
                     child: VerticalDivider(
                       color: AppColor.bgSideMenu.withOpacity(0.3),
                     ),
                   ),
                   Container(
-                    height: sp.getWidth(10, width),
-                    width: sp.getWidth(10, width),
+                    height: sp.getWidth(10, screenWidth),
+                    width: sp.getWidth(10, screenWidth),
                     decoration: BoxDecoration(
                       color: Colors.yellow.shade100,
                     ),
@@ -186,18 +186,18 @@ class _InventoryScreenState extends State<InventoryScreen> {
                   ),
                   Text(
                     "Below critical level (${invetoryProvider.calculateCriticalLevel()})",
-                    style: AppTextTheme.textTheme.bodySmall!
+                    style: textTheme.textTheme(screenWidth).bodySmall!
                         .copyWith(color: Colors.black),
                   ),
                   SizedBox(
-                    height: sp.getHeight(20, height, width),
+                    height: sp.getHeight(20, screenHeight, screenWidth),
                     child: VerticalDivider(
                       color: AppColor.bgSideMenu.withOpacity(0.3),
                     ),
                   ),
                   Container(
-                    height: sp.getWidth(10, width),
-                    width: sp.getWidth(10, width),
+                    height: sp.getWidth(10, screenWidth),
+                    width: sp.getWidth(10, screenWidth),
                     decoration: BoxDecoration(
                       color: Colors.red.shade100,
                     ),
@@ -207,23 +207,23 @@ class _InventoryScreenState extends State<InventoryScreen> {
                   ),
                   Text(
                     "Out of stock (${invetoryProvider.calculateOutofStock()})",
-                    style: AppTextTheme.textTheme.bodySmall!
+                    style: textTheme.textTheme(screenWidth).bodySmall!
                   .copyWith(color: Colors.black),
                   ),
                   Spacer(),
                   Text(
                     "Product Count: ${invetoryProvider.allProdcuts.length}",
-                    style: AppTextTheme.textTheme.bodySmall!
+                    style: textTheme.textTheme(screenWidth).bodySmall!
                         .copyWith(color: Colors.black),
                   ),
                   SizedBox(
-                    height: sp.getHeight(20, height, width),
+                    height: sp.getHeight(20, screenHeight, screenWidth),
                     child: VerticalDivider(
                       color: AppColor.bgSideMenu.withOpacity(0.3),
                     ),
                   ),
                   Text("Inventory Count: ${invetoryProvider.inventoryCount()}",
-                      style: AppTextTheme.textTheme.bodySmall!
+                      style: textTheme.textTheme(screenWidth).bodySmall!
                           .copyWith(color: Colors.black))
                 ],
               ),
