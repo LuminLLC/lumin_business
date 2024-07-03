@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
-import 'package:lumin_business/modules/inventory/product_controller.dart';
+
 import 'package:lumin_business/models/product.dart';
+import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
 import 'package:lumin_business/widgets/lumin_texticon_button.dart';
 
 class SelectedProduct extends StatefulWidget {
   final Product product;
   final AppState appState;
-  final ProductController productController;
+  final InventoryProvider inventoryProvider;
   const SelectedProduct(
       {Key? key,
       required this.product,
       required this.appState,
-      required this.productController})
+      required this.inventoryProvider})
       : super(key: key);
 
   @override
@@ -154,7 +155,7 @@ class _SelectedProductState extends State<SelectedProduct> {
                   //   setState(() {
                   //     isUpdating = true;
                   //   });
-                  //   await widget.productController
+                  //   await widget.InventoryProvider
                   //       .updateProduct(widget.product);
                   //   setState(() {
                   //     isUpdating = false;
@@ -175,7 +176,7 @@ class _SelectedProductState extends State<SelectedProduct> {
                     setState(() {
                       isUpdating = true;
                     });
-                    await widget.productController
+                    await widget.inventoryProvider
                         .deleteProduct(widget.product, widget.appState.businessInfo!.businessId);
                     setState(() {
                       isUpdating = false;

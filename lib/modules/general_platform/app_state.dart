@@ -2,9 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lumin_business/config.dart';
-import 'package:lumin_business/modules/inventory/product_controller.dart';
+
 import 'package:lumin_business/models/business.dart';
 import 'package:lumin_business/models/lumin_user.dart';
+import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
 import 'package:provider/provider.dart';
 
 class AppState with ChangeNotifier {
@@ -52,7 +53,7 @@ class AppState with ChangeNotifier {
           .collection('users')
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .get();
-      Provider.of<ProductController>(context, listen: false)
+      Provider.of<InventoryProvider>(context, listen: false)
           .fetchProducts(temp.data()!['business_id']);
       user = LuminUser(
         id: temp.id,

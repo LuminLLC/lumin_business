@@ -3,8 +3,9 @@ import 'package:lumin_business/common/app_colors.dart';
 import 'package:lumin_business/common/app_text_theme.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
-import 'package:lumin_business/modules/inventory/product_controller.dart';
+
 import 'package:lumin_business/models/product.dart';
+import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
 import 'package:lumin_business/widgets/set_order_quantity.dart';
 import 'package:lumin_business/widgets/selected_product.dart';
 
@@ -12,13 +13,13 @@ class ProductListTile extends StatelessWidget {
   final SizeAndSpacing sp = SizeAndSpacing();
 
   final Product product;
-  final ProductController productController;
+  final InventoryProvider inventoryProvider;
   final AppState appState;
   ProductListTile(
       {Key? key,
       required this.product,
       required this.appState,
-      required this.productController})
+      required this.inventoryProvider})
       : super(key: key);
 
   Color getTileColor(int quantity) {
@@ -90,7 +91,7 @@ class ProductListTile extends StatelessWidget {
                         return SelectedProduct(
                           product: product,
                           appState: appState,
-                          productController: productController,
+                          inventoryProvider: inventoryProvider,
                         );
                       });
                 },
@@ -107,7 +108,7 @@ class ProductListTile extends StatelessWidget {
                         builder: (context) {
                           return SetOrderQuantity(
                             product: product,
-                            productController: productController,
+                            inventoryProvider: inventoryProvider,
                           );
                         });
                   }

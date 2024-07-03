@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
-import 'package:lumin_business/modules/inventory/product_controller.dart';
+
 import 'package:lumin_business/models/product.dart';
+import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
 
 class OpenOrder extends StatefulWidget {
-  final ProductController productController;
+  final InventoryProvider inventoryProvider;
   final AppState appState;
   const OpenOrder(
-      {Key? key, required this.productController, required this.appState})
+      {Key? key, required this.inventoryProvider, required this.appState})
       : super(key: key);
 
   @override
@@ -29,19 +30,19 @@ class _OpenOrderState extends State<OpenOrder> {
             : Column(
                 children: [
                   for (Product p
-                      in widget.productController.fetchOpenOrder().keys)
+                      in widget.inventoryProvider.fetchOpenOrder().keys)
                     ListTile(
                       title: Text(p.name),
                       subtitle: Text(
-                          "Quantity: ${widget.productController.fetchOpenOrder()[p]}"),
+                          "Quantity: ${widget.inventoryProvider.fetchOpenOrder()[p]}"),
                       trailing: Text(
-                          "GHS${p.unitPrice * widget.productController.fetchOpenOrder()[p]!}"),
+                          "GHS${p.unitPrice * widget.inventoryProvider.fetchOpenOrder()[p]!}"),
                     ),
                   VerticalDivider(),
                   ListTile(
                     title: Text("Total"),
                     trailing: Text(
-                        "GHS${widget.productController.fetchOpenOrder().keys.map((e) => e.unitPrice * widget.productController.fetchOpenOrder()[e]!).reduce((value, element) => value + element)}"),
+                        "GHS${widget.inventoryProvider.fetchOpenOrder().keys.map((e) => e.unitPrice * widget.inventoryProvider.fetchOpenOrder()[e]!).reduce((value, element) => value + element)}"),
                   ),
                 ],
               ),
@@ -49,7 +50,7 @@ class _OpenOrderState extends State<OpenOrder> {
       actions: [
         TextButton(
           onPressed: () {
-            widget.productController
+            widget.inventoryProvider
                 .clearOpenOrder(widget.appState.businessInfo!.businessId);
             Navigator.pop(context);
           },
@@ -65,7 +66,7 @@ class _OpenOrderState extends State<OpenOrder> {
                   setState(() {
                     isCompletedOrderClicked = true;
                   });
-                  widget.productController
+                  widget.inventoryProvider
                       .completeOrder(widget.appState.businessInfo!.businessId)
                       .whenComplete(() {
                     Navigator.pop(context);

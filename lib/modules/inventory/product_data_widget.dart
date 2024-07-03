@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:lumin_business/common/app_colors.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
-import 'package:lumin_business/modules/inventory/product_controller.dart';
+import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
+
 import 'package:lumin_business/widgets/new_product.dart';
 import 'package:lumin_business/widgets/open_order.dart';
 import 'package:lumin_business/widgets/lumin_texticon_button.dart';
@@ -38,8 +39,8 @@ class _ProductDataWidgetState extends State<ProductDataWidget> {
     final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
 
-    return Consumer2<ProductController, AppState>(
-      builder: (context, productController, appState, _) => !productController
+    return Consumer2<InventoryProvider, AppState>(
+      builder: (context, InventoryProvider, appState, _) => !InventoryProvider
               .isProductFetched
           ? Column(
               children: [
@@ -90,16 +91,16 @@ class _ProductDataWidgetState extends State<ProductDataWidget> {
                         ),
                       ),
                       Spacer(),
-                      productController.openOrder.isNotEmpty
+                      InventoryProvider.openOrder.isNotEmpty
                           ? TextButton.icon(
                               onPressed: () {
-                                print(productController.fetchOpenOrder());
+                                print(InventoryProvider.fetchOpenOrder());
                                 showDialog(
                                     context: context,
                                     builder: (context) {
                                       return OpenOrder(
                                           appState: appState,
-                                          productController: productController);
+                                          inventoryProvider: InventoryProvider);
                                     });
                               },
                               label: Text(
@@ -117,7 +118,7 @@ class _ProductDataWidgetState extends State<ProductDataWidget> {
                               builder: (context) {
                                 return NewProduct(
                                   appState: appState,
-                                  productController: productController,
+                                  inventoryProvider: InventoryProvider,
                                 );
                               });
                         },
@@ -131,26 +132,26 @@ class _ProductDataWidgetState extends State<ProductDataWidget> {
                     padding: EdgeInsets.zero,
                     itemBuilder: (context, index) {
                       //TODO: move this function out of widget tree and factor in different filter options
-                      productController.allProdcuts.sort((a, b) => a.name
+                      InventoryProvider.allProdcuts.sort((a, b) => a.name
                           .toLowerCase()
                           .compareTo(b.name.toLowerCase())); //
 
                       return ProductListTile(
                         product: searchText.isEmpty
-                            ? productController.allProdcuts[index]
-                            : productController.allProdcuts
+                            ? InventoryProvider.allProdcuts[index]
+                            : InventoryProvider.allProdcuts
                                 .where((p) => p.name.contains(searchText))
                                 .elementAt(index),
                         appState: appState,
-                        productController: productController,
+                        inventoryProvider: InventoryProvider,
                       );
                     },
                     separatorBuilder: (context, index) => Divider(
                           color: Colors.grey[300],
                         ),
                     itemCount: searchText.isEmpty
-                        ? productController.allProdcuts.length
-                        : productController.allProdcuts
+                        ? InventoryProvider.allProdcuts.length
+                        : InventoryProvider.allProdcuts
                             .where((p) => p.name.contains(searchText))
                             .length),
               ],

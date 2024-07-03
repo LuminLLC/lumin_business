@@ -6,7 +6,7 @@ import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
 import 'package:lumin_business/modules/general_platform/menu_controller.dart';
 import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
-import 'package:lumin_business/modules/inventory/product_controller.dart';
+
 import 'package:provider/provider.dart';
 import 'modules/general_platform/home_page.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
@@ -23,8 +23,8 @@ Future<void> main() async {
     ChangeNotifierProvider<AppState>(create: (context) => AppState()),
     ChangeNotifierProvider<PlatformMenuController>(
         create: (context) => PlatformMenuController()),
-    ChangeNotifierProvider<ProductController>(
-        create: (context) => ProductController()),
+    ChangeNotifierProvider<InventoryProvider>(
+        create: (context) => InventoryProvider()),
   ], child: LuminBusiness()));
 }
 
