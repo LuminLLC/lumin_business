@@ -39,25 +39,21 @@ class _ProductDataWidgetState extends State<ProductDataWidget> {
     final double width = MediaQuery.of(context).size.width;
 
     return Consumer2<ProductController, AppState>(
-      builder: (context, productController, appState, _) => Container(
-        // height: double.infinity,
-        decoration: BoxDecoration(
-            color: AppColor.white, borderRadius: BorderRadius.circular(20)),
-        padding: EdgeInsets.all(20),
-        child: !productController.isProductFetched
-            ? Column(
-                children: [
-                  SizedBox(
-                    height: height / 4.5,
-                  ),
-                  CircularProgressIndicator(),
-                ],
-              )
-            : Column(
+      builder: (context, productController, appState, _) => !productController
+              .isProductFetched
+          ? Column(
+              children: [
+                SizedBox(
+                  height: height / 4.5,
+                ),
+                CircularProgressIndicator(),
+              ],
+            )
+          : Column(
               children: [
                 Padding(
-                  padding: EdgeInsets.only(
-                      bottom: sp.getHeight(15, height, width)),
+                  padding:
+                      EdgeInsets.only(bottom: sp.getHeight(15, height, width)),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -103,8 +99,7 @@ class _ProductDataWidgetState extends State<ProductDataWidget> {
                                     builder: (context) {
                                       return OpenOrder(
                                           appState: appState,
-                                          productController:
-                                              productController);
+                                          productController: productController);
                                     });
                               },
                               label: Text(
@@ -131,39 +126,35 @@ class _ProductDataWidgetState extends State<ProductDataWidget> {
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: sp.getHeight(670, height, width),
-                  child: ListView.separated(
-                      shrinkWrap: true,
-                      padding: EdgeInsets.zero,
-                      itemBuilder: (context, index) {
-                        //TODO: move this function out of widget tree and factor in different filter options
-                        productController.allProdcuts.sort((a, b) => a.name
-                            .toLowerCase()
-                            .compareTo(b.name.toLowerCase())); //
-                              
-                        return ProductListTile(
-                          product: searchText.isEmpty
-                              ? productController.allProdcuts[index]
-                              : productController.allProdcuts
-                                  .where((p) => p.name.contains(searchText))
-                                  .elementAt(index),
-                          appState: appState,
-                          productController: productController,
-                        );
-                      },
-                      separatorBuilder: (context, index) => Divider(
-                            color: Colors.grey[300],
-                          ),
-                      itemCount: searchText.isEmpty
-                          ? productController.allProdcuts.length
-                          : productController.allProdcuts
-                              .where((p) => p.name.contains(searchText))
-                              .length),
-                ),
+                ListView.separated(
+                    shrinkWrap: true,
+                    padding: EdgeInsets.zero,
+                    itemBuilder: (context, index) {
+                      //TODO: move this function out of widget tree and factor in different filter options
+                      productController.allProdcuts.sort((a, b) => a.name
+                          .toLowerCase()
+                          .compareTo(b.name.toLowerCase())); //
+
+                      return ProductListTile(
+                        product: searchText.isEmpty
+                            ? productController.allProdcuts[index]
+                            : productController.allProdcuts
+                                .where((p) => p.name.contains(searchText))
+                                .elementAt(index),
+                        appState: appState,
+                        productController: productController,
+                      );
+                    },
+                    separatorBuilder: (context, index) => Divider(
+                          color: Colors.grey[300],
+                        ),
+                    itemCount: searchText.isEmpty
+                        ? productController.allProdcuts.length
+                        : productController.allProdcuts
+                            .where((p) => p.name.contains(searchText))
+                            .length),
               ],
             ),
-      ),
     );
   }
 }
