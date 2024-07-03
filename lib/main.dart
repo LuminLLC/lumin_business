@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lumin_business/common/app_colors.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
 import 'package:lumin_business/modules/general_platform/menu_controller.dart';
@@ -39,6 +40,7 @@ class LuminBusiness extends StatelessWidget {
       theme: ThemeData.dark().copyWith(
           scaffoldBackgroundColor: Color(0xFF1E1E1E),
           primaryColor: Colors.white,
+         
           textTheme: GoogleFonts.dmSansTextTheme(Theme.of(context)
               .textTheme
               .copyWith(

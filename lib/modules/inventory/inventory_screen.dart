@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lumin_business/common/app_colors.dart';
 import 'package:lumin_business/common/app_responsive.dart';
+import 'package:lumin_business/common/app_text_theme.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
 import 'package:lumin_business/modules/inventory/product_controller.dart';
@@ -54,36 +55,41 @@ class _InventoryScreenState extends State<InventoryScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: TextField(
-                      controller: searchController,
-                      onChanged: (s) {
-                        setState(() {
-                          searchText = s;
-                        });
-                      },
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: AppColor.black,
-                        fontSize: sp.getFontSize(22, width),
+                  SizedBox(
+                    width: width / 3.5,
+                    child: Expanded(
+                      child: TextField(
+                        controller: searchController,
+                        cursorColor: AppColor.bgSideMenu,
+                        onChanged: (s) {
+                          setState(() {
+                            searchText = s;
+                          });
+                        },
+                        style: AppTextTheme.textTheme.headlineMedium!
+                                .copyWith(color: Colors.black),
+                        decoration: InputDecoration(
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: AppColor.bgSideMenu),
+                            ),
+                            border: UnderlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: AppColor.bgSideMenu),
+                            ),
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: AppColor.bgSideMenu),
+                            ),
+                            hintStyle: AppTextTheme.textTheme.headlineMedium!
+                                .copyWith(color: Colors.black),
+                            hintText: "All Products",
+                            suffixIcon: Icon(
+                              Icons.search,
+                              size: sp.getWidth(20, width),
+                              color: AppColor.bgSideMenu,
+                            )),
                       ),
-                      decoration: InputDecoration(
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey),
-                          ),
-                          border: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey),
-                          ),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey),
-                          ),
-                          hintStyle: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: AppColor.black,
-                            fontSize: sp.getFontSize(22, width),
-                          ),
-                          hintText: "All Products",
-                          suffixIcon: Icon(Icons.search)),
                     ),
                   ),
                   Spacer(),

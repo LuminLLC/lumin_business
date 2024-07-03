@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lumin_business/common/app_colors.dart';
+import 'package:lumin_business/common/app_text_theme.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
 import 'package:lumin_business/modules/inventory/product_controller.dart';
@@ -38,49 +39,36 @@ class ProductListTile extends StatelessWidget {
       // color: getTileColor(product.quantity),
       width: double.infinity,
       child: ListTile(
-       
         leading: Container(
           height: 10,
           width: 10,
           color: getTileColor(product.quantity),
         ),
-    
-        title: Text(
-          product.name,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: AppColor.black,
-            fontSize: sp.getFontSize(16, width),
-          ),
-        ),
+        title: Text(product.name,
+            style: AppTextTheme.textTheme.bodyLarge!
+                .copyWith(color: Colors.black)),
         subtitle: Row(
           children: [
             Text(
               "Category: ${product.category}",
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: sp.getFontSize(14, width),
-              ),
+              style: AppTextTheme.textTheme.bodyMedium!
+                  .copyWith(color: Colors.black),
             ),
             SizedBox(
                 height: sp.getHeight(20, height, width),
                 child: VerticalDivider()),
             Text(
               "Quantity in stock: ${product.quantity}",
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: sp.getFontSize(14, width),
-              ),
+              style: AppTextTheme.textTheme.bodyMedium!
+                  .copyWith(color: Colors.black),
             ),
             SizedBox(
                 height: sp.getHeight(20, height, width),
                 child: VerticalDivider()),
             Text(
               "Price: GHS${product.unitPrice}",
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: sp.getFontSize(14, width),
-              ),
+              style: AppTextTheme.textTheme.bodyMedium!
+                  .copyWith(color: Colors.black),
             ),
           ],
         ),
@@ -92,25 +80,25 @@ class ProductListTile extends StatelessWidget {
               IconButton(
                 icon: Icon(
                   Icons.edit,
-                  color: AppColor.bgSideMenu,
+                  color: AppColor.bgSideMenu.withOpacity(0.5),
                 ),
                 onPressed: () {
-                     showDialog(
-              // barrierDismissible: false,
-              context: context,
-              builder: (context) {
-                return SelectedProduct(
-                  product: product,
-                  appState: appState,
-                  productController: productController,
-                );
-              });
+                  showDialog(
+                      // barrierDismissible: false,
+                      context: context,
+                      builder: (context) {
+                        return SelectedProduct(
+                          product: product,
+                          appState: appState,
+                          productController: productController,
+                        );
+                      });
                 },
               ),
               IconButton(
                 icon: Icon(
                   Icons.add_shopping_cart,
-                  color: product.quantity == 0 ? Colors.grey : Colors.green,
+                  color: getTileColor(product.quantity),
                 ),
                 onPressed: () {
                   if (product.quantity > 0) {
