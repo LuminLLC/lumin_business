@@ -92,7 +92,7 @@ class ProductListTile extends StatelessWidget {
               IconButton(
                 icon: Icon(
                   Icons.edit,
-                  color: product.quantity == 0 ? Colors.grey : Colors.green,
+                  color: AppColor.bgSideMenu,
                 ),
                 onPressed: () {
                      showDialog(

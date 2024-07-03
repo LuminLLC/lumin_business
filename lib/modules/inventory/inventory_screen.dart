@@ -47,6 +47,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
               : null,
         ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
               padding: EdgeInsets.only(bottom: sp.getHeight(15, height, width)),
@@ -128,9 +129,10 @@ class _InventoryScreenState extends State<InventoryScreen> {
                   padding: EdgeInsets.zero,
                   itemBuilder: (context, index) {
                     //TODO: move this function out of widget tree and factor in different filter options
-                    productController.allProdcuts.sort((a, b) =>
-                        a.name.toLowerCase().compareTo(b.name.toLowerCase())); //
-              
+                    productController.allProdcuts.sort((a, b) => a.name
+                        .toLowerCase()
+                        .compareTo(b.name.toLowerCase())); //
+
                     return ProductListTile(
                       product: searchText.isEmpty
                           ? productController.allProdcuts[index]
@@ -150,9 +152,75 @@ class _InventoryScreenState extends State<InventoryScreen> {
                           .where((p) => p.name.contains(searchText))
                           .length),
             ),
+            SizedBox(height: sp.getHeight(10, height, width)),
+            Padding(
+              padding: EdgeInsets.only(right: width / 4),
+              child: Divider(
+                color: AppColor.bgSideMenu.withOpacity(0.3),
+              ),
+            ),
+            SizedBox(
+              child: Row(
+                children: [
+                  Container(
+                    height: 10,
+                    width: 10,
+                    decoration: BoxDecoration(
+                      color: Colors.green,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    "Above critical level",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  SizedBox(
+                    height: 20,
+                    child: VerticalDivider(
+                      color: Colors.grey,
+                    ),
+                  ),
+                  Container(
+                    height: 10,
+                    width: 10,
+                    decoration: BoxDecoration(
+                      color: Colors.yellow.shade100,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    "Below critical level",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  SizedBox(
+                    height: 20,
+                    child: VerticalDivider(
+                      color: Colors.grey,
+                    ),
+                  ),
+                  Container(
+                    height: 10,
+                    width: 10,
+                    decoration: BoxDecoration(
+                      color: Colors.red.shade100,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    "Out of stock",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
-        // child: Expanded(child: ProductDataWidget()),
       );
     });
   }

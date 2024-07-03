@@ -178,7 +178,7 @@ class _MenuState extends State<Menu> {
                               ? EdgeInsets.all(10)
                               : null,
                           decoration: BoxDecoration(
-                            color: AppColor.bgColor,
+                            color: AppColor.blue.withOpacity(0.5),
                             borderRadius: AppResponsive.isDesktop(context)
                                 ? BorderRadius.circular(30)
                                 : null,
@@ -186,31 +186,29 @@ class _MenuState extends State<Menu> {
                           child: ListTile(
                             contentPadding: EdgeInsets.symmetric(
                                 horizontal: sp.getWidth(5, screenWidth)),
-                            tileColor: Colors.white,
+                            // tileColor: Colors.white,
                             title: Text(
-                              appState.user == null || appState.user!.name == ""
-                                  ? ""
-                                  : "Hello, ${appState.user!.name}",
-                              style: AppTextTheme.textTheme.bodyLarge!
-                                  .copyWith(color: Colors.black),
-                            ),
+                                appState.user == null ||
+                                        appState.user!.name == ""
+                                    ? ""
+                                    : "Hello, ${appState.user!.name}",
+                                style: AppTextTheme.textTheme.bodyLarge!),
                             subtitle: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Divider(
-                                  color: Colors.black.withOpacity(0.5),
+                                  color: AppColor.bgSideMenu,
                                   thickness: .25,
                                 ),
                                 Text(
-                                  appState.businessInfo == null ||
-                                          appState.businessInfo!.businessName ==
-                                              ""
-                                      ? "Lumin Business"
-                                      : appState.businessInfo!.businessName,
-                                  style: AppTextTheme.textTheme.labelSmall!
-                                      .copyWith(color: AppColor.blue),
-                                ),
+                                    appState.businessInfo == null ||
+                                            appState.businessInfo!
+                                                    .businessName ==
+                                                ""
+                                        ? "Lumin Business"
+                                        : appState.businessInfo!.businessName,
+                                    style: AppTextTheme.textTheme.labelSmall!),
                                 SizedBox(
                                   height: sp.getHeight(
                                       2, screenHeight, screenWidth),
@@ -221,8 +219,7 @@ class _MenuState extends State<Menu> {
                                             appState.user!.access == null
                                         ? ""
                                         : "${appState.user!.access}",
-                                    style: AppTextTheme.textTheme.labelSmall!
-                                        .copyWith(color: AppColor.blue))
+                                    style: AppTextTheme.textTheme.labelSmall!)
                               ],
                             ),
                             trailing: IconButton(
