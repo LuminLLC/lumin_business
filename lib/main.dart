@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lumin_business/common/app_colors.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
-import 'package:lumin_business/controllers/app_state.dart';
-import 'package:lumin_business/controllers/menu_controller.dart';
-import 'package:lumin_business/controllers/product_controller.dart';
+import 'package:lumin_business/modules/general_platform/app_state.dart';
+import 'package:lumin_business/modules/general_platform/menu_controller.dart';
+import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
+
 import 'package:provider/provider.dart';
 import 'modules/general_platform/home_page.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
@@ -21,8 +23,8 @@ Future<void> main() async {
     ChangeNotifierProvider<AppState>(create: (context) => AppState()),
     ChangeNotifierProvider<PlatformMenuController>(
         create: (context) => PlatformMenuController()),
-    ChangeNotifierProvider<ProductController>(
-        create: (context) => ProductController()),
+    ChangeNotifierProvider<InventoryProvider>(
+        create: (context) => InventoryProvider()),
   ], child: LuminBusiness()));
 }
 
@@ -38,6 +40,7 @@ class LuminBusiness extends StatelessWidget {
       theme: ThemeData.dark().copyWith(
           scaffoldBackgroundColor: Color(0xFF1E1E1E),
           primaryColor: Colors.white,
+         
           textTheme: GoogleFonts.dmSansTextTheme(Theme.of(context)
               .textTheme
               .copyWith(
@@ -62,7 +65,7 @@ class LuminBusiness extends StatelessWidget {
             showPasswordVisibilityToggle: true,
             subtitleBuilder: (context, action) {
               return const Text(
-                "Welcome to Lumin Business! Please sign in to continue.",
+                "Hi to Lumin Business! Please sign in to continue.",
                 style: TextStyle(color: Colors.white),
               );
             },

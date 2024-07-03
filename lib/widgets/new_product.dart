@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
-import 'package:lumin_business/controllers/app_state.dart';
-import 'package:lumin_business/controllers/product_controller.dart';
+import 'package:lumin_business/modules/general_platform/app_state.dart'; 
 import 'package:lumin_business/models/product.dart';
+import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart'; 
 import 'package:lumin_business/widgets/custom_dropdown.dart';
 import 'package:lumin_business/widgets/lumin_texticon_button.dart';
 import 'package:provider/provider.dart';
 
 class NewProduct extends StatefulWidget {
   final AppState appState;
-  final ProductController productController;
+  final InventoryProvider inventoryProvider;
  
   const NewProduct(
-      {Key? key, required this.appState, required this.productController})
+      {Key? key, required this.appState, required this.inventoryProvider})
       : super(key: key);
 
   @override
@@ -199,8 +199,8 @@ class _NewProductState extends State<NewProduct> {
                       child: Text("Add Product to Existing Category"))
                 ]
               : [
-                  Consumer2<ProductController, AppState>(
-                    builder: (context, productController, appState, _) =>
+                  Consumer2<InventoryProvider, AppState>(
+                    builder: (context, InventoryProvider, appState, _) =>
                         LuminTextIconButton(
                       text: "Add Product",
                       icon: Icons.add,
@@ -211,19 +211,19 @@ class _NewProductState extends State<NewProduct> {
                           });
                           Product p = Product(
                             name: nameController.text,
-                            id: {productController.allProdcuts.length + 1}.toString(),
-                            category: productController.selectedCategory!,
+                            id: {InventoryProvider.allProdcuts.length + 1}.toString(),
+                            category: InventoryProvider.selectedCategory!,
                             quantity: int.parse(quantityController.text),
                             unitPrice: double.parse(unitPriceController.text),
                           );
-                          String productCode = productController
+                          String productCode = InventoryProvider
                               .generateProductCode(categoryCode, p);
 
-                          // await productController.addProduct(
+                          // await InventoryProvider.addProduct(
                           //     p, appState, productCode);
                           Navigator.pop(context);
                         }
-                        if (productController.selectedCategory == null) {
+                        if (InventoryProvider.selectedCategory == null) {
                           setState(() {
                             categoryError = true;
                           });
@@ -232,7 +232,7 @@ class _NewProductState extends State<NewProduct> {
                         print(nameController.text +
                             quantityController.text +
                             unitPriceController.text +
-                            "${productController.selectedCategory}");
+                            "${InventoryProvider.selectedCategory}");
                         // if (validateForm()) {}
                       },
                     ),

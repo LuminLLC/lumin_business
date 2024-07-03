@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:lumin_business/controllers/app_state.dart';
-import 'package:lumin_business/controllers/product_controller.dart';
+import 'package:lumin_business/modules/general_platform/app_state.dart';
+
 import 'package:lumin_business/models/category.dart';
+import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
 import 'package:provider/provider.dart';
 
 class CustomDropdownWidget extends StatefulWidget {
@@ -18,13 +19,13 @@ class _CustomDropdownWidgetState extends State<CustomDropdownWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer2<ProductController, AppState>(
-        builder: (context, productController, appState, _) {
+    return Consumer2<InventoryProvider, AppState>(
+        builder: (context, InventoryProvider, appState, _) {
       return DropdownButtonFormField<String>(
-        value: productController.selectedCategory,
+        value: InventoryProvider.selectedCategory,
         onChanged: (newValue) {
           print(newValue);
-          productController.setSelectedCategory(newValue!);
+          InventoryProvider.setSelectedCategory(newValue!);
           // Add your onChanged logic here
           // if (!hasChanges) {
           //   setState(() {
@@ -37,7 +38,7 @@ class _CustomDropdownWidgetState extends State<CustomDropdownWidget> {
           border: OutlineInputBorder(),
           hintText: "Enter Category",
         ),
-        items: productController.categories
+        items: InventoryProvider.categories
             .map<DropdownMenuItem<String>>((ProductCategory value) {
           return DropdownMenuItem<String>(
             value: value.name,
