@@ -104,7 +104,7 @@ class _MenuState extends State<Menu> {
       _getMenuItems(context, appState);
       return Container(
         color: AppColor.bgSideMenu,
-        width: !sp.isDesktop(screenWidth) ? screenWidth / 2.5 : null,
+        width: !sp.isDesktop(screenWidth) ? screenWidth / 2 : null,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -222,21 +222,6 @@ class _MenuState extends State<Menu> {
     });
   }
 
-  BottomNavigationBarItem menuItemTabAndMobile(
-      {required String title,
-      required Icon icon,
-      required AppState appState,
-      required BuildContext context,
-      required bool hasTrailing}) {
-    return BottomNavigationBarItem(
-        icon: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: icon,
-        ),
-        label: title,
-        backgroundColor: AppColor.bgSideMenu);
-  }
-
   Widget menuItemDesktop(
       {required String title,
       required Icon icon,
@@ -254,6 +239,7 @@ class _MenuState extends State<Menu> {
             screenHeight,
             screenWidth,
           ),
+          right: sp.isDesktop(screenWidth) ? 0 : sp.getWidth(10, screenWidth),
           left: sp.getWidth(10, screenWidth)),
       child: Container(
           decoration: BoxDecoration(
