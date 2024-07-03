@@ -4,12 +4,12 @@ import 'package:lumin_business/common/app_responsive.dart';
 import 'package:lumin_business/common/app_text_theme.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
-import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';  
+import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
 import 'package:lumin_business/widgets/lumin_texticon_button.dart';
 import 'package:lumin_business/widgets/new_product.dart';
 import 'package:lumin_business/widgets/open_order.dart';
 import 'package:lumin_business/widgets/product_list_tile.dart';
-import 'package:provider/provider.dart';  
+import 'package:provider/provider.dart';
 
 class InventoryScreen extends StatefulWidget {
   @override
@@ -65,23 +65,20 @@ class _InventoryScreenState extends State<InventoryScreen> {
                           .copyWith(color: Colors.black),
                       decoration: InputDecoration(
                           focusedBorder: UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(color: AppColor.bgSideMenu),
+                            borderSide: BorderSide(color: AppColor.bgSideMenu),
                           ),
                           border: UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(color: AppColor.bgSideMenu),
+                            borderSide: BorderSide(color: AppColor.bgSideMenu),
                           ),
                           enabledBorder: UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(color: AppColor.bgSideMenu),
+                            borderSide: BorderSide(color: AppColor.bgSideMenu),
                           ),
-                          hintStyle: AppTextTheme.textTheme.headlineMedium!
+                          hintStyle: AppTextTheme.textTheme.bodyLarge!
                               .copyWith(color: Colors.black),
                           hintText: "All Products",
                           suffixIcon: Icon(
                             Icons.search,
-                            size: sp.getWidth(20, width),
+                            size: sp.getWidth(25, width),
                             color: AppColor.bgSideMenu,
                           )),
                     ),
@@ -105,7 +102,6 @@ class _InventoryScreenState extends State<InventoryScreen> {
                             icon: Icons.shopping_bag,
                           ),
                         )
-            
                       : SizedBox(),
                   LuminTextIconButton(
                     text: "Add Product",
@@ -154,7 +150,6 @@ class _InventoryScreenState extends State<InventoryScreen> {
                           .length),
             ),
             SizedBox(height: sp.getHeight(30, height, width)),
-          
             SizedBox(
               child: Row(
                 children: [
@@ -170,7 +165,8 @@ class _InventoryScreenState extends State<InventoryScreen> {
                   ),
                   Text(
                     "Above critical level (${invetoryProvider.calculateAboveCriticalLevel()})",
-                    style: TextStyle(color: Colors.black),
+                    style: AppTextTheme.textTheme.bodySmall!
+                        .copyWith(color: Colors.black),
                   ),
                   SizedBox(
                     height: sp.getHeight(20, height, width),
@@ -190,7 +186,8 @@ class _InventoryScreenState extends State<InventoryScreen> {
                   ),
                   Text(
                     "Below critical level (${invetoryProvider.calculateCriticalLevel()})",
-                    style: TextStyle(color: Colors.black),
+                    style: AppTextTheme.textTheme.bodySmall!
+                        .copyWith(color: Colors.black),
                   ),
                   SizedBox(
                     height: sp.getHeight(20, height, width),
@@ -210,7 +207,8 @@ class _InventoryScreenState extends State<InventoryScreen> {
                   ),
                   Text(
                     "Out of stock (${invetoryProvider.calculateOutofStock()})",
-                    style: TextStyle(color: Colors.black),
+                    style: AppTextTheme.textTheme.bodySmall!
+                  .copyWith(color: Colors.black),
                   ),
                   Spacer(),
                   Text(

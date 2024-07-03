@@ -41,8 +41,8 @@ class ProductListTile extends StatelessWidget {
       width: double.infinity,
       child: ListTile(
         leading: Container(
-          height: 10,
-          width: 10,
+          height: sp.getWidth(10, width),
+          width: sp.getWidth(10, width),
           color: getTileColor(product.quantity),
         ),
         title: Text(product.name,
@@ -52,7 +52,7 @@ class ProductListTile extends StatelessWidget {
           children: [
             Text(
               "Category: ${product.category}",
-              style: AppTextTheme.textTheme.bodyMedium!
+              style: AppTextTheme.textTheme.bodySmall!
                   .copyWith(color: Colors.black),
             ),
             SizedBox(
@@ -60,7 +60,7 @@ class ProductListTile extends StatelessWidget {
                 child: VerticalDivider()),
             Text(
               "Quantity in stock: ${product.quantity}",
-              style: AppTextTheme.textTheme.bodyMedium!
+              style: AppTextTheme.textTheme.bodySmall!
                   .copyWith(color: Colors.black),
             ),
             SizedBox(
@@ -68,19 +68,20 @@ class ProductListTile extends StatelessWidget {
                 child: VerticalDivider()),
             Text(
               "Price: GHS${product.unitPrice}",
-              style: AppTextTheme.textTheme.bodyMedium!
+              style: AppTextTheme.textTheme.bodySmall!
                   .copyWith(color: Colors.black),
             ),
           ],
         ),
         trailing: SizedBox(
-          width: 200,
+          width: sp.getWidth(200, width),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               IconButton(
                 icon: Icon(
                   Icons.edit,
+                  size: sp.getWidth(25, width),
                   color: AppColor.bgSideMenu.withOpacity(0.5),
                 ),
                 onPressed: () {
@@ -99,6 +100,7 @@ class ProductListTile extends StatelessWidget {
               IconButton(
                 icon: Icon(
                   Icons.add_shopping_cart,
+                  size: sp.getWidth(25, width),
                   color: getTileColor(product.quantity),
                 ),
                 onPressed: () {
