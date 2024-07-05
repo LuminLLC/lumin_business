@@ -121,9 +121,7 @@ class _MenuState extends State<Menu> {
                         sp.isDesktop(screenWidth) ? EdgeInsets.all(10) : null,
                     decoration: BoxDecoration(
                       color: AppColor.blue.withOpacity(0.5),
-                      borderRadius: sp.isDesktop(screenWidth)
-                          ? BorderRadius.circular(30)
-                          : null,
+                      borderRadius: BorderRadius.circular(10),
                     ),
                     child: ListTile(
                       contentPadding: EdgeInsets.symmetric(
@@ -162,8 +160,7 @@ class _MenuState extends State<Menu> {
                                   textTheme.textTheme(screenWidth).labelSmall!)
                         ],
                       ),
-                    )
-                  ),
+                    )),
             SizedBox(
               height: screenHeight * 0.1,
             ),
