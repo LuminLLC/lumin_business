@@ -47,7 +47,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            HeaderWidget(),
+            HeaderWidget(actions: [],),
             Padding(
               padding: EdgeInsets.only(
                   bottom: sp.getHeight(20, screenHeight, screenWidth)),

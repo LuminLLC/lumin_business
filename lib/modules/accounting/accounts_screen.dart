@@ -22,6 +22,7 @@ class _AccountingScreenState extends State<AccountingScreen> {
   late TextEditingController searchController;
   late TextEditingController quantityController;
   String searchText = "";
+  
   @override
   void initState() {
     super.initState();
@@ -47,7 +48,7 @@ class _AccountingScreenState extends State<AccountingScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            HeaderWidget(),
+            HeaderWidget(actions: [],),
             Padding(
               padding: EdgeInsets.only(
                   bottom: sp.getHeight(20, screenHeight, screenWidth)),

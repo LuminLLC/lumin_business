@@ -37,7 +37,7 @@ class _DashboadScreenState extends State<DashboadScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              HeaderWidget(),
+              HeaderWidget(actions: [],),
               ListTile(
                 title: Text(
                   'Income and Expenses',

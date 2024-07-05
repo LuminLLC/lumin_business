@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:lumin_business/common/app_colors.dart'; 
 import 'package:lumin_business/common/app_text_theme.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
-import 'package:lumin_business/modules/general_platform/app_state.dart';
-import 'package:lumin_business/modules/general_platform/menu_controller.dart'; 
+import 'package:lumin_business/modules/general_platform/app_state.dart'; 
 import 'package:provider/provider.dart';
 
 class HeaderWidget extends StatefulWidget {
+  final List<Widget> actions;
+
+  const HeaderWidget({Key? key, required this.actions}) : super(key: key);
   @override
   _HeaderWidgetState createState() => _HeaderWidgetState();
 }
