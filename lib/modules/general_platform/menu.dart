@@ -82,7 +82,7 @@ class _MenuState extends State<Menu> {
         },
       ),
       menuItemDesktop(
-        title: "Utilites",
+        title: "Settings",
         context: context,
         index: 5,
         appState: appState,
@@ -162,12 +162,7 @@ class _MenuState extends State<Menu> {
                                   textTheme.textTheme(screenWidth).labelSmall!)
                         ],
                       ),
-                      trailing: IconButton(
-                        icon: Icon(Icons.settings),
-                        iconSize: sp.getWidth(20, screenWidth),
-                        onPressed: () {},
-                      ),
-                    ),
+                    )
                   ),
             SizedBox(
               height: screenHeight * 0.1,

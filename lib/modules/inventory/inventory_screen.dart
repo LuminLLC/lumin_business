@@ -3,6 +3,7 @@ import 'package:lumin_business/common/app_colors.dart';
 import 'package:lumin_business/common/app_text_theme.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
+import 'package:lumin_business/modules/general_platform/header_widget.dart';
 import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
 import 'package:lumin_business/widgets/lumin_texticon_button.dart';
 import 'package:lumin_business/widgets/new_product.dart';
@@ -46,6 +47,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            HeaderWidget(),
             Padding(
               padding: EdgeInsets.only(
                   bottom: sp.getHeight(20, screenHeight, screenWidth)),

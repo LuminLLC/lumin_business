@@ -12,7 +12,7 @@ class AppState with ChangeNotifier {
   final FirebaseFirestore _firestore = Config().firestoreEnv;
   Business? businessInfo;
   LuminUser? user;
-  int index = 2;
+  int index = 0;
 
   void setIndex(int i) {
     if (index != i) {

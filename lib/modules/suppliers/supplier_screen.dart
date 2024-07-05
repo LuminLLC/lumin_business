@@ -11,12 +11,12 @@ import 'package:lumin_business/widgets/open_order.dart';
 import 'package:lumin_business/widgets/product_list_tile.dart';
 import 'package:provider/provider.dart';
 
-class AccountingScreen extends StatefulWidget {
+class SupplierScreen extends StatefulWidget {
   @override
-  _AccountingScreenState createState() => _AccountingScreenState();
+  _SupplierScreenState createState() => _SupplierScreenState();
 }
 
-class _AccountingScreenState extends State<AccountingScreen> {
+class _SupplierScreenState extends State<SupplierScreen> {
   final AppTextTheme textTheme = AppTextTheme();
   final SizeAndSpacing sp = SizeAndSpacing();
   late TextEditingController searchController;

@@ -6,6 +6,8 @@ import 'package:lumin_business/modules/customers/customer_screen.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
 import 'package:lumin_business/modules/accounting/accounts_screen.dart';
 import 'package:lumin_business/modules/dashboard/dashboad_screen.dart';
+import 'package:lumin_business/modules/settings/settings_screen.dart';
+import 'package:lumin_business/modules/suppliers/supplier_screen.dart';
 import 'package:provider/provider.dart';
 import 'menu_controller.dart';
 import '../inventory/inventory_screen.dart';
@@ -23,8 +25,8 @@ class _HomePageState extends State<HomePage> {
     AccountingScreen(),
     InventoryScreen(),
     CustomerScreen(),
-    DashboadScreen(),
-    AccountingScreen(),
+    SupplierScreen(),
+    SettingsScreen(),
   ];
 
   @override
