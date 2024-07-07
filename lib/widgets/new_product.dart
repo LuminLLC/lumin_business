@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
-import 'package:lumin_business/modules/general_platform/app_state.dart'; 
+import 'package:lumin_business/modules/general_platform/app_state.dart';
 import 'package:lumin_business/models/product.dart';
-import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart'; 
+import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
 import 'package:lumin_business/widgets/custom_dropdown.dart';
 import 'package:lumin_business/widgets/lumin_texticon_button.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 class NewProduct extends StatefulWidget {
   final AppState appState;
   final InventoryProvider inventoryProvider;
- 
+
   const NewProduct(
       {Key? key, required this.appState, required this.inventoryProvider})
       : super(key: key);
@@ -211,13 +211,15 @@ class _NewProductState extends State<NewProduct> {
                           });
                           Product p = Product(
                             name: nameController.text,
-                            id: {InventoryProvider.allProdcuts.length + 1}.toString(),
+                            id: {InventoryProvider.allProdcuts.length + 1}
+                                .toString(),
                             category: InventoryProvider.selectedCategory!,
                             quantity: int.parse(quantityController.text),
                             unitPrice: double.parse(unitPriceController.text),
                           );
-                          String productCode = InventoryProvider
-                              .generateProductCode(categoryCode, p);
+                          String productCode =
+                              InventoryProvider.generateProductCode(
+                                  categoryCode, p);
 
                           // await InventoryProvider.addProduct(
                           //     p, appState, productCode);

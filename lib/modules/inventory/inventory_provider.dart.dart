@@ -75,7 +75,7 @@ class InventoryProvider with ChangeNotifier {
   String? quantityError;
   bool isProductFetched = false; //TODO: put this back to true
 
-  List<Product> allProdcuts = dummyProductData;
+  List<Product> allProdcuts = [];
   List<ProductCategory> categories = [];
   Map<String, List<Product>> productMap = {};
   List<ProductCategory> productCategories = [];
@@ -413,7 +413,4 @@ class InventoryProvider with ChangeNotifier {
       print(e);
     }
   }
-
-
-
 }
