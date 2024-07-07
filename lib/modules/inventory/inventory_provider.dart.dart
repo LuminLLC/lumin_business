@@ -73,7 +73,7 @@ class InventoryProvider with ChangeNotifier {
   String? selectedCategory;
   Map<Product, int> openOrder = {};
   String? quantityError;
-  bool isProductFetched = false; //TODO: put this back to true
+  bool isProductFetched = false;
 
   List<Product> allProdcuts = [];
   List<ProductCategory> categories = [];

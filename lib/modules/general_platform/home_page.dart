@@ -33,7 +33,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     // final double screenHeight = MediaQuery.of(context).size.height;
-    print(sp.isDesktop(screenWidth));
+
     return Consumer<AppState>(builder: (context, appState, _) {
       return Scaffold(
         appBar: !sp.isDesktop(screenWidth)

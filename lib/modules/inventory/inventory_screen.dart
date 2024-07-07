@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lumin_business/common/app_colors.dart';
 import 'package:lumin_business/common/app_text_theme.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
@@ -7,12 +8,9 @@ import 'package:lumin_business/modules/general_platform/app_state.dart';
 import 'package:lumin_business/modules/general_platform/header_widget.dart';
 import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
 import 'package:lumin_business/temp.dart';
-import 'package:lumin_business/widgets/lumin_texticon_button.dart';
 import 'package:lumin_business/widgets/new_product.dart';
-import 'package:lumin_business/widgets/open_order.dart';
 import 'package:lumin_business/widgets/product_list_tile.dart';
 import 'package:provider/provider.dart';
-import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 class InventoryScreen extends StatefulWidget {
   @override
@@ -21,10 +19,11 @@ class InventoryScreen extends StatefulWidget {
 
 class _InventoryScreenState extends State<InventoryScreen> {
   final AppTextTheme textTheme = AppTextTheme();
+  bool generatingPDF = false;
   final SizeAndSpacing sp = SizeAndSpacing();
   late TextEditingController searchController;
   late TextEditingController quantityController;
-  String searchText = "";
+
   @override
   void initState() {
     super.initState();
@@ -38,7 +37,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
     final double screenWidth = MediaQuery.of(context).size.width;
 
     return Consumer2<InventoryProvider, AppState>(
-        builder: (context, invetoryProvider, appState, _) {
+        builder: (context, inventoryProvider, appState, _) {
       return Container(
         margin: EdgeInsets.all(sp.getWidth(20, screenWidth)),
         padding: EdgeInsets.all(sp.getWidth(20, screenWidth)),
@@ -51,10 +50,115 @@ class _InventoryScreenState extends State<InventoryScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             HeaderWidget(
-              actions: [],
-              controller: searchController,
+              actions: [
+                IconButton(
+                  icon: Icon(
+                    Icons.add,
+                    color: AppColor.black,
+                  ),
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return NewProduct(
+                              appState: appState,
+                              inventoryProvider: inventoryProvider);
+                        });
+                  },
+                ),
+                inventoryProvider.allProdcuts.isNotEmpty
+                    ? IconButton(
+                        icon: Icon(
+                          Icons.download,
+                          color: AppColor.black,
+                        ),
+                        onPressed: () async {
+                          List<String> products = [];
+                          for (Product p in inventoryProvider.allProdcuts) {
+                            products.add(p.toFormattedString());
+                          }
+                          if (!generatingPDF &&
+                              inventoryProvider.allProdcuts.isNotEmpty) {
+                            setState(() {
+                              generatingPDF = true;
+                            });
+                            appState.createPdfAndDownload(products);
+                            setState(() {
+                              generatingPDF = false;
+                            });
+                          }
+                        },
+                      )
+                    : SizedBox(),
+              ],
+              controller: inventoryProvider.allProdcuts.isEmpty
+                  ? null
+                  : searchController,
+              hintText: "Search products",
             ),
-            Expanded(child: ChartWidget()),
+            Expanded(
+              child: !inventoryProvider.isProductFetched
+                  ? Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : inventoryProvider.allProdcuts.isEmpty
+                      ? Center(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                FontAwesomeIcons.boxOpen,
+                                color: AppColor.bgSideMenu,
+                                size: sp.getWidth(100, screenWidth),
+                              ),
+                              SizedBox(
+                                height:
+                                    sp.getHeight(20, screenHeight, screenWidth),
+                              ),
+                              Text(
+                                "You don't have any products in your inventory yet.\nClick the '+' button, in the top right corner of this window, to add your first product",
+                                textAlign: TextAlign.center,
+                                style: AppTextTheme()
+                                    .textTheme(screenWidth)
+                                    .bodyMedium!
+                                    .copyWith(
+                                      color: AppColor.bgSideMenu,
+                                    ),
+                              ),
+                            ],
+                          ),
+                        )
+                      : ListView.separated(
+                          shrinkWrap: true,
+                          padding: EdgeInsets.zero,
+                          itemBuilder: (context, index) {
+                            //TODO: move this function out of widget tree and factor in different filter options
+                            inventoryProvider.allProdcuts.sort((a, b) => a.name
+                                .toLowerCase()
+                                .compareTo(b.name.toLowerCase())); //
+
+                            return ProductListTile(
+                              product: appState.searchText.isEmpty
+                                  ? inventoryProvider.allProdcuts[index]
+                                  : inventoryProvider.allProdcuts
+                                      .where((p) =>
+                                          p.name.contains(appState.searchText))
+                                      .elementAt(index),
+                              appState: appState,
+                              inventoryProvider: inventoryProvider,
+                            );
+                          },
+                          separatorBuilder: (context, index) => Divider(
+                                color: Colors.grey[300],
+                              ),
+                          itemCount: appState.searchText.isEmpty
+                              ? inventoryProvider.allProdcuts.length
+                              : inventoryProvider.allProdcuts
+                                  .where((p) =>
+                                      p.name.contains(appState.searchText))
+                                  .length),
+            ),
             SizedBox(height: sp.getHeight(30, screenHeight, screenWidth)),
             SizedBox(
               child: Row(
@@ -70,7 +174,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                     width: 10,
                   ),
                   Text(
-                    "Above critical level (${invetoryProvider.calculateAboveCriticalLevel()})",
+                    "Above critical level (${inventoryProvider.calculateAboveCriticalLevel()})",
                     style: textTheme
                         .textTheme(screenWidth)
                         .bodySmall!
@@ -93,7 +197,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                     width: 10,
                   ),
                   Text(
-                    "Below critical level (${invetoryProvider.calculateCriticalLevel()})",
+                    "Below critical level (${inventoryProvider.calculateCriticalLevel()})",
                     style: textTheme
                         .textTheme(screenWidth)
                         .bodySmall!
@@ -116,7 +220,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                     width: 10,
                   ),
                   Text(
-                    "Out of stock (${invetoryProvider.calculateOutofStock()})",
+                    "Out of stock (${inventoryProvider.calculateOutofStock()})",
                     style: textTheme
                         .textTheme(screenWidth)
                         .bodySmall!
@@ -124,7 +228,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                   ),
                   Spacer(),
                   Text(
-                    "Product Count: ${invetoryProvider.allProdcuts.length}",
+                    "Product Count: ${inventoryProvider.allProdcuts.length}",
                     style: textTheme
                         .textTheme(screenWidth)
                         .bodySmall!
@@ -136,7 +240,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       color: AppColor.bgSideMenu.withOpacity(0.3),
                     ),
                   ),
-                  Text("Inventory Count: ${invetoryProvider.inventoryCount()}",
+                  Text("Inventory Count: ${inventoryProvider.inventoryCount()}",
                       style: textTheme
                           .textTheme(screenWidth)
                           .bodySmall!

@@ -8,7 +8,9 @@ import 'package:provider/provider.dart';
 class HeaderWidget extends StatefulWidget {
   final List<Widget> actions;
   TextEditingController? controller;
-  HeaderWidget({Key? key, required this.actions, this.controller})
+  String? hintText;
+  HeaderWidget(
+      {Key? key, required this.actions, this.controller, this.hintText})
       : super(key: key);
   @override
   _HeaderWidgetState createState() => _HeaderWidgetState();
@@ -52,6 +54,10 @@ class _HeaderWidgetState extends State<HeaderWidget> {
                       width: sp.getWidth(350, screenWidth),
                       height: 50,
                       child: SearchBar(
+                        controller: widget.controller,
+                        onChanged: (newText) {
+                          appState.setSearchText(newText);
+                        },
                         textStyle: WidgetStatePropertyAll(AppTextTheme()
                             .textTheme(screenWidth)
                             .bodyLarge!
@@ -66,10 +72,14 @@ class _HeaderWidgetState extends State<HeaderWidget> {
                         trailing: widget.controller!.text.isNotEmpty
                             ? [
                                 IconButton(
-                                    onPressed: () {}, icon: Icon(Icons.close))
+                                    onPressed: () {
+                                      widget.controller!.clear();
+                                      appState.setSearchText("");
+                                    },
+                                    icon: Icon(Icons.close))
                               ]
                             : null,
-                        hintText: "Search",
+                        hintText: widget.hintText,
                         backgroundColor:
                             WidgetStatePropertyAll(Colors.grey[100]),
                         elevation: WidgetStatePropertyAll(0),
@@ -81,14 +91,11 @@ class _HeaderWidgetState extends State<HeaderWidget> {
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  navigationIcon(
-                      icon: Icons.add,
-                      screenWidth: screenWidth,
-                      text: "Download Inventory Snapshot"),
-                  navigationIcon(
-                      icon: Icons.download,
-                      screenWidth: screenWidth,
-                      text: "Download Inventory Snapshot"),
+                  for (Widget w in widget.actions)
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 5),
+                      child: w,
+                    )
                 ],
               )
             }

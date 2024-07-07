@@ -27,5 +27,19 @@ class Product {
     };
   }
 
+  String toFormattedString() {
+    StringBuffer buffer = StringBuffer();
+    buffer.writeln('ID: ${id ?? "N/A"}');
+    buffer.writeln('Name: $name');
+    buffer.writeln('Category: $category');
+    buffer.writeln('Quantity: $quantity');
+    buffer.writeln('Unit Price: ${unitPrice.toStringAsFixed(2)}');
+    buffer.writeln('Is Perishable: ${isPerishable ? "Yes" : "No"}');
+    if (isPerishable && expiryDate != null) {
+      buffer.writeln('Expiry Date: ${expiryDate!.toLocal()}');
+    }
+    return buffer.toString();
+  }
+
 
 }

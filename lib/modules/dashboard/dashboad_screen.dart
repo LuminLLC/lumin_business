@@ -16,7 +16,7 @@ class _DashboadScreenState extends State<DashboadScreen> {
   @override
   void initState() {
     super.initState();
-    // Provider.of<InventoryProvider>(context, listen: false).fetchProducts();
+     
   }
 
   @override
