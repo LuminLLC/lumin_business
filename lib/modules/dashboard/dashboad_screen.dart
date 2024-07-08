@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:lumin_business/common/app_colors.dart';
-import 'package:lumin_business/common/app_responsive.dart';
+import 'package:lumin_business/common/app_colors.dart'; 
+import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
 
 import 'package:provider/provider.dart';
@@ -12,22 +12,24 @@ class DashboadScreen extends StatefulWidget {
 }
 
 class _DashboadScreenState extends State<DashboadScreen> {
+  final SizeAndSpacing sp = SizeAndSpacing();
   @override
   void initState() {
     super.initState();
-    // Provider.of<InventoryProvider>(context, listen: false).fetchProducts();
+     
   }
 
   @override
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
     return Consumer<InventoryProvider>(
         builder: (context, InventoryProvider, _) {
       return Container(
-        margin: AppResponsive.isDesktop(context) ? EdgeInsets.all(10) : null,
-        padding: AppResponsive.isDesktop(context) ? EdgeInsets.all(10) : null,
+        margin:sp.isDesktop(screenWidth) ? EdgeInsets.all(10) : null,
+        padding: sp.isDesktop(screenWidth) ? EdgeInsets.all(10) : null,
         decoration: BoxDecoration(
           color: AppColor.bgColor,
-          borderRadius: AppResponsive.isDesktop(context)
+          borderRadius: sp.isDesktop(screenWidth)
               ? BorderRadius.circular(30)
               : null,
         ),
@@ -35,7 +37,7 @@ class _DashboadScreenState extends State<DashboadScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              HeaderWidget(),
+              HeaderWidget(actions: [],),
               ListTile(
                 title: Text(
                   'Income and Expenses',

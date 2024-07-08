@@ -23,8 +23,24 @@ class SelectedProduct extends StatefulWidget {
 
 class _SelectedProductState extends State<SelectedProduct> {
   final SizeAndSpacing sp = SizeAndSpacing();
+  late TextEditingController nameController;
+  late TextEditingController categoryController;
+  late TextEditingController quantityController;
+  late TextEditingController priceController;
   bool hasChanges = false;
   bool isUpdating = false;
+
+  @override
+  void initState() {
+    super.initState();
+    nameController = TextEditingController()..text = widget.product.name;
+    categoryController = TextEditingController()
+      ..text = widget.product.category;
+    quantityController = TextEditingController()
+      ..text = widget.product.quantity.toString();
+    priceController = TextEditingController()
+      ..text = widget.product.unitPrice.toString();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +49,22 @@ class _SelectedProductState extends State<SelectedProduct> {
     return AlertDialog(
       title: Row(
         children: [
+          widget.product.image == null
+              ? Container(
+                  height: sp.getWidth(100, width),
+                  width: sp.getWidth(100, width),
+                  decoration: BoxDecoration(
+                      color: Colors.blueGrey,
+                      borderRadius: BorderRadius.circular(10)),
+                )
+              : Image.network(
+                  widget.product.image!,
+                  height: sp.getWidth(100, width),
+                  width: sp.getWidth(100, width),
+                ),
+          SizedBox(
+            width: sp.getWidth(20, width),
+          ),
           Text(
             "Product Details",
             style: TextStyle(fontSize: sp.getFontSize(24, width)),
@@ -50,7 +82,10 @@ class _SelectedProductState extends State<SelectedProduct> {
         width: sp.getWidth(600, width),
         child: isUpdating
             ? Center(
-                child: CircularProgressIndicator(),
+                child: SizedBox(
+                    height: sp.getWidth(50, width),
+                    width: sp.getWidth(50, width),
+                    child: CircularProgressIndicator()),
               )
             : SingleChildScrollView(
                 child: Column(
@@ -61,8 +96,7 @@ class _SelectedProductState extends State<SelectedProduct> {
                       height: sp.getHeight(35, width, height),
                     ),
                     TextField(
-                      controller: TextEditingController()
-                        ..text = widget.product.name,
+                      controller: nameController,
                       onChanged: (value) {
                         if (!hasChanges) {
                           setState(() {
@@ -81,8 +115,7 @@ class _SelectedProductState extends State<SelectedProduct> {
                       height: sp.getHeight(35, width, height),
                     ),
                     TextField(
-                      controller: TextEditingController()
-                        ..text = widget.product.category.toString(),
+                      controller: categoryController,
                       style: TextStyle(fontSize: sp.getFontSize(16, width)),
                       onChanged: (value) {
                         if (!hasChanges) {
@@ -101,8 +134,7 @@ class _SelectedProductState extends State<SelectedProduct> {
                       height: sp.getHeight(35, width, height),
                     ),
                     TextField(
-                      controller: TextEditingController()
-                        ..text = widget.product.quantity.toString(),
+                      controller: quantityController,
                       style: TextStyle(fontSize: sp.getFontSize(16, width)),
                       onChanged: (value) {
                         if (!hasChanges) {
@@ -112,7 +144,7 @@ class _SelectedProductState extends State<SelectedProduct> {
                         }
                       },
                       decoration: InputDecoration(
-                          enabled: widget.appState.user!.access == "admin",
+                          // enabled: widget.appState.user!.access == "admin",
                           labelText: "Quantity",
                           border: OutlineInputBorder(),
                           hintText: widget.product.quantity.toString()),
@@ -121,8 +153,7 @@ class _SelectedProductState extends State<SelectedProduct> {
                       height: sp.getHeight(35, width, height),
                     ),
                     TextField(
-                      controller: TextEditingController()
-                        ..text = widget.product.unitPrice.toString(),
+                      controller: priceController,
                       onChanged: (value) {
                         if (!hasChanges) {
                           setState(() {
@@ -130,7 +161,7 @@ class _SelectedProductState extends State<SelectedProduct> {
                           });
                         }
                       },
-                      enabled: widget.appState.user!.access == "admin",
+                      // enabled: widget.appState.user!.access == "admin",
                       style: TextStyle(fontSize: sp.getFontSize(16, width)),
                       decoration: InputDecoration(
                           labelText: "Unit Price",
@@ -144,27 +175,33 @@ class _SelectedProductState extends State<SelectedProduct> {
                 ),
               ),
       ),
-      actions: isUpdating || !(widget.appState.user!.access == "admin")
+      actions: false //isUpdating || !(widget.appState.user!.access == "admin")
           ? []
           : [
               LuminTextIconButton(
                 text: hasChanges ? "Save & Exit" : "Exit",
                 icon: hasChanges ? Icons.save : Icons.close,
                 onPressed: () async {
-                  // if (hasChanges) {
-                  //   setState(() {
-                  //     isUpdating = true;
-                  //   });
-                  //   await widget.InventoryProvider
-                  //       .updateProduct(widget.product);
-                  //   setState(() {
-                  //     isUpdating = false;
-                  //   });
-                  //   Navigator.pop(context);
-                  // } else {
-                  //   // no changes
-                  //   Navigator.pop(context);
-                  // }
+                  if (hasChanges) {
+                    setState(() {
+                      isUpdating = true;
+                    });
+                    await widget.inventoryProvider.updateProduct(
+                        Product(
+                            id: widget.product.id,
+                            name: nameController.text,
+                            quantity: int.parse(quantityController.text),
+                            category: categoryController.text,
+                            unitPrice: double.parse(priceController.text)),
+                        widget.appState.businessInfo!.businessId);
+                    setState(() {
+                      isUpdating = false;
+                    });
+                    Navigator.pop(context);
+                  } else {
+                    // no changes
+                    Navigator.pop(context);
+                  }
                 },
               ),
               LuminTextIconButton(
@@ -176,8 +213,8 @@ class _SelectedProductState extends State<SelectedProduct> {
                     setState(() {
                       isUpdating = true;
                     });
-                    await widget.inventoryProvider
-                        .deleteProduct(widget.product, widget.appState.businessInfo!.businessId);
+                    await widget.inventoryProvider.deleteProduct(widget.product,
+                        widget.appState.businessInfo!.businessId);
                     setState(() {
                       isUpdating = false;
                     });

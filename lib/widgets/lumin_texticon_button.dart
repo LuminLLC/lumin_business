@@ -8,6 +8,7 @@ import 'package:lumin_business/common/app_text_theme.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 
 class LuminTextIconButton extends StatelessWidget {
+  final AppTextTheme textTheme = AppTextTheme();
   final SizeAndSpacing sp = SizeAndSpacing();
   final String text;
   final IconData icon;
@@ -41,7 +42,7 @@ class LuminTextIconButton extends StatelessWidget {
         backgroundColor: WidgetStateProperty.all(AppColor.bgSideMenu),
       ),
       label: Text(text,
-          style: AppTextTheme.textTheme.bodySmall!.copyWith(
+          style: textTheme.textTheme(screenWidth).bodySmall!.copyWith(
             color: textColor ?? Colors.white,
           )),
       icon: Icon(

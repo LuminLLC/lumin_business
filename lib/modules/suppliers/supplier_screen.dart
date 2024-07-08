@@ -11,12 +11,12 @@ import 'package:lumin_business/widgets/new_product.dart';
 import 'package:lumin_business/widgets/product_list_tile.dart';
 import 'package:provider/provider.dart';
 
-class CustomerScreen extends StatefulWidget {
+class SupplierScreen extends StatefulWidget {
   @override
-  _CustomerScreenState createState() => _CustomerScreenState();
+  _SupplierScreenState createState() => _SupplierScreenState();
 }
 
-class _CustomerScreenState extends State<CustomerScreen> {
+class _SupplierScreenState extends State<SupplierScreen> {
   final AppTextTheme textTheme = AppTextTheme();
   bool generatingPDF = false;
   final SizeAndSpacing sp = SizeAndSpacing();
@@ -93,7 +93,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
               controller: inventoryProvider.allProdcuts.isEmpty
                   ? null
                   : searchController,
-              hintText: "Search customers",
+              hintText: "Search suppliers",
             ),
             Expanded(
               child: !inventoryProvider.isProductFetched

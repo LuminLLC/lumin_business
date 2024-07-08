@@ -4,7 +4,6 @@ import 'package:lumin_business/common/size_and_spacing.dart';
 
 import 'package:lumin_business/models/product.dart';
 import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
-import 'package:provider/provider.dart';
 
 class SetOrderQuantity extends StatefulWidget {
   final Product product;

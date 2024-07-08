@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:lumin_business/common/app_colors.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 
-import 'package:provider/provider.dart';
 
 class StatCardWidget extends StatelessWidget {
   final String statName;

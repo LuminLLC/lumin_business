@@ -73,9 +73,9 @@ class InventoryProvider with ChangeNotifier {
   String? selectedCategory;
   Map<Product, int> openOrder = {};
   String? quantityError;
-  bool isProductFetched = false; //TODO: put this back to true
+  bool isProductFetched = false;
 
-  List<Product> allProdcuts = dummyProductData;
+  List<Product> allProdcuts = [];
   List<ProductCategory> categories = [];
   Map<String, List<Product>> productMap = {};
   List<ProductCategory> productCategories = [];
@@ -348,6 +348,7 @@ class InventoryProvider with ChangeNotifier {
 
   Future<void> fetchProducts(String businessID) async {
     if (!isProductFetched) {
+      allProdcuts = [];
       QuerySnapshot<Map<String, dynamic>> tempList = await _firestore
           .collection('businesses')
           .doc(businessID)
@@ -366,6 +367,22 @@ class InventoryProvider with ChangeNotifier {
       isProductFetched = true;
       notifyListeners();
       await getCategories(businessID);
+    }
+  }
+
+  Future<void> updateProduct(Product updatedProduct, String businessID) async {
+    try {
+      await _firestore
+          .collection('businesses')
+          .doc(businessID)
+          .collection("products")
+          .doc(updatedProduct.id)
+          .set(updatedProduct.toMap());
+      isProductFetched = false;
+      notifyListeners();
+      fetchProducts(businessID);
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -413,7 +430,4 @@ class InventoryProvider with ChangeNotifier {
       print(e);
     }
   }
-
-
-
 }
