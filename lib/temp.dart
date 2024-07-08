@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:syncfusion_flutter_xlsio/xlsio.dart' as xcel;
 import 'package:syncfusion_flutter_xlsio/xlsio.dart';
 
 class TempClass {

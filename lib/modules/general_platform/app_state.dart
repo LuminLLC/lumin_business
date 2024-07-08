@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:excel/excel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,16 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lumin_business/config.dart';
 import 'package:lumin_business/models/product.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'package:flutter/material.dart';
 import 'package:printing/printing.dart';
 import 'package:lumin_business/models/business.dart';
 import 'package:lumin_business/models/lumin_user.dart';
 import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
 import 'package:provider/provider.dart';
-import 'package:universal_html/html.dart';
 
 class AppState with ChangeNotifier {
   final FirebaseFirestore _firestore = Config().firestoreEnv;

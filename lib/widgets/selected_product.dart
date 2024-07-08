@@ -33,6 +33,14 @@ class _SelectedProductState extends State<SelectedProduct> {
     return AlertDialog(
       title: Row(
         children: [
+          Image.asset(
+            "assets/GreenDrop_Station_Aluminum_Can_1.jpg",
+            height: sp.getWidth(100, width),
+            width: sp.getWidth(100, width),
+          ),
+          SizedBox(
+            width: sp.getWidth(20, width),
+          ),
           Text(
             "Product Details",
             style: TextStyle(fontSize: sp.getFontSize(24, width)),
@@ -176,8 +184,8 @@ class _SelectedProductState extends State<SelectedProduct> {
                     setState(() {
                       isUpdating = true;
                     });
-                    await widget.inventoryProvider
-                        .deleteProduct(widget.product, widget.appState.businessInfo!.businessId);
+                    await widget.inventoryProvider.deleteProduct(widget.product,
+                        widget.appState.businessInfo!.businessId);
                     setState(() {
                       isUpdating = false;
                     });

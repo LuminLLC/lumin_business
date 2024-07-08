@@ -11,7 +11,7 @@ import 'package:lumin_business/widgets/selected_product.dart';
 
 class ProductListTile extends StatelessWidget {
   final SizeAndSpacing sp = SizeAndSpacing();
-final AppTextTheme textTheme = AppTextTheme();
+  final AppTextTheme textTheme = AppTextTheme();
   final Product product;
   final InventoryProvider inventoryProvider;
   final AppState appState;
@@ -24,7 +24,7 @@ final AppTextTheme textTheme = AppTextTheme();
 
   Color getTileColor(int quantity) {
     if (quantity > 10) {
-      return Colors.green;
+      return Colors.white;
     } else if (quantity == 0) {
       return Colors.red.shade100;
     } else {
@@ -40,19 +40,45 @@ final AppTextTheme textTheme = AppTextTheme();
       // color: getTileColor(product.quantity),
       width: double.infinity,
       child: ListTile(
-        leading: Container(
-          height: sp.getWidth(10, screenWidth),
-          width: sp.getWidth(10, screenWidth),
-          color: getTileColor(product.quantity),
+        leading: Image.asset(
+          "assets/GreenDrop_Station_Aluminum_Can_1.jpg",
+          height: 50,
+          width: 50,
         ),
-        title: Text(product.name,
-            style: textTheme.textTheme(screenWidth).bodyLarge!
-                .copyWith(color: Colors.black)),
+        onTap: () {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return SelectedProduct(
+                    product: product,
+                    appState: appState,
+                    inventoryProvider: inventoryProvider);
+              });
+        },
+        title: Row(
+          children: [
+            Text(product.name,
+                style: textTheme
+                    .textTheme(screenWidth)
+                    .bodyLarge!
+                    .copyWith(color: Colors.black)),
+            SizedBox(
+              width: 20,
+            ),
+            Container(
+              height: sp.getWidth(10, screenWidth),
+              width: sp.getWidth(10, screenWidth),
+              color: getTileColor(product.quantity),
+            ),
+          ],
+        ),
         subtitle: Row(
           children: [
             Text(
               "Category: ${product.category}",
-              style: textTheme.textTheme(screenWidth).bodySmall!
+              style: textTheme
+                  .textTheme(screenWidth)
+                  .bodySmall!
                   .copyWith(color: Colors.black),
             ),
             SizedBox(
@@ -60,7 +86,9 @@ final AppTextTheme textTheme = AppTextTheme();
                 child: VerticalDivider()),
             Text(
               "Quantity in stock: ${product.quantity}",
-              style: textTheme.textTheme(screenWidth).bodySmall!
+              style: textTheme
+                  .textTheme(screenWidth)
+                  .bodySmall!
                   .copyWith(color: Colors.black),
             ),
             SizedBox(
@@ -68,7 +96,9 @@ final AppTextTheme textTheme = AppTextTheme();
                 child: VerticalDivider()),
             Text(
               "Price: GHS${product.unitPrice}",
-              style: textTheme.textTheme(screenWidth).bodySmall!
+              style: textTheme
+                  .textTheme(screenWidth)
+                  .bodySmall!
                   .copyWith(color: Colors.black),
             ),
           ],
