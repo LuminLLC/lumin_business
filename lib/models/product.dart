@@ -1,5 +1,6 @@
 class Product {
-   String? id;
+  String? id;
+  String? image;
   String name;
   String category;
   int quantity;
@@ -13,6 +14,7 @@ class Product {
       required this.name,
       required this.quantity,
       required this.category,
+      this.image,
       this.isPerishable = false,
       this.expiryDate,
       required this.unitPrice});
@@ -40,6 +42,4 @@ class Product {
     }
     return buffer.toString();
   }
-
-
 }

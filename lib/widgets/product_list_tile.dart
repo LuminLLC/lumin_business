@@ -24,7 +24,7 @@ class ProductListTile extends StatelessWidget {
 
   Color getTileColor(int quantity) {
     if (quantity > 10) {
-      return Colors.white;
+      return Colors.green;
     } else if (quantity == 0) {
       return Colors.red.shade100;
     } else {
@@ -40,11 +40,19 @@ class ProductListTile extends StatelessWidget {
       // color: getTileColor(product.quantity),
       width: double.infinity,
       child: ListTile(
-        leading: Image.asset(
-          "assets/GreenDrop_Station_Aluminum_Can_1.jpg",
-          height: 50,
-          width: 50,
-        ),
+        leading: product.image == null
+            ? Container(
+                height: sp.getWidth(50, screenWidth),
+                width: sp.getWidth(50, screenWidth),
+                decoration: BoxDecoration(
+                    color: Colors.blueGrey,
+                    borderRadius: BorderRadius.circular(10)),
+              )
+            : Image.network(
+                product.image!,
+                height: sp.getWidth(50, screenWidth),
+                width: sp.getWidth(50, screenWidth),
+              ),
         onTap: () {
           showDialog(
               context: context,
