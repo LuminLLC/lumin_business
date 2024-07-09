@@ -112,14 +112,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   LuminTextIconButton(
                     text: "Add Product",
                     onPressed: () {
-                      showDialog(
-                          context: context,
-                          builder: (context) {
-                            return NewProduct(
-                              appState: appState,
-                              inventoryProvider: invetoryProvider,
-                            );
-                          });
+                      // showDialog(
+                      //     context: context,
+                      //     builder: (context) {
+                      //       return NewProduct(
+                      //         appState: appState,
+                      //         inventoryProvider: invetoryProvider,
+                      //       );
+                      //     });
                     },
                     icon: Icons.add,
                   ),

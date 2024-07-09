@@ -22,7 +22,7 @@ class _AccountingScreenState extends State<AccountingScreen> {
   late TextEditingController searchController;
   late TextEditingController quantityController;
   String searchText = "";
-  
+
   @override
   void initState() {
     super.initState();
@@ -48,7 +48,9 @@ class _AccountingScreenState extends State<AccountingScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            HeaderWidget(actions: [],),
+            HeaderWidget(
+              actions: [],
+            ),
             Padding(
               padding: EdgeInsets.only(
                   bottom: sp.getHeight(20, screenHeight, screenWidth)),
@@ -113,14 +115,14 @@ class _AccountingScreenState extends State<AccountingScreen> {
                   LuminTextIconButton(
                     text: "Add Product",
                     onPressed: () {
-                      showDialog(
-                          context: context,
-                          builder: (context) {
-                            return NewProduct(
-                              appState: appState,
-                              inventoryProvider: invetoryProvider,
-                            );
-                          });
+                      // showDialog(
+                      //     context: context,
+                      //     builder: (context) {
+                      //       return NewProduct(
+                      //         appState: appState,
+                      //         inventoryProvider: invetoryProvider,
+                      //       );
+                      //     });
                     },
                     icon: Icons.add,
                   ),
