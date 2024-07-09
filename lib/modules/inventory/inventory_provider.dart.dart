@@ -80,6 +80,11 @@ class InventoryProvider with ChangeNotifier {
   Map<String, List<Product>> productMap = {};
   List<ProductCategory> productCategories = [];
 
+  void clearSelectedCategory() {
+    selectedCategory = null;
+    notifyListeners();
+  }
+
   Stream<DocumentSnapshot<Map<String, dynamic>>> getTodaysOrders(
       String businessID) {
     String todayDateString = DateFormat('yyyy-MM-dd').format(DateTime.now());
@@ -129,7 +134,7 @@ class InventoryProvider with ChangeNotifier {
 
   Future<void> addProduct(
       Product p, String businessID, String productCode) async {
-    // String productCode = generateProductCode(categoryCode, p);
+    print(businessID);
     try {
       await _firestore
           .collection('businesses')
@@ -143,6 +148,8 @@ class InventoryProvider with ChangeNotifier {
         "unitPrice": p.unitPrice
       });
       allProdcuts.add(p);
+
+      notifyListeners();
     } catch (e) {
       print(e);
     }
@@ -378,9 +385,14 @@ class InventoryProvider with ChangeNotifier {
           .collection("products")
           .doc(updatedProduct.id)
           .set(updatedProduct.toMap());
-      isProductFetched = false;
+
+      for (Product p in allProdcuts) {
+        if (p.id == updatedProduct.id) {
+          int index = allProdcuts.indexOf(p);
+          allProdcuts[index] = updatedProduct;
+        }
+      }
       notifyListeners();
-      fetchProducts(businessID);
     } catch (e) {
       print(e);
     }

@@ -1,24 +1,16 @@
-Lumin Business - Version 1.1
+Lumin Business - Version 1.1.2
 
-New Features:
+Hot Fix:
 
-Inventory Management:
-- Add New Products: Users can now seamlessly add new products to their inventory.
-- Adjust Quantities and Prices: Easily adjust the quantities and prices of existing products to keep your inventory up-to-date.
+This release addresses the following:
 
-Customer and Supplier Management:
-- New Models: We have introduced new models for managing your customers and suppliers. This is the first step towards a more comprehensive management system.
-- Future Enhancements: Stay tuned for additional functionalities in upcoming releases that will further enhance customer and supplier management.
+- Addresses a bug that causes new product uploads to fail or return a dirty state.
+- Addresses a bug that causes platform to fetch entire inventory database on updating a field on one product.
+- General platform stability issues
+- General data efficiency issues
 
-Upcoming Features:
 
-Dashboard:
-- Business Summary: We are developing a dashboard that will provide users with a summary of key information about their business. This feature will give you an at-a-glance view of your business performance.
-
-Accounting Module:
-- Income and Expenses Tracking: Our team is working on an accounting module to help you track your income and expenses efficiently. This will streamline your financial management process.
-
-We hope these new features enhance your experience with our platform. Your feedback is valuable to us, so please do not hesitate to share your thoughts and suggestions.
+Your feedback is valuable to us, so please do not hesitate to share your thoughts and suggestions.
 
 Thank you for using Lumin Business!
 

@@ -61,6 +61,12 @@ class _InventoryScreenState extends State<InventoryScreen> {
                         builder: (context) {
                           return NewProduct(
                               appState: appState,
+                              product: Product(
+                                  id: "id",
+                                  name: "name",
+                                  quantity: 100,
+                                  category: "category",
+                                  unitPrice: 100),
                               inventoryProvider: inventoryProvider);
                         });
                   },

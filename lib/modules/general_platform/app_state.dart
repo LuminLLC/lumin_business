@@ -112,6 +112,7 @@ class AppState with ChangeNotifier {
 
   void setIndex(int i) {
     if (index != i) {
+      setSearchText("");
       index = i;
       notifyListeners();
     }

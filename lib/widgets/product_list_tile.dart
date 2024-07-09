@@ -26,9 +26,9 @@ class ProductListTile extends StatelessWidget {
     if (quantity > 10) {
       return Colors.green;
     } else if (quantity == 0) {
-      return Colors.red.shade100;
+      return Colors.red;
     } else {
-      return Colors.yellow.shade100;
+      return Colors.yellow;
     }
   }
 
@@ -53,16 +53,6 @@ class ProductListTile extends StatelessWidget {
                 height: sp.getWidth(50, screenWidth),
                 width: sp.getWidth(50, screenWidth),
               ),
-        onTap: () {
-          showDialog(
-              context: context,
-              builder: (context) {
-                return SelectedProduct(
-                    product: product,
-                    appState: appState,
-                    inventoryProvider: inventoryProvider);
-              });
-        },
         title: Row(
           children: [
             Text(product.name,
@@ -120,7 +110,7 @@ class ProductListTile extends StatelessWidget {
                 icon: Icon(
                   Icons.edit,
                   size: sp.getWidth(25, screenWidth),
-                  color: AppColor.bgSideMenu.withOpacity(0.5),
+                  color: AppColor.bgSideMenu.withOpacity(0.8),
                 ),
                 onPressed: () {
                   showDialog(

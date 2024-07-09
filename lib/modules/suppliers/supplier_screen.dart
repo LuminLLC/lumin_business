@@ -56,13 +56,13 @@ class _SupplierScreenState extends State<SupplierScreen> {
                     color: AppColor.black,
                   ),
                   onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return NewProduct(
-                              appState: appState,
-                              inventoryProvider: inventoryProvider);
-                        });
+                    // showDialog(
+                    //     context: context,
+                    //     builder: (context) {
+                    //       return NewProduct(
+                    //           appState: appState,
+                    //           inventoryProvider: inventoryProvider);
+                    //     });
                   },
                 ),
                 inventoryProvider.allProdcuts.isNotEmpty
