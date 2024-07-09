@@ -4,18 +4,18 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lumin_business/config.dart';
-import 'package:lumin_business/models/product.dart';
+import 'package:lumin_business/modules/inventory/product.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
-import 'package:lumin_business/models/business.dart';
-import 'package:lumin_business/models/lumin_user.dart';
+import 'package:lumin_business/modules/user_and_busness/business_model.dart';
+import 'package:lumin_business/modules/user_and_busness/lumin_user.dart';
 import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
 import 'package:provider/provider.dart';
 
 class AppState with ChangeNotifier {
   final FirebaseFirestore _firestore = Config().firestoreEnv;
   String searchText = "";
-  Business? businessInfo;
+  BusinessModel? businessInfo;
   LuminUser? user;
   int index = 0;
 
@@ -124,7 +124,7 @@ class AppState with ChangeNotifier {
         DocumentSnapshot<Map<String, dynamic>> temp =
             await _firestore.collection('businesses').doc(businessID).get();
 
-        businessInfo = Business(
+        businessInfo = BusinessModel(
           businessId: temp.id,
           businessName: temp.data()!['business_name'],
           businessLogo: temp.data()!['business_logo'] ?? "",

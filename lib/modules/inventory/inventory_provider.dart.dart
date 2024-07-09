@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lumin_business/config.dart';
-import 'package:lumin_business/models/category.dart';
-import 'package:lumin_business/models/product.dart';
+import 'package:lumin_business/modules/inventory/category.dart';
+import 'package:lumin_business/modules/inventory/product.dart';
 
 List<Product> dummyProductData = [
   Product(

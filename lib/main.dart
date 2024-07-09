@@ -6,7 +6,7 @@ import 'package:lumin_business/modules/customers/customer_provider.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
 import 'package:lumin_business/modules/general_platform/menu_controller.dart';
 import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
-
+import 'package:lumin_business/modules/suppliers/supplier_provider.dart';
 import 'package:provider/provider.dart';
 import 'modules/general_platform/home_page.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
@@ -20,6 +20,8 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(MultiProvider(providers: [
+    ChangeNotifierProvider<SupplierProvider>(
+        create: (context) => SupplierProvider()),
     ChangeNotifierProvider<CustomerProvider>(
         create: (context) => CustomerProvider()),
     ChangeNotifierProvider<AppState>(create: (context) => AppState()),

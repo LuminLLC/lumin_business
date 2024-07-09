@@ -3,10 +3,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lumin_business/common/app_colors.dart';
 import 'package:lumin_business/common/app_text_theme.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
-import 'package:lumin_business/models/product.dart';
+import 'package:lumin_business/modules/inventory/product.dart';
+import 'package:lumin_business/modules/customers/customer_provider.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
 import 'package:lumin_business/modules/general_platform/header_widget.dart';
 import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
+import 'package:lumin_business/modules/suppliers/supplier_provider.dart';
 import 'package:lumin_business/widgets/new_product.dart';
 import 'package:lumin_business/widgets/product_list_tile.dart';
 import 'package:provider/provider.dart';
@@ -35,8 +37,8 @@ class _SupplierScreenState extends State<SupplierScreen> {
     final double screenHeight = MediaQuery.of(context).size.height;
     final double screenWidth = MediaQuery.of(context).size.width;
 
-    return Consumer2<InventoryProvider, AppState>(
-        builder: (context, inventoryProvider, appState, _) {
+    return Consumer2<SupplierProvider, AppState>(
+        builder: (context, supplierProvider, appState, _) {
       return Container(
         margin: EdgeInsets.all(sp.getWidth(20, screenWidth)),
         padding: EdgeInsets.all(sp.getWidth(20, screenWidth)),
@@ -61,11 +63,11 @@ class _SupplierScreenState extends State<SupplierScreen> {
                     //     builder: (context) {
                     //       return NewProduct(
                     //           appState: appState,
-                    //           inventoryProvider: inventoryProvider);
+                    //           inventoryProvider: customerProvider);
                     //     });
                   },
                 ),
-                inventoryProvider.allProdcuts.isNotEmpty
+                supplierProvider.allSuppliers.isNotEmpty
                     ? IconButton(
                         icon: Icon(
                           Icons.download,
@@ -73,11 +75,11 @@ class _SupplierScreenState extends State<SupplierScreen> {
                         ),
                         onPressed: () async {
                           List<String> products = [];
-                          for (Product p in inventoryProvider.allProdcuts) {
+                          for (Product p in supplierProvider.allSuppliers) {
                             products.add(p.toFormattedString());
                           }
                           if (!generatingPDF &&
-                              inventoryProvider.allProdcuts.isNotEmpty) {
+                              supplierProvider.allSuppliers.isNotEmpty) {
                             setState(() {
                               generatingPDF = true;
                             });
@@ -90,24 +92,24 @@ class _SupplierScreenState extends State<SupplierScreen> {
                       )
                     : SizedBox(),
               ],
-              controller: inventoryProvider.allProdcuts.isEmpty
+              controller: supplierProvider.allSuppliers.isEmpty
                   ? null
                   : searchController,
               hintText: "Search suppliers",
             ),
             Expanded(
-              child: !inventoryProvider.isProductFetched
+              child: !supplierProvider.isSuppliersFetched
                   ? Center(
                       child: CircularProgressIndicator(),
                     )
-                  : inventoryProvider.allProdcuts.isEmpty
+                  : supplierProvider.allSuppliers.isEmpty
                       ? Center(
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(
-                                FontAwesomeIcons.boxOpen,
+                                FontAwesomeIcons.peopleCarryBox,
                                 color: AppColor.bgSideMenu,
                                 size: sp.getWidth(100, screenWidth),
                               ),
@@ -116,7 +118,7 @@ class _SupplierScreenState extends State<SupplierScreen> {
                                     sp.getHeight(20, screenHeight, screenWidth),
                               ),
                               Text(
-                                "You don't have any products in your inventory yet.\nClick the '+' button, in the top right corner of this window, to add your first product",
+                                "You don't have any suppliers yet.\nClick the '+' button, in the top right corner of this window, to add your first supplier",
                                 textAlign: TextAlign.center,
                                 style: AppTextTheme()
                                     .textTheme(screenWidth)
@@ -133,27 +135,27 @@ class _SupplierScreenState extends State<SupplierScreen> {
                           padding: EdgeInsets.zero,
                           itemBuilder: (context, index) {
                             //TODO: move this function out of widget tree and factor in different filter options
-                            inventoryProvider.allProdcuts.sort((a, b) => a.name
+                            supplierProvider.allSuppliers.sort((a, b) => a.name
                                 .toLowerCase()
                                 .compareTo(b.name.toLowerCase())); //
 
                             return ProductListTile(
                               product: appState.searchText.isEmpty
-                                  ? inventoryProvider.allProdcuts[index]
-                                  : inventoryProvider.allProdcuts
+                                  ? supplierProvider.allSuppliers[index]
+                                  : supplierProvider.allSuppliers
                                       .where((p) =>
                                           p.name.contains(appState.searchText))
                                       .elementAt(index),
                               appState: appState,
-                              inventoryProvider: inventoryProvider,
+                              inventoryProvider: InventoryProvider(),
                             );
                           },
                           separatorBuilder: (context, index) => Divider(
                                 color: Colors.grey[300],
                               ),
                           itemCount: appState.searchText.isEmpty
-                              ? inventoryProvider.allProdcuts.length
-                              : inventoryProvider.allProdcuts
+                              ? supplierProvider.allSuppliers.length
+                              : supplierProvider.allSuppliers
                                   .where((p) =>
                                       p.name.contains(appState.searchText))
                                   .length),
@@ -173,7 +175,8 @@ class _SupplierScreenState extends State<SupplierScreen> {
                     width: 10,
                   ),
                   Text(
-                    "Above critical level (${inventoryProvider.calculateAboveCriticalLevel()})",
+                    "",
+                    // "Above critical level (${customerProvider.calculateAboveCriticalLevel()})",
                     style: textTheme
                         .textTheme(screenWidth)
                         .bodySmall!
@@ -196,7 +199,8 @@ class _SupplierScreenState extends State<SupplierScreen> {
                     width: 10,
                   ),
                   Text(
-                    "Below critical level (${inventoryProvider.calculateCriticalLevel()})",
+                    // "Below critical level (${customerProvider.calculateCriticalLevel()})",
+                    "",
                     style: textTheme
                         .textTheme(screenWidth)
                         .bodySmall!
@@ -219,7 +223,8 @@ class _SupplierScreenState extends State<SupplierScreen> {
                     width: 10,
                   ),
                   Text(
-                    "Out of stock (${inventoryProvider.calculateOutofStock()})",
+                    // "Out of stock (${customerProvider.calculateOutofStock()})",
+                    "",
                     style: textTheme
                         .textTheme(screenWidth)
                         .bodySmall!
@@ -227,7 +232,8 @@ class _SupplierScreenState extends State<SupplierScreen> {
                   ),
                   Spacer(),
                   Text(
-                    "Product Count: ${inventoryProvider.allProdcuts.length}",
+                    // "Product Count: ${customerProvider.allProdcuts.length}",
+                    "",
                     style: textTheme
                         .textTheme(screenWidth)
                         .bodySmall!
@@ -239,7 +245,9 @@ class _SupplierScreenState extends State<SupplierScreen> {
                       color: AppColor.bgSideMenu.withOpacity(0.3),
                     ),
                   ),
-                  Text("Inventory Count: ${inventoryProvider.inventoryCount()}",
+                  Text(
+                      // "Inventory Count: ${customerProvider.inventoryCount()}",
+                      "",
                       style: textTheme
                           .textTheme(screenWidth)
                           .bodySmall!

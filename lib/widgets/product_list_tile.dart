@@ -4,7 +4,7 @@ import 'package:lumin_business/common/app_text_theme.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
 
-import 'package:lumin_business/models/product.dart';
+import 'package:lumin_business/modules/inventory/product.dart';
 import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
 import 'package:lumin_business/widgets/set_order_quantity.dart';
 import 'package:lumin_business/widgets/selected_product.dart';

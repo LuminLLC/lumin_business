@@ -1,4 +1,4 @@
-import 'package:lumin_business/models/product.dart';
+import 'package:lumin_business/modules/inventory/product.dart';
 
 class LuminOrder {
   String? orderId;

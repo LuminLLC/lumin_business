@@ -5,7 +5,7 @@ enum accountTypes {
 
 }
 
-class Business {
+class BusinessModel {
   final String businessId;
   String businessName;
   final String businessLogo;
@@ -17,7 +17,7 @@ class Business {
   final  Map<String, dynamic> accounts;
 
 
-  Business({
+  BusinessModel({
     required this.businessId,
     required this.businessName,
     required this.businessLogo,
