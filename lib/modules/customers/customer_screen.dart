@@ -4,6 +4,7 @@ import 'package:lumin_business/common/app_colors.dart';
 import 'package:lumin_business/common/app_text_theme.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/models/product.dart';
+import 'package:lumin_business/modules/customers/customer_provider.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
 import 'package:lumin_business/modules/general_platform/header_widget.dart';
 import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
@@ -35,8 +36,8 @@ class _CustomerScreenState extends State<CustomerScreen> {
     final double screenHeight = MediaQuery.of(context).size.height;
     final double screenWidth = MediaQuery.of(context).size.width;
 
-    return Consumer2<InventoryProvider, AppState>(
-        builder: (context, inventoryProvider, appState, _) {
+    return Consumer2<CustomerProvider, AppState>(
+        builder: (context, customerProvider, appState, _) {
       return Container(
         margin: EdgeInsets.all(sp.getWidth(20, screenWidth)),
         padding: EdgeInsets.all(sp.getWidth(20, screenWidth)),
@@ -56,16 +57,16 @@ class _CustomerScreenState extends State<CustomerScreen> {
                     color: AppColor.black,
                   ),
                   onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return NewProduct(
-                              appState: appState,
-                              inventoryProvider: inventoryProvider);
-                        });
+                    // showDialog(
+                    //     context: context,
+                    //     builder: (context) {
+                    //       return NewProduct(
+                    //           appState: appState,
+                    //           inventoryProvider: customerProvider);
+                    //     });
                   },
                 ),
-                inventoryProvider.allProdcuts.isNotEmpty
+                customerProvider.allCustomers.isNotEmpty
                     ? IconButton(
                         icon: Icon(
                           Icons.download,
@@ -73,11 +74,11 @@ class _CustomerScreenState extends State<CustomerScreen> {
                         ),
                         onPressed: () async {
                           List<String> products = [];
-                          for (Product p in inventoryProvider.allProdcuts) {
+                          for (Product p in customerProvider.allCustomers) {
                             products.add(p.toFormattedString());
                           }
                           if (!generatingPDF &&
-                              inventoryProvider.allProdcuts.isNotEmpty) {
+                              customerProvider.allCustomers.isNotEmpty) {
                             setState(() {
                               generatingPDF = true;
                             });
@@ -90,24 +91,24 @@ class _CustomerScreenState extends State<CustomerScreen> {
                       )
                     : SizedBox(),
               ],
-              controller: inventoryProvider.allProdcuts.isEmpty
+              controller: customerProvider.allCustomers.isEmpty
                   ? null
                   : searchController,
               hintText: "Search customers",
             ),
             Expanded(
-              child: !inventoryProvider.isProductFetched
+              child: !customerProvider.isCustomersFetched
                   ? Center(
                       child: CircularProgressIndicator(),
                     )
-                  : inventoryProvider.allProdcuts.isEmpty
+                  : customerProvider.allCustomers.isEmpty
                       ? Center(
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(
-                                FontAwesomeIcons.boxOpen,
+                                FontAwesomeIcons.person,
                                 color: AppColor.bgSideMenu,
                                 size: sp.getWidth(100, screenWidth),
                               ),
@@ -116,7 +117,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                     sp.getHeight(20, screenHeight, screenWidth),
                               ),
                               Text(
-                                "You don't have any products in your inventory yet.\nClick the '+' button, in the top right corner of this window, to add your first product",
+                                "You don't have any customers yet.\nClick the '+' button, in the top right corner of this window, to add your first customer",
                                 textAlign: TextAlign.center,
                                 style: AppTextTheme()
                                     .textTheme(screenWidth)
@@ -133,27 +134,27 @@ class _CustomerScreenState extends State<CustomerScreen> {
                           padding: EdgeInsets.zero,
                           itemBuilder: (context, index) {
                             //TODO: move this function out of widget tree and factor in different filter options
-                            inventoryProvider.allProdcuts.sort((a, b) => a.name
+                            customerProvider.allCustomers.sort((a, b) => a.name
                                 .toLowerCase()
                                 .compareTo(b.name.toLowerCase())); //
 
                             return ProductListTile(
                               product: appState.searchText.isEmpty
-                                  ? inventoryProvider.allProdcuts[index]
-                                  : inventoryProvider.allProdcuts
+                                  ? customerProvider.allCustomers[index]
+                                  : customerProvider.allCustomers
                                       .where((p) =>
                                           p.name.contains(appState.searchText))
                                       .elementAt(index),
                               appState: appState,
-                              inventoryProvider: inventoryProvider,
+                              inventoryProvider: InventoryProvider(),
                             );
                           },
                           separatorBuilder: (context, index) => Divider(
                                 color: Colors.grey[300],
                               ),
                           itemCount: appState.searchText.isEmpty
-                              ? inventoryProvider.allProdcuts.length
-                              : inventoryProvider.allProdcuts
+                              ? customerProvider.allCustomers.length
+                              : customerProvider.allCustomers
                                   .where((p) =>
                                       p.name.contains(appState.searchText))
                                   .length),
@@ -173,7 +174,8 @@ class _CustomerScreenState extends State<CustomerScreen> {
                     width: 10,
                   ),
                   Text(
-                    "Above critical level (${inventoryProvider.calculateAboveCriticalLevel()})",
+                    "",
+                    // "Above critical level (${customerProvider.calculateAboveCriticalLevel()})",
                     style: textTheme
                         .textTheme(screenWidth)
                         .bodySmall!
@@ -196,7 +198,8 @@ class _CustomerScreenState extends State<CustomerScreen> {
                     width: 10,
                   ),
                   Text(
-                    "Below critical level (${inventoryProvider.calculateCriticalLevel()})",
+                    // "Below critical level (${customerProvider.calculateCriticalLevel()})",
+                    "",
                     style: textTheme
                         .textTheme(screenWidth)
                         .bodySmall!
@@ -219,7 +222,8 @@ class _CustomerScreenState extends State<CustomerScreen> {
                     width: 10,
                   ),
                   Text(
-                    "Out of stock (${inventoryProvider.calculateOutofStock()})",
+                    // "Out of stock (${customerProvider.calculateOutofStock()})",
+                    "",
                     style: textTheme
                         .textTheme(screenWidth)
                         .bodySmall!
@@ -227,7 +231,8 @@ class _CustomerScreenState extends State<CustomerScreen> {
                   ),
                   Spacer(),
                   Text(
-                    "Product Count: ${inventoryProvider.allProdcuts.length}",
+                    // "Product Count: ${customerProvider.allProdcuts.length}",
+                    "",
                     style: textTheme
                         .textTheme(screenWidth)
                         .bodySmall!
@@ -239,7 +244,9 @@ class _CustomerScreenState extends State<CustomerScreen> {
                       color: AppColor.bgSideMenu.withOpacity(0.3),
                     ),
                   ),
-                  Text("Inventory Count: ${inventoryProvider.inventoryCount()}",
+                  Text(
+                      // "Inventory Count: ${customerProvider.inventoryCount()}",
+                      "",
                       style: textTheme
                           .textTheme(screenWidth)
                           .bodySmall!

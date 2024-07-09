@@ -129,7 +129,6 @@ class InventoryProvider with ChangeNotifier {
 
   Future<void> addProduct(
       Product p, String businessID, String productCode) async {
-    // String productCode = generateProductCode(categoryCode, p);
     try {
       await _firestore
           .collection('businesses')
@@ -143,6 +142,8 @@ class InventoryProvider with ChangeNotifier {
         "unitPrice": p.unitPrice
       });
       allProdcuts.add(p);
+     
+      notifyListeners();
     } catch (e) {
       print(e);
     }

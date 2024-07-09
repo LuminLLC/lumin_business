@@ -221,21 +221,29 @@ class _NewProductState extends State<NewProduct> {
                               InventoryProvider.generateProductCode(
                                   categoryCode, p);
 
-                          // await InventoryProvider.addProduct(
-                          //     p, appState, productCode);
-                          Navigator.pop(context);
-                        }
-                        if (InventoryProvider.selectedCategory == null) {
-                          setState(() {
-                            categoryError = true;
+                          await InventoryProvider.addProduct(
+                                  p,
+                                  appState.businessInfo!.businessId,
+                                  productCode)
+                              .whenComplete(() {
+                            setState(() {
+                              isUpdating = false;
+                            });
+                            print("here");
+                            Navigator.pop(context);
                           });
-                          return;
                         }
-                        print(nameController.text +
-                            quantityController.text +
-                            unitPriceController.text +
-                            "${InventoryProvider.selectedCategory}");
-                        // if (validateForm()) {}
+                        // if (InventoryProvider.selectedCategory == null) {
+                        //   setState(() {
+                        //     categoryError = true;
+                        //   });
+                        //   return;
+                        // }
+                        // print(nameController.text +
+                        //     quantityController.text +
+                        //     unitPriceController.text +
+                        //     "${InventoryProvider.selectedCategory}");
+                        // // if (validateForm()) {}
                       },
                     ),
                   ),
