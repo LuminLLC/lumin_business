@@ -175,7 +175,7 @@ class _AccountingScreenState extends State<AccountingScreen> {
                     width: 10,
                   ),
                   Text(
-                    "Above critical level  ",
+                    "Income  ",
                     style: textTheme
                         .textTheme(screenWidth)
                         .bodySmall!
@@ -191,37 +191,14 @@ class _AccountingScreenState extends State<AccountingScreen> {
                     height: sp.getWidth(10, screenWidth),
                     width: sp.getWidth(10, screenWidth),
                     decoration: BoxDecoration(
-                      color: Colors.yellow.shade100,
+                      color: Colors.red,
                     ),
                   ),
                   SizedBox(
                     width: 10,
                   ),
                   Text(
-                    "Below critical level  ",
-                    style: textTheme
-                        .textTheme(screenWidth)
-                        .bodySmall!
-                        .copyWith(color: Colors.black),
-                  ),
-                  SizedBox(
-                    height: sp.getHeight(20, screenHeight, screenWidth),
-                    child: VerticalDivider(
-                      color: AppColor.bgSideMenu.withOpacity(0.3),
-                    ),
-                  ),
-                  Container(
-                    height: sp.getWidth(10, screenWidth),
-                    width: sp.getWidth(10, screenWidth),
-                    decoration: BoxDecoration(
-                      color: Colors.red.shade100,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    "Out of stock ?)",
+                    "Expenses",
                     style: textTheme
                         .textTheme(screenWidth)
                         .bodySmall!
@@ -229,23 +206,12 @@ class _AccountingScreenState extends State<AccountingScreen> {
                   ),
                   Spacer(),
                   Text(
-                    "Product Count:",
+                    "Transaction Count: ${accountingProvider.allTransactions.length}",
                     style: textTheme
                         .textTheme(screenWidth)
                         .bodySmall!
                         .copyWith(color: Colors.black),
                   ),
-                  SizedBox(
-                    height: sp.getHeight(20, screenHeight, screenWidth),
-                    child: VerticalDivider(
-                      color: AppColor.bgSideMenu.withOpacity(0.3),
-                    ),
-                  ),
-                  Text("Inventory Count: ",
-                      style: textTheme
-                          .textTheme(screenWidth)
-                          .bodySmall!
-                          .copyWith(color: Colors.black))
                 ],
               ),
             ),

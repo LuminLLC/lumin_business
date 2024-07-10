@@ -3,6 +3,7 @@ import 'package:lumin_business/common/app_colors.dart';
 import 'package:lumin_business/common/app_text_theme.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/accounting/accounting_provider.dart';
+import 'package:lumin_business/modules/accounting/selected_transaction.dart';
 import 'package:lumin_business/modules/accounting/transaction_model.dart';
 import 'package:lumin_business/modules/customers/customer_model.dart';
 import 'package:lumin_business/modules/customers/customer_provider.dart';
@@ -343,9 +344,18 @@ class GeneralListTile extends StatelessWidget {
             size: sp.getWidth(20, screenWidth),
             color: AppColor.bgSideMenu.withOpacity(0.8),
           ),
-          onPressed: () {
-            // Implement your action here, such as showing a detailed view of the transaction.
-          },
+              onPressed: () {
+                  showDialog(
+                      // barrierDismissible: false,
+                      context: context,
+                      builder: (context) {
+                        return SelectedTransaction(
+                          transaction: transaction,
+                          appState: appState,
+                          accountingProvider: provider,
+                        );
+                      });
+                },
         ),
       ),
     );

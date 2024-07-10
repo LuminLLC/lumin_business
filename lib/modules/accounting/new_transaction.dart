@@ -3,9 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/accounting/accounting_provider.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
-import 'package:lumin_business/modules/inventory/product_model.dart';
-import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
-import 'package:lumin_business/widgets/custom_dropdown.dart';
+import 'package:lumin_business/util.dart';
 import 'package:lumin_business/widgets/lumin_texticon_button.dart';
 import 'package:provider/provider.dart';
 
@@ -131,8 +129,10 @@ class _NewTransactionState extends State<NewTransaction> {
                         height: sp.getHeight(35, width, height),
                       ),
                       TextField(
-                        controller: quantityController,
+                        controller: quantityController
+                          ..text = LuminUtil.formatDate(DateTime.now()),
                         style: TextStyle(fontSize: sp.getFontSize(16, width)),
+                        keyboardType: TextInputType.datetime,
                         onChanged: (value) {
                           if (!hasChanges) {
                             setState(() {
@@ -145,9 +145,7 @@ class _NewTransactionState extends State<NewTransaction> {
                           labelText: "Date",
                           suffixIcon: IconButton(
                             icon: Icon(Icons.date_range),
-                            onPressed: () {
-                              
-                            },
+                            onPressed: () {},
                           ),
                           border: OutlineInputBorder(),
                           // hintText: widget.product.quantity.toString()
