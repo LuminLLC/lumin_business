@@ -30,5 +30,11 @@ List<TransactionModel> dummyProductData = [
 
 class AccountingProvider with ChangeNotifier {
   bool isAccountingFetched = true;
+  String? newTransactionType;
   List<TransactionModel> allTransactions = dummyProductData; //[];
+
+  void setNewTransactionType(String s) {
+    newTransactionType = s;
+    notifyListeners();
+  }
 }

@@ -7,7 +7,7 @@ import 'package:lumin_business/modules/inventory/product_model.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
 import 'package:lumin_business/modules/general_platform/header_widget.dart';
 import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
-import 'package:lumin_business/widgets/new_product.dart';
+import 'package:lumin_business/modules/inventory/new_product.dart';
 import 'package:lumin_business/widgets/general_list_tile.dart';
 import 'package:provider/provider.dart';
 

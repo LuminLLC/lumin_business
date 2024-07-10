@@ -11,8 +11,8 @@ import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
 import 'package:lumin_business/modules/inventory/product_model.dart';
 import 'package:lumin_business/modules/suppliers/supplier_model.dart';
 import 'package:lumin_business/modules/suppliers/supplier_provider.dart';
-import 'package:lumin_business/widgets/set_order_quantity.dart';
-import 'package:lumin_business/widgets/selected_product.dart';
+import 'package:lumin_business/modules/inventory/set_order_quantity.dart';
+import 'package:lumin_business/modules/inventory/selected_product.dart';
 
 // ignore: must_be_immutable
 class GeneralListTile extends StatelessWidget {

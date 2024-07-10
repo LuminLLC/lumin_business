@@ -4,9 +4,10 @@ import 'package:lumin_business/common/app_colors.dart';
 import 'package:lumin_business/common/app_text_theme.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/accounting/accounting_provider.dart';
-import 'package:lumin_business/modules/accounting/transaction_model.dart'; 
+import 'package:lumin_business/modules/accounting/new_transaction.dart';
+import 'package:lumin_business/modules/accounting/transaction_model.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
-import 'package:lumin_business/modules/general_platform/header_widget.dart'; 
+import 'package:lumin_business/modules/general_platform/header_widget.dart';
 import 'package:lumin_business/widgets/general_list_tile.dart';
 import 'package:provider/provider.dart';
 
@@ -55,19 +56,13 @@ class _AccountingScreenState extends State<AccountingScreen> {
                     color: AppColor.black,
                   ),
                   onPressed: () {
-                    // showDialog(
-                    //     context: context,
-                    //     builder: (context) {
-                    //       return NewProduct(
-                    //           appState: appState,
-                    //           product: ProductModel(
-                    //               id: "id",
-                    //               name: "name",
-                    //               quantity: 100,
-                    //               category: "category",
-                    //               unitPrice: 100),
-                    //           inventoryProvider: accountingProvider);
-                    //     });
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return NewTransaction(
+                            appState: appState,
+                          );
+                        });
                   },
                 ),
                 accountingProvider.allTransactions.isNotEmpty
