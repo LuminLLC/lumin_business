@@ -41,7 +41,7 @@ class _MenuState extends State<Menu> {
         title: "Accounting",
         context: context,
         index: 1,
-        icon: Icon(FontAwesomeIcons.cashRegister),
+        icon: Icon(FontAwesomeIcons.calculator),
         hasTrailing: true,
         appState: appState,
         press: () {

@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
-import 'package:lumin_business/modules/inventory/product.dart';
+import 'package:lumin_business/modules/inventory/product_model.dart';
 import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
 import 'package:lumin_business/widgets/custom_dropdown.dart';
 import 'package:lumin_business/widgets/lumin_texticon_button.dart';
 import 'package:provider/provider.dart';
 
 class NewProduct extends StatefulWidget {
-  final Product product;
+  final ProductModel product;
   final AppState appState;
   final InventoryProvider inventoryProvider;
   const NewProduct(
@@ -168,7 +168,7 @@ class _NewProductState extends State<NewProduct> {
                       text: hasChanges ? "Save & Exit" : "Close",
                       icon: hasChanges ? Icons.save : Icons.close,
                       onPressed: () async {
-                        Product p = Product(
+                        ProductModel p = ProductModel(
                             id: widget.product.id,
                             name: nameController.text,
                             quantity: int.parse(quantityController.text),

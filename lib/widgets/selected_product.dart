@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
-import 'package:lumin_business/modules/inventory/product.dart';
+import 'package:lumin_business/modules/inventory/product_model.dart';
 import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
 import 'package:lumin_business/widgets/lumin_texticon_button.dart';
 
 class SelectedProduct extends StatefulWidget {
-  final Product product;
+  final ProductModel product;
   final AppState appState;
   final InventoryProvider inventoryProvider;
   const SelectedProduct(
@@ -186,7 +186,7 @@ class _SelectedProductState extends State<SelectedProduct> {
                       isUpdating = true;
                     });
                     await widget.inventoryProvider.updateProduct(
-                        Product(
+                        ProductModel(
                             id: widget.product.id,
                             name: nameController.text,
                             quantity: int.parse(quantityController.text),

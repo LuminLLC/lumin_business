@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lumin_business/config.dart';
-import 'package:lumin_business/modules/inventory/product.dart';
+import 'package:lumin_business/modules/inventory/product_model.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:lumin_business/modules/user_and_busness/business_model.dart';
@@ -19,7 +19,7 @@ class AppState with ChangeNotifier {
   LuminUser? user;
   int index = 0;
 
-  Future<void> exportToExcel(List<Product> products) async {
+  Future<void> exportToExcel(List<ProductModel> products) async {
     var excel = Excel.createExcel();
     Sheet sheetObject = excel['Sheet1'];
 

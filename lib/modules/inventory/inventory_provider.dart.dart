@@ -3,64 +3,64 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lumin_business/config.dart';
 import 'package:lumin_business/modules/inventory/category.dart';
-import 'package:lumin_business/modules/inventory/product.dart';
+import 'package:lumin_business/modules/inventory/product_model.dart';
 
-List<Product> dummyProductData = [
-  Product(
+List<ProductModel> dummyProductData = [
+  ProductModel(
       id: "id",
       name: "name",
       quantity: 20,
       category: "category",
       unitPrice: 1.2),
-  Product(
+  ProductModel(
       id: "id",
       name: "name",
       quantity: 20,
       category: "category",
       unitPrice: 1.2),
-  Product(
+  ProductModel(
       id: "id",
       name: "name",
       quantity: 20,
       category: "category",
       unitPrice: 1.2),
-  Product(
+  ProductModel(
       id: "id",
       name: "name",
       quantity: 20,
       category: "category",
       unitPrice: 1.2),
-  Product(
+  ProductModel(
       id: "id",
       name: "name",
       quantity: 20,
       category: "category",
       unitPrice: 1.2),
-  Product(
+  ProductModel(
       id: "id",
       name: "name",
       quantity: 20,
       category: "category",
       unitPrice: 1.2),
-  Product(
+  ProductModel(
       id: "id",
       name: "name",
       quantity: 20,
       category: "category",
       unitPrice: 1.2),
-  Product(
+  ProductModel(
       id: "id",
       name: "name",
       quantity: 20,
       category: "category",
       unitPrice: 1.2),
-  Product(
+  ProductModel(
       id: "id",
       name: "name",
       quantity: 20,
       category: "category",
       unitPrice: 1.2),
-  Product(
+  ProductModel(
       id: "id",
       name: "name",
       quantity: 20,
@@ -71,13 +71,13 @@ List<Product> dummyProductData = [
 class InventoryProvider with ChangeNotifier {
   final FirebaseFirestore _firestore = Config().firestoreEnv;
   String? selectedCategory;
-  Map<Product, int> openOrder = {};
+  Map<ProductModel, int> openOrder = {};
   String? quantityError;
-  bool isProductFetched = false;
+  bool isProductFetched = true;
 
-  List<Product> allProdcuts = [];
+  List<ProductModel> allProdcuts = dummyProductData; //[];
   List<ProductCategory> categories = [];
-  Map<String, List<Product>> productMap = {};
+  Map<String, List<ProductModel>> productMap = {};
   List<ProductCategory> productCategories = [];
 
   void clearSelectedCategory() {
@@ -126,14 +126,14 @@ class InventoryProvider with ChangeNotifier {
 
   int inventoryCount() {
     int sum = 0;
-    for (Product p in allProdcuts) {
+    for (ProductModel p in allProdcuts) {
       sum += p.quantity;
     }
     return sum;
   }
 
   Future<void> addProduct(
-      Product p, String businessID, String productCode) async {
+      ProductModel p, String businessID, String productCode) async {
     print(businessID);
     try {
       await _firestore
@@ -160,7 +160,7 @@ class InventoryProvider with ChangeNotifier {
 //orders
   Future<void> completeOrder(String businessID) async {
     notifyListeners();
-    for (Product p in openOrder.keys) {
+    for (ProductModel p in openOrder.keys) {
       await decreaseProductQuantity(p, openOrder[p]!, businessID);
     }
     await addOrderToHistory(businessID, "fulfilled");
@@ -168,7 +168,7 @@ class InventoryProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Map<Product, int> fetchOpenOrder() {
+  Map<ProductModel, int> fetchOpenOrder() {
     return openOrder;
   }
 
@@ -186,7 +186,7 @@ class InventoryProvider with ChangeNotifier {
 
     if (documentSnapshot.exists) {
       position = (documentSnapshot.data()!.length + 1).toString();
-      for (Product p in openOrder.keys) {
+      for (ProductModel p in openOrder.keys) {
         if (!order.containsKey(position)) {
           order[position] = [];
         }
@@ -207,7 +207,7 @@ class InventoryProvider with ChangeNotifier {
           .doc(todayDateString)
           .update(order);
     } else {
-      for (Product p in openOrder.keys) {
+      for (ProductModel p in openOrder.keys) {
         if (!order.containsKey(position)) {
           order[position] = [];
         }
@@ -240,7 +240,7 @@ class InventoryProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  addToOrder(Product p, int quantity) {
+  addToOrder(ProductModel p, int quantity) {
     if (openOrder.containsKey(p)) {
       openOrder[p] = openOrder[p]! + quantity;
     } else {
@@ -249,7 +249,7 @@ class InventoryProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  bool verifyQuantity(Product p, int quantity) {
+  bool verifyQuantity(ProductModel p, int quantity) {
     if (p.quantity >= quantity) {
       return true;
     }
@@ -258,7 +258,7 @@ class InventoryProvider with ChangeNotifier {
 
   int calculateAboveCriticalLevel() {
     int aboveCriticalLevel = 0;
-    for (Product product in allProdcuts) {
+    for (ProductModel product in allProdcuts) {
       if (product.quantity >= 10) {
         aboveCriticalLevel++;
       }
@@ -268,7 +268,7 @@ class InventoryProvider with ChangeNotifier {
 
   int calculateOutofStock() {
     int outOfStock = 0;
-    for (Product product in allProdcuts) {
+    for (ProductModel product in allProdcuts) {
       if (product.quantity == 0) {
         outOfStock++;
       }
@@ -278,7 +278,7 @@ class InventoryProvider with ChangeNotifier {
 
   int calculateCriticalLevel() {
     int criticalLevel = 0;
-    for (Product product in allProdcuts) {
+    for (ProductModel product in allProdcuts) {
       if (product.quantity < 10) {
         criticalLevel++;
       }
@@ -337,7 +337,7 @@ class InventoryProvider with ChangeNotifier {
     return newCategory;
   }
 
-  String getCategoryCode(Product p) {
+  String getCategoryCode(ProductModel p) {
     for (ProductCategory c in categories) {
       if (p.category == c.name) {
         return c.code;
@@ -347,7 +347,7 @@ class InventoryProvider with ChangeNotifier {
   }
 
 //Products
-  String generateProductCode(String categoryCode, Product p) {
+  String generateProductCode(String categoryCode, ProductModel p) {
     int position = allProdcuts.indexOf(p);
 
     return categoryCode + "P" + position.toString();
@@ -364,7 +364,7 @@ class InventoryProvider with ChangeNotifier {
 
       for (QueryDocumentSnapshot<Map<String, dynamic>> element
           in tempList.docs) {
-        allProdcuts.add(Product(
+        allProdcuts.add(ProductModel(
             id: element.id,
             name: element.data()["name"],
             quantity: element.data()["quantity"],
@@ -377,7 +377,8 @@ class InventoryProvider with ChangeNotifier {
     }
   }
 
-  Future<void> updateProduct(Product updatedProduct, String businessID) async {
+  Future<void> updateProduct(
+      ProductModel updatedProduct, String businessID) async {
     try {
       await _firestore
           .collection('businesses')
@@ -386,7 +387,7 @@ class InventoryProvider with ChangeNotifier {
           .doc(updatedProduct.id)
           .set(updatedProduct.toMap());
 
-      for (Product p in allProdcuts) {
+      for (ProductModel p in allProdcuts) {
         if (p.id == updatedProduct.id) {
           int index = allProdcuts.indexOf(p);
           allProdcuts[index] = updatedProduct;
@@ -399,7 +400,7 @@ class InventoryProvider with ChangeNotifier {
   }
 
   Future<void> decreaseProductQuantity(
-      Product p, int orderQuantity, String businessID) async {
+      ProductModel p, int orderQuantity, String businessID) async {
     bool sentinel = true;
     int index = 0;
     int upatedQuantity = 0;
@@ -427,7 +428,7 @@ class InventoryProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> deleteProduct(Product p, String businessID) async {
+  Future<void> deleteProduct(ProductModel p, String businessID) async {
     try {
       await _firestore
           .collection('businesses')

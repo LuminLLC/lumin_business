@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 
-import 'package:lumin_business/modules/inventory/product.dart';
+import 'package:lumin_business/modules/inventory/product_model.dart';
 import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
 
 class SetOrderQuantity extends StatefulWidget {
-  final Product product;
+  final ProductModel product;
   final InventoryProvider inventoryProvider;
   const SetOrderQuantity(
       {Key? key, required this.product, required this.inventoryProvider})

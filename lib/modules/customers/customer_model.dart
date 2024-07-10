@@ -1,18 +1,19 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:lumin_business/modules/inventory/lumin_order.dart';
 
 class CustomerModel {
   // Properties
-  int id;
+  String id;
   String name;
   String email;
   String phoneNumber;
+  String address;
   List<LuminOrder> orders;
 
   // Constructor
   CustomerModel(
       {required this.id,
       required this.name,
+      required this.address,
       required this.email,
       required this.phoneNumber,
       required this.orders});
@@ -24,6 +25,7 @@ class CustomerModel {
       'name': name,
       'email': email,
       'phoneNumber': phoneNumber,
+      'address': address
       // Assuming 'orders' is a List<Order> and Order has a toMap method
       // 'orders': orders.map((order) => order.toMap()).toList(),
     };
@@ -36,6 +38,7 @@ class CustomerModel {
         name: map['name'],
         email: map['email'],
         phoneNumber: map['phoneNumber'],
+        address: map["address"],
         orders: []
         // Assuming you have a corresponding fromMap method for Order
         // orders: List<Order>.from(map['orders']?.map((orderMap) => Order.fromMap(orderMap))),

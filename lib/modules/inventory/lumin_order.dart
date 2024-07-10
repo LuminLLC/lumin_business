@@ -1,8 +1,8 @@
-import 'package:lumin_business/modules/inventory/product.dart';
+import 'package:lumin_business/modules/inventory/product_model.dart';
 
 class LuminOrder {
   String? orderId;
-  Map<Product, int> orderDetails;
+  Map<ProductModel, int> orderDetails;
 
   LuminOrder({
     this.orderId,

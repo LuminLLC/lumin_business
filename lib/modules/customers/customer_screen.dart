@@ -3,13 +3,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lumin_business/common/app_colors.dart';
 import 'package:lumin_business/common/app_text_theme.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
-import 'package:lumin_business/modules/inventory/product.dart';
+import 'package:lumin_business/modules/inventory/product_model.dart';
 import 'package:lumin_business/modules/customers/customer_provider.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
 import 'package:lumin_business/modules/general_platform/header_widget.dart';
-import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
-import 'package:lumin_business/widgets/new_product.dart';
-import 'package:lumin_business/widgets/product_list_tile.dart';
+import 'package:lumin_business/widgets/general_list_tile.dart';
 import 'package:provider/provider.dart';
 
 class CustomerScreen extends StatefulWidget {
@@ -74,7 +72,8 @@ class _CustomerScreenState extends State<CustomerScreen> {
                         ),
                         onPressed: () async {
                           List<String> products = [];
-                          for (Product p in customerProvider.allCustomers) {
+                          for (ProductModel p
+                              in customerProvider.allCustomers) {
                             products.add(p.toFormattedString());
                           }
                           if (!generatingPDF &&
@@ -138,15 +137,15 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                 .toLowerCase()
                                 .compareTo(b.name.toLowerCase())); //
 
-                            return ProductListTile(
-                              product: appState.searchText.isEmpty
+                            return GeneralListTile.fromCustomers(
+                              customer: appState.searchText.isEmpty
                                   ? customerProvider.allCustomers[index]
                                   : customerProvider.allCustomers
                                       .where((p) =>
                                           p.name.contains(appState.searchText))
                                       .elementAt(index),
                               appState: appState,
-                              inventoryProvider: InventoryProvider(),
+                              provider: customerProvider,
                             );
                           },
                           separatorBuilder: (context, index) => Divider(
