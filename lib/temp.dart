@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lumin_business/common/app_colors.dart';
 import 'package:lumin_business/common/app_text_theme.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:syncfusion_flutter_charts/sparkcharts.dart';
+import 'package:syncfusion_flutter_charts/charts.dart'; 
 
 class ChartExample extends StatefulWidget {
   // ignore: prefer_const_constructors_in_immutables
