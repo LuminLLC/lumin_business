@@ -1,3 +1,6 @@
+
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:lumin_business/common/app_colors.dart';
 import 'package:lumin_business/common/app_text_theme.dart';
@@ -344,18 +347,18 @@ class GeneralListTile extends StatelessWidget {
             size: sp.getWidth(20, screenWidth),
             color: AppColor.bgSideMenu.withOpacity(0.8),
           ),
-              onPressed: () {
-                  showDialog(
-                      // barrierDismissible: false,
-                      context: context,
-                      builder: (context) {
-                        return SelectedTransaction(
-                          transaction: transaction,
-                          appState: appState,
-                          accountingProvider: provider,
-                        );
-                      });
-                },
+          onPressed: () {
+            showDialog(
+                // barrierDismissible: false,
+                context: context,
+                builder: (context) {
+                  return SelectedTransaction(
+                    transaction: transaction,
+                    appState: appState,
+                    accountingProvider: provider,
+                  );
+                });
+          },
         ),
       ),
     );
@@ -366,8 +369,12 @@ class GeneralListTile extends StatelessWidget {
       required double screenHeight,
       required ProductModel product,
       required BuildContext context}) {
-    InventoryProvider accountingProvider = provider;
-    int index = accountingProvider.allProdcuts.indexOf(product) + 1;
+    InventoryProvider inventoryProvider = provider;
+    int index = inventoryProvider.allProdcuts.indexOf(product) + 1;
+    Uint8List? image;
+    if (product.image != null && product.image!.runtimeType != String) {
+      image = Uint8List.fromList(product.image.cast<int>());
+    }
     return Container(
       width: double.infinity,
       child: ListTile(
@@ -387,10 +394,17 @@ class GeneralListTile extends StatelessWidget {
                       .copyWith(color: Colors.white),
                 ),
               )
-            : Image.network(
-                product.image!,
+            : Container(
                 height: sp.getWidth(50, screenWidth),
                 width: sp.getWidth(50, screenWidth),
+                decoration: BoxDecoration(
+                    color: Colors.blueGrey,
+                    borderRadius: BorderRadius.circular(10)),
+                child: Image.memory(
+                  image ?? Uint8List.fromList([]),
+                  height: sp.getWidth(40, screenWidth),
+                  width: sp.getWidth(40, screenWidth),
+                ),
               ),
         title: Row(
           children: [
@@ -452,6 +466,7 @@ class GeneralListTile extends StatelessWidget {
                   color: AppColor.bgSideMenu.withOpacity(0.8),
                 ),
                 onPressed: () {
+                  // print(product.image.toString());
                   showDialog(
                       // barrierDismissible: false,
                       context: context,

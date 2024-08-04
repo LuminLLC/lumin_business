@@ -3,8 +3,6 @@ import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/accounting/accounting_provider.dart';
 import 'package:lumin_business/modules/accounting/transaction_model.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
-import 'package:lumin_business/modules/inventory/product_model.dart';
-import 'package:lumin_business/widgets/lumin_texticon_button.dart';
 
 class SelectedTransaction extends StatefulWidget {
   final TransactionModel transaction;

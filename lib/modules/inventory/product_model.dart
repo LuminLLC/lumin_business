@@ -1,6 +1,7 @@
+
 class ProductModel {
   String? id;
-  String? image;
+  dynamic image;
   String name;
   String category;
   int quantity;

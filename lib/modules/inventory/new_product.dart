@@ -51,16 +51,28 @@ class _NewProductState extends State<NewProduct> {
       return AlertDialog(
         title: Row(
           children: [
-            widget.product.image == null
+            inventoryProvider.photo == null
                 ? Container(
                     height: sp.getWidth(100, width),
                     width: sp.getWidth(100, width),
                     decoration: BoxDecoration(
-                        color: Colors.blueGrey,
-                        borderRadius: BorderRadius.circular(10)),
-                  )
+                      color: Colors.blueGrey,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: IconButton(
+                      onPressed: () => inventoryProvider.uploadImage(),
+                      // onPressed: () => inventoryProvider.getImage(),
+                      splashColor: Colors.transparent,
+                      hoverColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      icon: Icon(
+                        Icons.add_a_photo_outlined,
+                        size: sp.getWidth(50, width),
+                        color: Colors.white,
+                      ),
+                    ))
                 : Image.network(
-                    widget.product.image!,
+                    inventoryProvider.photo!.path,
                     height: sp.getWidth(100, width),
                     width: sp.getWidth(100, width),
                   ),
@@ -160,43 +172,39 @@ class _NewProductState extends State<NewProduct> {
                   ),
                 ),
         ),
-        actions:
-            false //isUpdating || !(widget.appState.user!.access == "admin")
-                ? []
-                : [
-                    LuminTextIconButton(
-                      text: hasChanges ? "Save & Exit" : "Close",
-                      icon: hasChanges ? Icons.save : Icons.close,
-                      onPressed: () async {
-                        ProductModel p = ProductModel(
-                            id: widget.product.id,
-                            name: nameController.text,
-                            quantity: int.parse(quantityController.text),
-                            category: inventoryProvider.selectedCategory!,
-                            unitPrice: double.parse(priceController.text));
-                        String productCode =
-                            inventoryProvider.generateProductCode(
-                                inventoryProvider.getCategoryCode(p), p);
-                        if (hasChanges) {
-                          setState(() {
-                            isUpdating = true;
-                          });
-                          await widget.inventoryProvider.addProduct(
-                            p,
-                            appState.businessInfo!.businessId,
-                            productCode,
-                          );
-                          setState(() {
-                            isUpdating = false;
-                          });
-                          Navigator.pop(context);
-                        } else {
-                          // no changes
-                          Navigator.pop(context);
-                        }
-                      },
-                    ),
-                  ],
+        actions: [
+          LuminTextIconButton(
+            text: hasChanges ? "Save & Exit" : "Close",
+            icon: hasChanges ? Icons.save : Icons.close,
+            onPressed: () async {
+              if (hasChanges) {
+                ProductModel p = ProductModel(
+                    id: widget.product.id,
+                    name: nameController.text,
+                    quantity: int.parse(quantityController.text),
+                    category: inventoryProvider.selectedCategory!,
+                    unitPrice: double.parse(priceController.text));
+                String productCode = inventoryProvider.generateProductCode(
+                    inventoryProvider.getCategoryCode(p), p);
+                setState(() {
+                  isUpdating = true;
+                });
+                await widget.inventoryProvider.addProduct(
+                  p,
+                  appState.businessInfo!.businessId,
+                  productCode,
+                );
+                setState(() {
+                  isUpdating = false;
+                });
+                Navigator.pop(context);
+              } else {
+                inventoryProvider.clearNewProduct();
+                Navigator.pop(context);
+              }
+            },
+          ),
+        ],
       );
     });
   }

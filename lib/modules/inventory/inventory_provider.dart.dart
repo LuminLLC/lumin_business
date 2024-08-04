@@ -1,9 +1,15 @@
+import 'dart:io';
+import 'dart:typed_data';
+import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:lumin_business/config.dart';
 import 'package:lumin_business/modules/inventory/category.dart';
 import 'package:lumin_business/modules/inventory/product_model.dart';
+import 'package:universal_html/html.dart' as html;
 
 List<ProductModel> dummyProductData = [
   ProductModel(
@@ -71,11 +77,11 @@ List<ProductModel> dummyProductData = [
 class InventoryProvider with ChangeNotifier {
   final FirebaseFirestore _firestore = Config().firestoreEnv;
   String? selectedCategory;
+  File? photo;
   Map<ProductModel, int> openOrder = {};
   String? quantityError;
-  bool isProductFetched = true;
-
-  List<ProductModel> allProdcuts = dummyProductData; //[];
+  bool isProductFetched = false;
+  List<ProductModel> allProdcuts = [];
   List<ProductCategory> categories = [];
   Map<String, List<ProductModel>> productMap = {};
   List<ProductCategory> productCategories = [];
@@ -124,6 +130,61 @@ class InventoryProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void clearNewProduct() {
+    photo = null;
+    notifyListeners();
+  }
+
+  void uploadImage() {
+    html.FileUploadInputElement uploadInput = html.FileUploadInputElement()
+      ..accept = 'image/*';
+    uploadInput.click();
+
+    uploadInput.onChange.listen((event) {
+      final file = uploadInput.files!.first;
+      final reader = html.FileReader();
+      reader.readAsDataUrl(file);
+      reader.onLoad.listen((event){
+        print("done");
+      });
+    });
+  }
+
+  Future getImage() async {
+    var maxFileSizeInBytes = 2 * 1048576;
+    final ImagePicker _picker = ImagePicker();
+    final pickedFile = await _picker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 50,
+    );
+    var imagePath = await pickedFile!.readAsBytes();
+    var fileSize = imagePath.length; // Get the file size in bytes
+    if (fileSize <= maxFileSizeInBytes) {
+      photo = File(pickedFile.path);
+    } else {
+      // File is too large, ask user to upload a smaller file, or compress the file/image
+    }
+
+    notifyListeners();
+  }
+
+  Future<String> uploadImageToFirebase(String fileName) async {
+    if (photo == null) return "";
+    Uint8List imageData = await XFile(photo!.path).readAsBytes();
+    try {
+      final ref =
+          FirebaseStorage.instance.ref().child('product_images/$fileName');
+      final uploadTask = ref.putData(imageData);
+      final snapshot = await uploadTask.whenComplete(() {});
+      final downloadUrl = await snapshot.ref.getDownloadURL();
+      print("success");
+      return downloadUrl;
+    } catch (e) {
+      print('error occured: $e');
+      return "";
+    }
+  }
+
   int inventoryCount() {
     int sum = 0;
     for (ProductModel p in allProdcuts) {
@@ -134,7 +195,12 @@ class InventoryProvider with ChangeNotifier {
 
   Future<void> addProduct(
       ProductModel p, String businessID, String productCode) async {
-    print(businessID);
+    Uint8List? imageData;
+    if (photo != null) {
+      print("not null");
+      imageData = await XFile(photo!.path).readAsBytes();
+    }
+
     try {
       await _firestore
           .collection('businesses')
@@ -143,17 +209,17 @@ class InventoryProvider with ChangeNotifier {
           .doc(productCode)
           .set({
         "name": p.name,
+        "image": imageData ?? "",
         "quantity": p.quantity,
         "category": p.category,
         "unitPrice": p.unitPrice
       });
+      p.image = imageData != null ? imageData : null;
       allProdcuts.add(p);
-
       notifyListeners();
     } catch (e) {
       print(e);
     }
-
     notifyListeners();
   }
 
@@ -353,6 +419,27 @@ class InventoryProvider with ChangeNotifier {
     return categoryCode + "P" + position.toString();
   }
 
+  Future<Uint8List> downloadImage(String imageUrl) async {
+    final response = await http.get(Uri.parse(imageUrl));
+    if (response.statusCode == 200) {
+      return response.bodyBytes;
+    } else {
+      print(response.body);
+      return Uint8List(0);
+    }
+  }
+
+// Future<Uint8List?> downloadImage(String imagePath) async {
+//   try {
+//     final storageRef = FirebaseStorage.instance.ref().child(imagePath);
+//     final Uint8List? imageData = await storageRef.getData();
+//     return imageData;
+//   } catch (e) {
+//     print('Error downloading image: $e');
+//     return null;
+//   }
+// }
+
   Future<void> fetchProducts(String businessID) async {
     if (!isProductFetched) {
       allProdcuts = [];
@@ -366,6 +453,7 @@ class InventoryProvider with ChangeNotifier {
           in tempList.docs) {
         allProdcuts.add(ProductModel(
             id: element.id,
+            image: element.data()["image"],
             name: element.data()["name"],
             quantity: element.data()["quantity"],
             category: element.data()["category"],
