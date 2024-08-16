@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/accounting/accounting_provider.dart';
+import 'package:lumin_business/modules/accounting/transaction_model.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
 import 'package:lumin_business/util.dart';
 import 'package:lumin_business/widgets/lumin_texticon_button.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 class NewTransaction extends StatefulWidget {
   final AppState appState;
@@ -20,6 +22,7 @@ class NewTransaction extends StatefulWidget {
 }
 
 class _NewTransactionState extends State<NewTransaction> {
+  var uuid = Uuid();
   final SizeAndSpacing sp = SizeAndSpacing();
   late TextEditingController nameController;
   late TextEditingController categoryController;
@@ -183,48 +186,26 @@ class _NewTransactionState extends State<NewTransaction> {
                   ),
                 ),
         ),
-        actions:
-            false //isUpdating || !(widget.appState.user!.access == "admin")
-                ? []
-                : [
-                    LuminTextIconButton(
-                      text: hasChanges ? "Save & Exit" : "Close",
-                      icon: hasChanges ? Icons.save : Icons.close,
-                      onPressed: () async {
-                        if (hasChanges) {
-                        } else {
-                          accountingProvider.setNewTransactionType("");
-                          Navigator.pop(context);
-                        }
-                        // ProductModel p = ProductModel(
-                        //     id: widget.product.id,
-                        //     name: nameController.text,
-                        //     quantity: int.parse(quantityController.text),
-                        //     category: inventoryProvider.selectedCategory!,
-                        //     unitPrice: double.parse(priceController.text));
-                        // String productCode =
-                        //     inventoryProvider.generateProductCode(
-                        //         inventoryProvider.getCategoryCode(p), p);
-                        // if (hasChanges) {
-                        //   setState(() {
-                        //     isUpdating = true;
-                        //   });
-                        //   await widget.inventoryProvider.addProduct(
-                        //     p,
-                        //     appState.businessInfo!.businessId,
-                        //     productCode,
-                        //   );
-                        //   setState(() {
-                        //     isUpdating = false;
-                        //   });
-                        //   Navigator.pop(context);
-                        // } else {
-                        //   // no changes
-                        //   Navigator.pop(context);
-                        // }
-                      },
-                    ),
-                  ],
+        actions: [
+          LuminTextIconButton(
+            text: hasChanges ? "Save & Exit" : "Close",
+            icon: hasChanges ? Icons.save : Icons.close,
+            onPressed: () async {
+              if (hasChanges) {
+                accountingProvider.addTransaction(
+                    TransactionModel(
+                        id: uuid.v1(),
+                        description: "Saint test",
+                        amount: 20,
+                        date: DateTime.now(),
+                        type: TransactionType.income),
+                    appState.businessInfo!.businessId);
+              } else {
+                Navigator.pop(context);
+              }
+            },
+          ),
+        ],
       );
     });
   }

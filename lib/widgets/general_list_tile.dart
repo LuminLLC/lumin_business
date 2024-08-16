@@ -6,7 +6,7 @@ import 'package:lumin_business/common/app_colors.dart';
 import 'package:lumin_business/common/app_text_theme.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/accounting/accounting_provider.dart';
-import 'package:lumin_business/modules/accounting/selected_transaction.dart';
+import 'package:lumin_business/modules/accounting/widgets/selected_transaction.dart';
 import 'package:lumin_business/modules/accounting/transaction_model.dart';
 import 'package:lumin_business/modules/customers/customer_model.dart';
 import 'package:lumin_business/modules/customers/customer_provider.dart';

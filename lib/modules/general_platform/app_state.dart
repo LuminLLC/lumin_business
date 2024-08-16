@@ -135,7 +135,7 @@ class AppState with ChangeNotifier {
           businessDescription: temp.data()!['description'],
           accounts: temp.data()!['accounts'],
         );
-        print("jere");
+
         print({businessInfo!.accounts});
         user!.access = businessInfo!.accounts[user!.email];
         notifyListeners();

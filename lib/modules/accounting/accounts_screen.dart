@@ -4,7 +4,7 @@ import 'package:lumin_business/common/app_colors.dart';
 import 'package:lumin_business/common/app_text_theme.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/accounting/accounting_provider.dart';
-import 'package:lumin_business/modules/accounting/new_transaction.dart';
+import 'package:lumin_business/modules/accounting/widgets/new_transaction.dart';
 import 'package:lumin_business/modules/accounting/transaction_model.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
 import 'package:lumin_business/modules/general_platform/header_widget.dart';
@@ -37,6 +37,10 @@ class _AccountingScreenState extends State<AccountingScreen> {
 
     return Consumer2<AccountingProvider, AppState>(
         builder: (context, accountingProvider, appState, _) {
+      if (appState.businessInfo != null) {
+        Provider.of<AccountingProvider>(context, listen: false)
+            .fetchTransactions(appState.businessInfo!.businessId);
+      }
       return Container(
         margin: EdgeInsets.all(sp.getWidth(20, screenWidth)),
         padding: EdgeInsets.all(sp.getWidth(20, screenWidth)),

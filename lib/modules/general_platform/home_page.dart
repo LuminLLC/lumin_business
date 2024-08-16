@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lumin_business/common/app_colors.dart';
 import 'package:lumin_business/common/app_text_theme.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
+import 'package:lumin_business/modules/accounting/accounting_provider.dart';
 import 'package:lumin_business/modules/customers/customer_screen.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
 import 'package:lumin_business/modules/accounting/accounts_screen.dart';
@@ -32,9 +33,9 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
-    // final double screenHeight = MediaQuery.of(context).size.height;
-
     return Consumer<AppState>(builder: (context, appState, _) {
+     
+
       return Scaffold(
         appBar: !sp.isDesktop(screenWidth)
             ? AppBar(
