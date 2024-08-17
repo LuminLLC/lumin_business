@@ -3,6 +3,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lumin_business/common/app_colors.dart';
 import 'package:lumin_business/common/app_text_theme.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
+import 'package:lumin_business/modules/customers/customer_model.dart';
+import 'package:lumin_business/modules/customers/widgets/new_customer.dart';
 import 'package:lumin_business/modules/inventory/product_model.dart';
 import 'package:lumin_business/modules/customers/customer_provider.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
@@ -36,6 +38,10 @@ class _CustomerScreenState extends State<CustomerScreen> {
 
     return Consumer2<CustomerProvider, AppState>(
         builder: (context, customerProvider, appState, _) {
+      if (appState.businessInfo != null) {
+        Provider.of<CustomerProvider>(context, listen: false)
+            .fetchCustomers(appState.businessInfo!.businessId);
+      }
       return Container(
         margin: EdgeInsets.all(sp.getWidth(20, screenWidth)),
         padding: EdgeInsets.all(sp.getWidth(20, screenWidth)),
@@ -55,13 +61,13 @@ class _CustomerScreenState extends State<CustomerScreen> {
                     color: AppColor.black,
                   ),
                   onPressed: () {
-                    // showDialog(
-                    //     context: context,
-                    //     builder: (context) {
-                    //       return NewProduct(
-                    //           appState: appState,
-                    //           inventoryProvider: customerProvider);
-                    //     });
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return NewCustomer(
+                            appState: appState,
+                          );
+                        });
                   },
                 ),
                 customerProvider.allCustomers.isNotEmpty
@@ -71,21 +77,21 @@ class _CustomerScreenState extends State<CustomerScreen> {
                           color: AppColor.black,
                         ),
                         onPressed: () async {
-                          List<String> products = [];
-                          for (ProductModel p
-                              in customerProvider.allCustomers) {
-                            products.add(p.toFormattedString());
-                          }
-                          if (!generatingPDF &&
-                              customerProvider.allCustomers.isNotEmpty) {
-                            setState(() {
-                              generatingPDF = true;
-                            });
-                            appState.createPdfAndDownload(products);
-                            setState(() {
-                              generatingPDF = false;
-                            });
-                          }
+                          // List<String> products = [];
+                          // for (CustomerModel c
+                          //     in customerProvider.allCustomers) {
+                          //   // products.add(p.toFormattedString());
+                          // }
+                          // if (!generatingPDF &&
+                          //     customerProvider.allCustomers.isNotEmpty) {
+                          //   setState(() {
+                          //     generatingPDF = true;
+                          //   });
+                          //   appState.createPdfAndDownload(products);
+                          //   setState(() {
+                          //     generatingPDF = false;
+                          //   });
+                          // }
                         },
                       )
                     : SizedBox(),

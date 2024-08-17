@@ -3,25 +3,27 @@ import 'package:flutter/services.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/accounting/accounting_provider.dart';
 import 'package:lumin_business/modules/accounting/transaction_model.dart';
+import 'package:lumin_business/modules/customers/customer_model.dart';
+import 'package:lumin_business/modules/customers/customer_provider.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
 import 'package:lumin_business/util.dart';
 import 'package:lumin_business/widgets/lumin_texticon_button.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
-class NewTransaction extends StatefulWidget {
+class NewCustomer extends StatefulWidget {
   final AppState appState;
 
-  const NewTransaction({
+  const NewCustomer({
     Key? key,
     required this.appState,
   }) : super(key: key);
 
   @override
-  State<NewTransaction> createState() => _NewTransactionState();
+  State<NewCustomer> createState() => _NewCustomerState();
 }
 
-class _NewTransactionState extends State<NewTransaction> {
+class _NewCustomerState extends State<NewCustomer> {
   var uuid = Uuid();
   final SizeAndSpacing sp = SizeAndSpacing();
   late TextEditingController descriptionController;
@@ -43,8 +45,8 @@ class _NewTransactionState extends State<NewTransaction> {
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
     final double height = MediaQuery.of(context).size.height;
-    return Consumer2<AccountingProvider, AppState>(
-        builder: (context, accountingProvider, appState, _) {
+    return Consumer2<CustomerProvider, AppState>(
+        builder: (context, customerProvider, appState, _) {
       return AlertDialog(
         title: Row(
           children: [
@@ -55,17 +57,17 @@ class _NewTransactionState extends State<NewTransaction> {
                   color: Colors.blueGrey,
                   borderRadius: BorderRadius.circular(10)),
               alignment: Alignment.center,
-              child: accountingProvider.newTransactionType == null
-                  ? null
-                  : Icon(accountingProvider.newTransactionType == "Income"
-                      ? Icons.south_west
-                      : Icons.north_east),
+              // child: customerProvider.newTransactionType == null
+              //     ? null
+              //     : Icon(customerProvider.newTransactionType == "Income"
+              //         ? Icons.south_west
+              //         : Icons.north_east),
             ),
             SizedBox(
               width: sp.getWidth(20, width),
             ),
             Text(
-              "Add New Transaction",
+              "Add New Customer",
               style: TextStyle(fontSize: sp.getFontSize(24, width)),
             ),
           ],
@@ -108,24 +110,24 @@ class _NewTransactionState extends State<NewTransaction> {
                       SizedBox(
                         height: sp.getHeight(35, width, height),
                       ),
-                      DropdownButtonFormField<String>(
-                        value: accountingProvider.newTransactionType,
-                        onChanged: (newValue) {
-                          print(newValue);
-                        },
-                        decoration: InputDecoration(
-                          labelText: "Transaction Type",
-                          border: OutlineInputBorder(),
-                          hintText: "Select a transaction type",
-                        ),
-                        items: ["Income", "Expense"]
-                            .map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                      ),
+                      // DropdownButtonFormField<String>(
+                      //   value: customerProvider.newTransactionType,
+                      //   onChanged: (newValue) {
+                      //     print(newValue);
+                      //   },
+                      //   decoration: InputDecoration(
+                      //     labelText: "Transaction Type",
+                      //     border: OutlineInputBorder(),
+                      //     hintText: "Select a transaction type",
+                      //   ),
+                      //   items: ["Income", "Expense"]
+                      //       .map<DropdownMenuItem<String>>((String value) {
+                      //     return DropdownMenuItem<String>(
+                      //       value: value,
+                      //       child: Text(value),
+                      //     );
+                      //   }).toList(),
+                      // ),
                       SizedBox(
                         height: sp.getHeight(35, width, height),
                       ),
@@ -148,7 +150,10 @@ class _NewTransactionState extends State<NewTransaction> {
                           suffixIcon: IconButton(
                             icon: Icon(Icons.date_range),
                             onPressed: () {
-                              DatePickerDialog(firstDate: DateTime.now(),lastDate: DateTime.now(),);
+                              DatePickerDialog(
+                                firstDate: DateTime.now(),
+                                lastDate: DateTime.now(),
+                              );
                             },
                           ),
                           border: OutlineInputBorder(),
@@ -195,13 +200,14 @@ class _NewTransactionState extends State<NewTransaction> {
             icon: hasChanges ? Icons.save : Icons.close,
             onPressed: () async {
               if (hasChanges) {
-                accountingProvider.addTransaction(
-                    TransactionModel(
+                customerProvider.addCustomer(
+                    CustomerModel(
                         id: uuid.v1(),
-                        description: descriptionController.text,
-                        amount: double.parse(amountController.text),
-                        date: DateTime.now(),
-                        type: TransactionType.income),
+                        name: "John Doe",
+                        address: "123 Apple Street, Any Town",
+                        email: "stan@luminllc.com",
+                        phoneNumber: "phoneNumber",
+                        orders: []),
                     appState.businessInfo!.businessId);
               } else {
                 Navigator.pop(context);
