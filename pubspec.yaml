@@ -53,6 +53,7 @@ dependencies:
   path: ^1.9.0
   flutter_login: ^5.0.0
   feedback: ^3.1.0
+  calendar_date_picker2: ^1.1.5
 
   http: any
 dev_dependencies:

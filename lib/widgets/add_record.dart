@@ -1,4 +1,6 @@
+import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
+import 'package:lumin_business/common/lumin_utll.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/accounting/accounting_provider.dart';
 import 'package:lumin_business/modules/accounting/transaction_model.dart';
@@ -28,13 +30,16 @@ class AddRecord<T extends ChangeNotifier> extends StatefulWidget {
 class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
   var uuid = Uuid();
   final SizeAndSpacing sp = SizeAndSpacing();
+  List<DateTime> date = [];
   late TextEditingController nameController;
   late TextEditingController categoryController;
   late TextEditingController quantityController;
   late TextEditingController priceController;
   late TextEditingController amountController;
+  late TextEditingController descriptionController;
   late TextEditingController customerController;
   late TextEditingController supplierController;
+  late TextEditingController dateController;
   String categoryCode = "";
   bool hasChanges = false;
   bool isUpdating = false;
@@ -49,6 +54,8 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
     amountController = TextEditingController();
     customerController = TextEditingController();
     supplierController = TextEditingController();
+    descriptionController = TextEditingController();
+    dateController = TextEditingController();
   }
 
   @override
@@ -141,7 +148,107 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
 
   List<Widget> _getTransactionFields(double width, double height) {
     return [
-      // Add transaction-specific fields here
+      TextField(
+        controller: amountController,
+        onChanged: (value) => setState(() {
+          hasChanges = true;
+        }),
+        keyboardType: TextInputType.number,
+        style: TextStyle(fontSize: sp.getFontSize(16, width)),
+        decoration: InputDecoration(
+            labelText: "Transaction Amount",
+            border: OutlineInputBorder(),
+            hintText: "Enter the transaction amount",
+            prefix: Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: Text("GHS"),
+            )),
+      ),
+      SizedBox(
+        height: sp.getHeight(30, height, width),
+      ),
+      TextField(
+        controller: descriptionController,
+        onChanged: (value) => setState(() {
+          hasChanges = true;
+        }),
+        style: TextStyle(fontSize: sp.getFontSize(16, width)),
+        decoration: InputDecoration(
+            labelText: "Transaction Type",
+            border: OutlineInputBorder(),
+            hintText: "Select the transaction type",
+            prefix: Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: Text("GHS"),
+            )),
+      ),
+      SizedBox(
+        height: sp.getHeight(30, height, width),
+      ),
+      InkWell(
+        onTap: () async {
+          await showCalendarDatePicker2Dialog(
+            context: context,
+            config: CalendarDatePicker2WithActionButtonsConfig(),
+            dialogSize: const Size(325, 400),
+            value: date,
+            borderRadius: BorderRadius.circular(15),
+          ).then((result) {
+            if (result != null && result[0] != null) {
+              setState(() {
+                dateController.text = LuminUtll.formatDate(result[0]!);
+              });
+            }
+          });
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.grey, // Adjust the border color to match your theme
+              width: 1.0,
+            ),
+            borderRadius:
+                BorderRadius.circular(5.0), // Adjust the radius as needed
+            color:
+                Colors.transparent, // Match the background color to your theme
+          ),
+          padding: EdgeInsets.symmetric(
+            horizontal: 12.0,
+          ), //Add padding inside the container
+          width: double.infinity,
+          height: 50,
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              dateController.text.isEmpty
+                  ? "Tap to select date"
+                  : dateController.text,
+              // style: TextStyle(
+              //   color:
+              //       Colors.white, // Adjust the text color to match your theme
+              //   fontSize: 16.0,
+              // ),
+            ),
+          ),
+        ),
+      ),
+      SizedBox(
+        height: sp.getHeight(30, height, width),
+      ),
+      TextField(
+        controller: descriptionController,
+        onChanged: (value) => setState(() {
+          hasChanges = true;
+        }),
+        maxLines: 3,
+        maxLength: 50,
+        style: TextStyle(fontSize: sp.getFontSize(16, width)),
+        decoration: InputDecoration(
+          labelText: "Desctiption",
+          border: OutlineInputBorder(),
+          hintText: "Enter the transaction description",
+        ),
+      ),
     ];
   }
 

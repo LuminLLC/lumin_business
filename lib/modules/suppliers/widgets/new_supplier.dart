@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lumin_business/common/lumin_utll.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
 import 'package:lumin_business/modules/suppliers/supplier_model.dart';
 import 'package:lumin_business/modules/suppliers/supplier_provider.dart';
-import 'package:lumin_business/util.dart';
+
 import 'package:lumin_business/widgets/lumin_texticon_button.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
@@ -132,7 +133,7 @@ class _NewSupplierState extends State<NewSupplier> {
                       //date
                       TextField(
                         controller: dateController
-                          ..text = LuminUtil.formatDate(DateTime.now()),
+                          ..text = LuminUtll.formatDate(DateTime.now()),
                         style: TextStyle(fontSize: sp.getFontSize(16, width)),
                         keyboardType: TextInputType.datetime,
                         onChanged: (value) {

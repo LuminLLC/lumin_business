@@ -8,6 +8,8 @@ import 'package:lumin_business/modules/accounting/widgets/new_transaction.dart';
 import 'package:lumin_business/modules/accounting/transaction_model.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
 import 'package:lumin_business/modules/general_platform/header_widget.dart';
+import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
+import 'package:lumin_business/widgets/add_record.dart';
 import 'package:lumin_business/widgets/general_list_tile.dart';
 import 'package:provider/provider.dart';
 
@@ -63,10 +65,17 @@ class _AccountingScreenState extends State<AccountingScreen> {
                     showDialog(
                         context: context,
                         builder: (context) {
-                          return NewTransaction(
-                            appState: appState,
+                          return AddRecord<InventoryProvider>(
+                            recordType: RecordType.transaction,
                           );
                         });
+                    // showDialog(
+                    //     context: context,
+                    //     builder: (context) {
+                    //       return NewTransaction(
+                    //         appState: appState,
+                    //       );
+                    //     });
                   },
                 ),
                 accountingProvider.allTransactions.isNotEmpty
