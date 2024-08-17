@@ -1,6 +1,7 @@
 enum TransactionType { income, expense }
 
 class TransactionModel {
+  
   final String id;
   final String description;
   final double amount;

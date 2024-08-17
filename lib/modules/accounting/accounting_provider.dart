@@ -30,10 +30,14 @@ import 'package:lumin_business/modules/accounting/transaction_model.dart';
 // ];
 
 class AccountingProvider with ChangeNotifier {
+  String? photo;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   bool isAccountingFetched = false;
   String? newTransactionType;
   List<TransactionModel> allTransactions = [];
+
+
+  
 
   Future<void> addTransaction(TransactionModel t, String businessID) async {
     try {

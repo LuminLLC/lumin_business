@@ -4,6 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/accounting/accounting_provider.dart';
+import 'package:lumin_business/modules/accounting/transaction_model.dart';
 import 'package:lumin_business/modules/customers/customer_provider.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
 import 'package:lumin_business/modules/general_platform/menu_controller.dart';
@@ -14,6 +15,7 @@ import 'package:lumin_business/modules/login/login_screen.dart';
 import 'package:lumin_business/modules/login/signup_screen.dart';
 import 'package:lumin_business/modules/login/uplaod_data.dart';
 import 'package:lumin_business/modules/suppliers/supplier_provider.dart';
+import 'package:lumin_business/widgets/add_record.dart';
 import 'package:provider/provider.dart';
 import 'modules/general_platform/home_page.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -77,7 +79,11 @@ class LuminBusiness extends StatelessWidget {
         "/uploadData": (context) => UploadData()
       },
       initialRoute: '/sign-in',
-      // home: ChartExample(),
+      // home: Container(
+      //   child: AddRecord<InventoryProvider>(
+      //     recordType: RecordType.supplier,
+      //   ),
+      // ),
     );
   }
 }
