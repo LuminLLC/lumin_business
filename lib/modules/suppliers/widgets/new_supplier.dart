@@ -1,29 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
-import 'package:lumin_business/modules/accounting/accounting_provider.dart';
-import 'package:lumin_business/modules/accounting/transaction_model.dart';
-import 'package:lumin_business/modules/customers/customer_model.dart';
-import 'package:lumin_business/modules/customers/customer_provider.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
+import 'package:lumin_business/modules/suppliers/supplier_model.dart';
+import 'package:lumin_business/modules/suppliers/supplier_provider.dart';
 import 'package:lumin_business/util.dart';
 import 'package:lumin_business/widgets/lumin_texticon_button.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
-class NewCustomer extends StatefulWidget {
+class NewSupplier extends StatefulWidget {
   final AppState appState;
 
-  const NewCustomer({
+  const NewSupplier({
     Key? key,
     required this.appState,
   }) : super(key: key);
 
   @override
-  State<NewCustomer> createState() => _NewCustomerState();
+  State<NewSupplier> createState() => _NewSupplierState();
 }
 
-class _NewCustomerState extends State<NewCustomer> {
+class _NewSupplierState extends State<NewSupplier> {
   var uuid = Uuid();
   final SizeAndSpacing sp = SizeAndSpacing();
   late TextEditingController descriptionController;
@@ -45,8 +43,8 @@ class _NewCustomerState extends State<NewCustomer> {
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
     final double height = MediaQuery.of(context).size.height;
-    return Consumer2<CustomerProvider, AppState>(
-        builder: (context, customerProvider, appState, _) {
+    return Consumer2<SupplierProvider, AppState>(
+        builder: (context, supplierProvider, appState, _) {
       return AlertDialog(
         title: Row(
           children: [
@@ -200,14 +198,13 @@ class _NewCustomerState extends State<NewCustomer> {
             icon: hasChanges ? Icons.save : Icons.close,
             onPressed: () async {
               if (hasChanges) {
-                customerProvider.addCustomer(
-                    CustomerModel(
+                supplierProvider.addSupplier(
+                    SupplierModel(
                         id: uuid.v1(),
-                        name: "John Doe",
-                        address: "123 Apple Street, Any Town",
-                        email: "stan@luminllc.com",
-                        phoneNumber: "phoneNumber",
-                        orders: []),
+                        name: "name",
+                        contactNumber: "contactNumber",
+                        email: "email",
+                        address: "address"),
                     appState.businessInfo!.businessId);
               } else {
                 Navigator.pop(context);

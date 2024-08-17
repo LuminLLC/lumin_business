@@ -7,6 +7,7 @@ import 'package:lumin_business/modules/inventory/product_model.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
 import 'package:lumin_business/modules/general_platform/header_widget.dart';
 import 'package:lumin_business/modules/suppliers/supplier_provider.dart';
+import 'package:lumin_business/modules/suppliers/widgets/new_supplier.dart';
 import 'package:lumin_business/widgets/general_list_tile.dart';
 import 'package:provider/provider.dart';
 
@@ -36,6 +37,10 @@ class _SupplierScreenState extends State<SupplierScreen> {
 
     return Consumer2<SupplierProvider, AppState>(
         builder: (context, supplierProvider, appState, _) {
+      if (appState.businessInfo != null) {
+        Provider.of<SupplierProvider>(context, listen: false)
+            .fetchSuppliers(appState.businessInfo!.businessId);
+      }
       return Container(
         margin: EdgeInsets.all(sp.getWidth(20, screenWidth)),
         padding: EdgeInsets.all(sp.getWidth(20, screenWidth)),
@@ -55,13 +60,13 @@ class _SupplierScreenState extends State<SupplierScreen> {
                     color: AppColor.black,
                   ),
                   onPressed: () {
-                    // showDialog(
-                    //     context: context,
-                    //     builder: (context) {
-                    //       return NewProduct(
-                    //           appState: appState,
-                    //           inventoryProvider: customerProvider);
-                    //     });
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return NewSupplier(
+                            appState: appState,
+                          );
+                        });
                   },
                 ),
                 supplierProvider.allSuppliers.isNotEmpty

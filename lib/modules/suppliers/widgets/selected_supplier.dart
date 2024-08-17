@@ -4,11 +4,11 @@ import 'package:lumin_business/modules/accounting/accounting_provider.dart';
 import 'package:lumin_business/modules/accounting/transaction_model.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
 
-class SelectedCustomer extends StatefulWidget {
+class SelectedSupplier extends StatefulWidget {
   final TransactionModel transaction;
   final AppState appState;
   final AccountingProvider accountingProvider;
-  const SelectedCustomer(
+  const SelectedSupplier(
       {Key? key,
       required this.transaction,
       required this.appState,
@@ -16,10 +16,10 @@ class SelectedCustomer extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<SelectedCustomer> createState() => _SelectedCustomerState();
+  State<SelectedSupplier> createState() => _SelectedSupplierState();
 }
 
-class _SelectedCustomerState extends State<SelectedCustomer> {
+class _SelectedSupplierState extends State<SelectedSupplier> {
   final SizeAndSpacing sp = SizeAndSpacing();
   late TextEditingController nameController;
   late TextEditingController categoryController;

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:lumin_business/modules/suppliers/supplier_model.dart';
 
@@ -35,6 +36,44 @@ List<SupplierModel> dummySupplierData = [
 ];
 
 class SupplierProvider with ChangeNotifier {
-  List allSuppliers = dummySupplierData; //[];
-  bool isSuppliersFetched = true;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  List allSuppliers = [];
+  bool isSuppliersFetched = false;
+
+  Future<void> addSupplier(SupplierModel s, String businessID) async {
+    try {
+      await _firestore
+          .collection("businesses")
+          .doc(businessID)
+          .collection("suppliers")
+          .doc(s.id)
+          .set(s.toMap());
+      allSuppliers.add(s);
+      // allCustomers.sort((a, b) => a.date.compareTo(b.date));
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> fetchSuppliers(String businessID) async {
+    if (!isSuppliersFetched) {
+      try {
+        QuerySnapshot<Map<String, dynamic>> rawDocs = await _firestore
+            .collection("businesses")
+            .doc(businessID)
+            .collection("suppliers")
+            .get();
+        for (var v in rawDocs.docs) {
+          allSuppliers.add(SupplierModel.fromMap(v.data()));
+        }
+        // allCustomers.sort((a, b) => a.date.compareTo(b.date));
+        isSuppliersFetched = true;
+
+        notifyListeners();
+      } catch (e) {
+        print("error fetching customers");
+      }
+    }
+  }
 }
