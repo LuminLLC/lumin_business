@@ -28,4 +28,12 @@ class LuminUtll {
     print(output);
     return output;
   }
+
+  String formatCurrency(double amount, {String currencyCode = "GHS"}) {
+    final formatCurrency = NumberFormat.currency(
+      locale: 'en_GH', // Assuming 'en_GH' locale for Ghana
+      decimalDigits: 2, // Number of decimal places
+    );
+    return formatCurrency.format(amount);
+  }
 }

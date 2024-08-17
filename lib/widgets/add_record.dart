@@ -1,5 +1,6 @@
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lumin_business/common/lumin_utll.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/accounting/accounting_provider.dart';
@@ -223,11 +224,10 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
               dateController.text.isEmpty
                   ? "Tap to select date"
                   : dateController.text,
-              // style: TextStyle(
-              //   color:
-              //       Colors.white, // Adjust the text color to match your theme
-              //   fontSize: 16.0,
-              // ),
+              style: TextStyle(
+                color: Colors.grey, // Adjust the text color to match your theme
+                fontSize: 16.0,
+              ),
             ),
           ),
         ),
