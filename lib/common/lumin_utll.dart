@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 class LuminUtll {
@@ -35,5 +36,47 @@ class LuminUtll {
       decimalDigits: 2, // Number of decimal places
     );
     return formatCurrency.format(amount);
+  }
+}
+
+class CurrencyInputFormatter extends TextInputFormatter {
+  final String currencySymbol;
+
+  CurrencyInputFormatter({this.currencySymbol = "GHS"});
+
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    // If the new value is empty, return the new value
+    if (newValue.text.isEmpty) {
+      return newValue.copyWith(text: '');
+    }
+
+    // Remove all non-digit characters
+    String value = newValue.text.replaceAll(RegExp(r'[^\d]'), '');
+
+    // If there's nothing left after removing non-digit characters, return the old value
+    if (value.isEmpty) {
+      return oldValue;
+    }
+
+    // Parse the value to an integer
+    int newValueAsInt = int.parse(value);
+
+    // Format the number as currency
+    final formatter = NumberFormat.currency(
+      locale: 'en_GH',
+      symbol: currencySymbol + " ",
+      decimalDigits: 2,
+    );
+
+    // Apply the currency format
+    String newText = formatter.format(newValueAsInt / 100);
+
+    // Return the new TextEditingValue with the formatted currency string
+    return TextEditingValue(
+      text: newText,
+      selection: TextSelection.collapsed(offset: newText.length),
+    );
   }
 }

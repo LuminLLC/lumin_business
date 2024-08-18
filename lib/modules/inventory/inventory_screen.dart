@@ -7,7 +7,8 @@ import 'package:lumin_business/modules/inventory/product_model.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
 import 'package:lumin_business/modules/general_platform/header_widget.dart';
 import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
-import 'package:lumin_business/modules/inventory/new_product.dart';
+import 'package:lumin_business/widgets/add_record.dart';
+
 import 'package:lumin_business/widgets/general_list_tile.dart';
 import 'package:provider/provider.dart';
 
@@ -59,15 +60,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
                     showDialog(
                         context: context,
                         builder: (context) {
-                          return NewProduct(
-                              appState: appState,
-                              product: ProductModel(
-                                  id: "id",
-                                  name: "name",
-                                  quantity: 100,
-                                  category: "category",
-                                  unitPrice: 100),
-                              inventoryProvider: inventoryProvider);
+                          return AddRecord<InventoryProvider>(
+                            recordType: RecordType.product,
+                          );
                         });
                   },
                 ),
@@ -79,7 +74,8 @@ class _InventoryScreenState extends State<InventoryScreen> {
                         ),
                         onPressed: () async {
                           List<String> products = [];
-                          for (ProductModel p in inventoryProvider.allProdcuts) {
+                          for (ProductModel p
+                              in inventoryProvider.allProdcuts) {
                             products.add(p.toFormattedString());
                           }
                           if (!generatingPDF &&

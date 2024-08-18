@@ -38,7 +38,7 @@ class _SelectedSupplierState extends State<SelectedSupplier> {
     quantityController = TextEditingController()
       ..text = widget.transaction.amount.toString();
     priceController = TextEditingController()
-      ..text = widget.transaction.date.toIso8601String();
+      ..text = widget.transaction.date ;
   }
 
   @override

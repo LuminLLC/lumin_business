@@ -6,8 +6,8 @@ import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/inventory/product_model.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
 import 'package:lumin_business/modules/general_platform/header_widget.dart';
-import 'package:lumin_business/modules/suppliers/supplier_provider.dart';
-import 'package:lumin_business/modules/suppliers/widgets/new_supplier.dart';
+import 'package:lumin_business/modules/suppliers/supplier_provider.dart'; 
+import 'package:lumin_business/widgets/add_record.dart';
 import 'package:lumin_business/widgets/general_list_tile.dart';
 import 'package:provider/provider.dart';
 
@@ -63,8 +63,8 @@ class _SupplierScreenState extends State<SupplierScreen> {
                     showDialog(
                         context: context,
                         builder: (context) {
-                          return NewSupplier(
-                            appState: appState,
+                          return AddRecord<SupplierProvider>(
+                          recordType: RecordType.supplier,
                           );
                         });
                   },

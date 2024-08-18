@@ -5,7 +5,7 @@ class TransactionModel {
   final String id;
   final String description;
   final double amount;
-  final DateTime date;
+  final String date;
   final TransactionType type;
 
   TransactionModel({
@@ -22,7 +22,7 @@ class TransactionModel {
       'id': id,
       'description': description,
       'amount': amount,
-      'date': date.toIso8601String(), // Store date as a string in ISO 8601 format
+      'date': date , // Store date as a string in ISO 8601 format
       'type': type.toString().split('.').last, // Store the enum as a string
     };
   }
@@ -33,7 +33,7 @@ class TransactionModel {
       id: map['id'],
       description: map['description'],
       amount: map['amount'],
-      date: DateTime.parse(map['date']),
+      date: map['date'],
       type: TransactionType.values.firstWhere((e) => e.toString().split('.').last == map['type']),
     );
   }

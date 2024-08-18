@@ -323,7 +323,7 @@ class GeneralListTile extends StatelessWidget {
                 height: sp.getHeight(20, screenHeight, screenWidth),
                 child: VerticalDivider()),
             Text(
-              "Date: ${transaction.date.toLocal()}".split(' ')[0],
+              "Date: ${transaction.date }" ,
               style: textTheme
                   .textTheme(screenWidth)
                   .bodySmall!

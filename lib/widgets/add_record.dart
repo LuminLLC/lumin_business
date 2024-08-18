@@ -1,10 +1,9 @@
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/material.dart'; 
 import 'package:lumin_business/common/lumin_utll.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/accounting/accounting_provider.dart';
-import 'package:lumin_business/modules/accounting/transaction_model.dart';
+import 'package:lumin_business/modules/accounting/transaction_model.dart'; 
 import 'package:lumin_business/modules/general_platform/app_state.dart';
 import 'package:lumin_business/widgets/lumin_texticon_button.dart';
 import 'package:provider/provider.dart';
@@ -32,6 +31,10 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
   var uuid = Uuid();
   final SizeAndSpacing sp = SizeAndSpacing();
   List<DateTime> date = [];
+  String? selectedTransactionType;
+  String? amountError;
+  String? transactionTypeError;
+  final List<String> items = ["Income", 'Expense'];
   late TextEditingController nameController;
   late TextEditingController categoryController;
   late TextEditingController quantityController;
@@ -42,7 +45,7 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
   late TextEditingController supplierController;
   late TextEditingController dateController;
   String categoryCode = "";
-  bool hasChanges = false;
+
   bool isUpdating = false;
 
   @override
@@ -56,7 +59,37 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
     customerController = TextEditingController();
     supplierController = TextEditingController();
     descriptionController = TextEditingController();
-    dateController = TextEditingController();
+    dateController = TextEditingController()
+      ..text = LuminUtll.formatDate(DateTime.now());
+  }
+
+  bool validateTransaction() {
+    bool amountPass = true;
+    bool typePass = true;
+    bool datePass = true;
+
+    if (amountController.text.isEmpty || amountController.text == "GHS  0.00") {
+      amountPass = false;
+      setState(() {
+        amountError = "Amount can't be empty";
+      });
+    }
+
+    if (selectedTransactionType == null) {
+      setState(() {
+        transactionTypeError = "Transaction type can't be empty";
+      });
+      typePass = false;
+    }
+
+    if (dateController.text.isEmpty) {
+      setState(() {
+        transactionTypeError = "Date";
+      });
+      typePass = false;
+    }
+
+    return amountPass && typePass && datePass;
   }
 
   @override
@@ -90,25 +123,10 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
           ),
           actions: [
             LuminTextIconButton(
-              text: hasChanges ? "Save" : "Close",
-              icon: hasChanges ? Icons.save : Icons.close,
-              onPressed: () async {
-                if (hasChanges) {
-                  if (provider is AccountingProvider) {
-                    setState(() {
-                      isUpdating = true;
-                    });
-                    await _handleSave(
-                        provider, appState.businessInfo!.businessId);
-                    setState(() {
-                      isUpdating = false;
-                    });
-                    Navigator.pop(context);
-                  } else {
-                    Navigator.pop(context);
-                  }
-                }
-              },
+              text: "Add",
+              icon: Icons.add,
+              onPressed: () => _handleSave(provider as AccountingProvider,
+                  "appState.businessInfo!.businessId"), //TODO: remove literal
             ),
           ],
         );
@@ -151,37 +169,86 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
     return [
       TextField(
         controller: amountController,
-        onChanged: (value) => setState(() {
-          hasChanges = true;
-        }),
+        inputFormatters: [CurrencyInputFormatter(currencySymbol: "GHS ")],
+        onChanged: (value) {
+          if (amountError != null) {
+            setState(() {
+              amountError = null;
+            });
+          }
+        },
         keyboardType: TextInputType.number,
         style: TextStyle(fontSize: sp.getFontSize(16, width)),
         decoration: InputDecoration(
-            labelText: "Transaction Amount",
-            border: OutlineInputBorder(),
-            hintText: "Enter the transaction amount",
-            prefix: Padding(
-              padding: const EdgeInsets.only(right: 8.0),
-              child: Text("GHS"),
-            )),
+          errorText: amountError,
+          labelText: "Transaction Amount",
+          border: OutlineInputBorder(),
+          hintText: "Enter the transaction amount",
+        ),
       ),
       SizedBox(
         height: sp.getHeight(30, height, width),
       ),
-      TextField(
-        controller: descriptionController,
-        onChanged: (value) => setState(() {
-          hasChanges = true;
-        }),
-        style: TextStyle(fontSize: sp.getFontSize(16, width)),
+      DropdownButtonFormField<String>(
+        hint: Text(
+          "Select a transaction type",
+          style: TextStyle(
+            color: Colors.grey[300], // Adjust this color to match your style
+          ),
+        ),
+        value: selectedTransactionType,
         decoration: InputDecoration(
-            labelText: "Transaction Type",
-            border: OutlineInputBorder(),
-            hintText: "Select the transaction type",
-            prefix: Padding(
-              padding: const EdgeInsets.only(right: 8.0),
-              child: Text("GHS"),
-            )),
+          errorText: transactionTypeError,
+          // hintText: "Select a transaction type",
+          // labelText: "Transaction Type",
+          hintStyle: TextStyle(
+            color: Colors.grey[300], // Adjust this color to match your style
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(5), // Rounded corners
+            borderSide: BorderSide(
+              color: Colors.grey, // Border color
+              width: 1.0,
+            ),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8.0), // Rounded corners
+            borderSide: BorderSide(
+              color: Colors.blue, // Border color when focused
+              width: 2.0,
+            ),
+          ),
+          contentPadding: EdgeInsets.only(
+            left: 12.0, // Horizontal padding inside the dropdown
+          ),
+        ),
+        icon: Padding(
+          padding: const EdgeInsets.only(right: 8.0),
+          child: Icon(
+            Icons.arrow_drop_down, // Icon for the dropdown
+            color: Colors.grey[700], // Adjust this color to match your style
+          ),
+        ),
+        style: TextStyle(
+          color: Colors.white, // Text color inside the dropdown
+          fontSize: 16.0, // Text size inside the dropdown
+        ),
+        onChanged: (value) {
+          if (transactionTypeError != null) {
+            setState(() {
+              transactionTypeError = null;
+            });
+          }
+          setState(() {
+            selectedTransactionType = value;
+          });
+        },
+        items: items.map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(value),
+          );
+        }).toList(),
       ),
       SizedBox(
         height: sp.getHeight(30, height, width),
@@ -218,17 +285,22 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
           ), //Add padding inside the container
           width: double.infinity,
           height: 50,
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              dateController.text.isEmpty
-                  ? "Tap to select date"
-                  : dateController.text,
-              style: TextStyle(
-                color: Colors.grey, // Adjust the text color to match your theme
-                fontSize: 16.0,
+          child: Row(
+            children: [
+              Text(
+                dateController.text,
+                style: TextStyle(
+                  color:
+                      Colors.grey, // Adjust the text color to match your theme
+                  fontSize: 16.0,
+                ),
               ),
-            ),
+              Spacer(),
+              Text(
+                "Tap to change date",
+                style: TextStyle(fontSize: 12, color: Colors.white30),
+              )
+            ],
           ),
         ),
       ),
@@ -237,9 +309,9 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
       ),
       TextField(
         controller: descriptionController,
-        onChanged: (value) => setState(() {
-          hasChanges = true;
-        }),
+        // onChanged: (value) => setState(() {
+        //   hasChanges = true;
+        // }),
         maxLines: 3,
         maxLength: 50,
         style: TextStyle(fontSize: sp.getFontSize(16, width)),
@@ -256,9 +328,9 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
     return [
       TextField(
         controller: nameController,
-        onChanged: (value) => setState(() {
-          hasChanges = true;
-        }),
+        // onChanged: (value) => setState(() {
+        //   hasChanges = true;
+        // }),
         style: TextStyle(fontSize: sp.getFontSize(16, width)),
         decoration: InputDecoration(
           labelText: "Product Name",
@@ -274,9 +346,9 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
     return [
       TextField(
         controller: customerController,
-        onChanged: (value) => setState(() {
-          hasChanges = true;
-        }),
+        // onChanged: (value) => setState(() {
+        //   hasChanges = true;
+        // }),
         style: TextStyle(fontSize: sp.getFontSize(16, width)),
         decoration: InputDecoration(
           labelText: "Customer Name",
@@ -292,9 +364,9 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
     return [
       TextField(
         controller: supplierController,
-        onChanged: (value) => setState(() {
-          hasChanges = true;
-        }),
+        // onChanged: (value) => setState(() {
+        //   hasChanges = true;
+        // }),
         style: TextStyle(fontSize: sp.getFontSize(16, width)),
         decoration: InputDecoration(
           labelText: "Supplier Name",
@@ -310,16 +382,21 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
       AccountingProvider provider, String businessId) async {
     switch (widget.recordType) {
       case RecordType.transaction:
-        await provider.addTransaction(
-          TransactionModel(
-            id: uuid.v1(),
-            description: "",
-            amount: double.parse(amountController.text),
-            date: DateTime.now(),
-            type: TransactionType.income,
-          ),
-          businessId,
-        );
+        bool isValid = validateTransaction();
+        if (isValid) {
+          
+          await provider.addTransaction(
+            TransactionModel(
+              id: uuid.v1(),
+              description: descriptionController.text,
+              amount: double.parse(amountController.text),
+              date:  dateController.text,
+              type: TransactionType.income,
+            ),
+            businessId,
+          );
+        }
+
         break;
       case RecordType.product:
         // Handle saving product
