@@ -36,9 +36,6 @@ class AccountingProvider with ChangeNotifier {
   String? newTransactionType;
   List<TransactionModel> allTransactions = [];
 
-
-  
-
   Future<void> addTransaction(TransactionModel t, String businessID) async {
     try {
       await _firestore

@@ -77,22 +77,28 @@ class _LoginScreenState extends State<LoginScreen> {
         height: height,
         width: width,
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             ResponsiveWidget.isSmallScreen(context)
                 ? const SizedBox()
                 : Expanded(
-                    child: Container(
-                      height: height,
-                      color: AppColors.mainBlueColor,
-                      child: Center(
-                        child: Text(
-                          'Lumin Business',
-                          style: ralewayStyle.copyWith(
-                            fontSize: 48.0,
-                            color: AppColors.whiteColor,
-                            fontWeight: FontWeight.w800,
+                    child: Padding(
+                      padding: EdgeInsets.only(left: sp.getWidth(30, width)),
+                      child: Container(
+                        height: height * 0.8,
+                        decoration: BoxDecoration(
+                            color: AppColors.mainBlueColor,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(15))),
+                        child: Center(
+                          child: Text(
+                            'Lumin Business',
+                            style: ralewayStyle.copyWith(
+                              fontSize: 48.0,
+                              color: AppColors.whiteColor,
+                              fontWeight: FontWeight.w800,
+                            ),
                           ),
                         ),
                       ),
@@ -270,7 +276,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                         ),
-                        SizedBox(height: height * 0.05),
+                        SizedBox(height: height * 0.07),
                         Material(
                           color: Colors.transparent,
                           child: Consumer<LuminAuthProvider>(

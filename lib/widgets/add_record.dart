@@ -1,9 +1,9 @@
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
-import 'package:flutter/material.dart'; 
+import 'package:flutter/material.dart';
 import 'package:lumin_business/common/lumin_utll.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/accounting/accounting_provider.dart';
-import 'package:lumin_business/modules/accounting/transaction_model.dart'; 
+import 'package:lumin_business/modules/accounting/transaction_model.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
 import 'package:lumin_business/widgets/lumin_texticon_button.dart';
 import 'package:provider/provider.dart';
@@ -28,6 +28,7 @@ class AddRecord<T extends ChangeNotifier> extends StatefulWidget {
 }
 
 class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
+  bool isUpdating = false;
   var uuid = Uuid();
   final SizeAndSpacing sp = SizeAndSpacing();
   List<DateTime> date = [];
@@ -45,8 +46,6 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
   late TextEditingController supplierController;
   late TextEditingController dateController;
   String categoryCode = "";
-
-  bool isUpdating = false;
 
   @override
   void initState() {
@@ -104,6 +103,7 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
           title: Text(_getDialogTitle(widget.recordType)),
           content: SizedBox(
             width: sp.getWidth(600, width),
+            height: isUpdating ? sp.getHeight(400, height, width) : null,
             child: isUpdating
                 ? Center(
                     child: SizedBox(
@@ -122,12 +122,14 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
                   ),
           ),
           actions: [
-            LuminTextIconButton(
-              text: "Add",
-              icon: Icons.add,
-              onPressed: () => _handleSave(provider as AccountingProvider,
-                  "appState.businessInfo!.businessId"), //TODO: remove literal
-            ),
+            isUpdating
+                ? SizedBox()
+                : LuminTextIconButton(
+                    text: "Add",
+                    icon: Icons.add,
+                    onPressed: () => _handleSave(provider as AccountingProvider,
+                        appState.businessInfo!.businessId),
+                  ),
           ],
         );
       },
@@ -309,9 +311,6 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
       ),
       TextField(
         controller: descriptionController,
-        // onChanged: (value) => setState(() {
-        //   hasChanges = true;
-        // }),
         maxLines: 3,
         maxLength: 50,
         style: TextStyle(fontSize: sp.getFontSize(16, width)),
@@ -378,23 +377,43 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
     ];
   }
 
+  void resetControllers() {
+    nameController.clear();
+    categoryController.clear();
+    quantityController.clear();
+    priceController.clear();
+    amountController.clear();
+    customerController.clear();
+    supplierController.clear();
+    descriptionController.clear();
+    selectedTransactionType = null;
+    dateController = TextEditingController()
+      ..text = LuminUtll.formatDate(DateTime.now());
+  }
+
   Future<void> _handleSave(
       AccountingProvider provider, String businessId) async {
     switch (widget.recordType) {
       case RecordType.transaction:
         bool isValid = validateTransaction();
         if (isValid) {
-          
+          setState(() {
+            isUpdating = true;
+          });
           await provider.addTransaction(
             TransactionModel(
               id: uuid.v1(),
               description: descriptionController.text,
-              amount: double.parse(amountController.text),
-              date:  dateController.text,
+              amount: CurrencyInputFormatter().getAmount(amountController.text),
+              date: dateController.text,
               type: TransactionType.income,
             ),
             businessId,
           );
+          resetControllers();
+          setState(() {
+            isUpdating = false;
+          });
         }
 
         break;

@@ -79,4 +79,14 @@ class CurrencyInputFormatter extends TextInputFormatter {
       selection: TextSelection.collapsed(offset: newText.length),
     );
   }
+
+  double getAmount(String formattedValue) {
+    // Remove the currency symbol and other non-numeric characters
+    String numericString = formattedValue
+        .replaceAll(currencySymbol, '')
+        .replaceAll(RegExp(r'[^\d.]'), '');
+
+    // Parse the numeric string to a double
+    return double.parse(numericString);
+  }
 }
