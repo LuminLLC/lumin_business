@@ -56,7 +56,7 @@ class _HeaderWidgetState extends State<HeaderWidget> {
                       child: SearchBar(
                         controller: widget.controller,
                         onChanged: (newText) {
-                          appState.setSearchText(newText);
+                          appState.setSearchText(newText.toLowerCase());
                         },
                         textStyle: WidgetStatePropertyAll(AppTextTheme()
                             .textTheme(screenWidth)
