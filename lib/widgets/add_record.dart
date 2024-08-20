@@ -127,8 +127,8 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
                 : LuminTextIconButton(
                     text: "Add",
                     icon: Icons.add,
-                    onPressed: () => _handleSave(provider as AccountingProvider,
-                        appState.businessInfo!.businessId),
+                    onPressed: () => _handleSave(
+                        provider, appState.businessInfo!.businessId),
                   ),
           ],
         );
@@ -391,8 +391,7 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
       ..text = LuminUtll.formatDate(DateTime.now());
   }
 
-  Future<void> _handleSave(
-      AccountingProvider provider, String businessId) async {
+  Future<void> _handleSave(provider, String businessId) async {
     switch (widget.recordType) {
       case RecordType.transaction:
         bool isValid = validateTransaction();
@@ -418,7 +417,29 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
 
         break;
       case RecordType.product:
-        // Handle saving product
+        bool isValid = validateTransaction();
+        if (isValid) {
+          setState(() {
+            isUpdating = true;
+          });
+          await provider.addProduct(
+            
+          );
+          // await provider.addTransaction(
+          //   TransactionModel(
+          //     id: uuid.v1(),
+          //     description: descriptionController.text,
+          //     amount: CurrencyInputFormatter().getAmount(amountController.text),
+          //     date: dateController.text,
+          //     type: TransactionType.income,
+          //   ),
+          //   businessId,
+          // );
+          resetControllers();
+          setState(() {
+            isUpdating = false;
+          });
+        }
         break;
       case RecordType.customer:
         // Handle saving customer

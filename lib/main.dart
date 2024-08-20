@@ -14,6 +14,7 @@ import 'package:lumin_business/modules/login/login_screen.dart';
 import 'package:lumin_business/modules/login/signup_screen.dart';
 import 'package:lumin_business/modules/login/uplaod_data.dart';
 import 'package:lumin_business/modules/suppliers/supplier_provider.dart';
+import 'package:lumin_business/widgets/add_record.dart';
 import 'package:provider/provider.dart';
 import 'modules/general_platform/home_page.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -76,12 +77,12 @@ class LuminBusiness extends StatelessWidget {
         "/createBusiness": (context) => CreateBusinessScreen(),
         "/uploadData": (context) => UploadData()
       },
-      initialRoute: '/sign-in',
-      // home: Container(
-      //   child: AddRecord<InventoryProvider>(
-      //     recordType: RecordType.supplier,
-      //   ),
-      // ),
+      // initialRoute: '/sign-in',
+      home: Container(
+        child: AddRecord<InventoryProvider>(
+          recordType: RecordType.product,
+        ),
+      ),
     );
   }
 }
