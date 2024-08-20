@@ -74,7 +74,7 @@ class _HeaderWidgetState extends State<HeaderWidget> {
                                 IconButton(
                                     onPressed: () {
                                       widget.controller!.clear();
-                                      appState.setSearchText("");
+                                      appState.setSearchText(""); 
                                     },
                                     icon: Icon(Icons.close))
                               ]
