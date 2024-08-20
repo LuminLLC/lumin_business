@@ -1,0 +1,16 @@
+Lumin Business - Version 1.1.2
+
+Hot Fix:
+
+This release addresses the following:
+
+- Addresses a bug that causes new product uploads to fail or return a dirty state.
+- Addresses a bug that causes platform to fetch entire inventory database on updating a field on one product.
+- General platform stability issues
+- General data efficiency issues
+
+
+Your feedback is valuable to us, so please do not hesitate to share your thoughts and suggestions.
+
+Thank you for using Lumin Business!
+

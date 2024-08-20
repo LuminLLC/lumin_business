@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
-import 'package:lumin_business/controllers/product_controller.dart';
+
 import 'package:lumin_business/models/product.dart';
-import 'package:provider/provider.dart';
+import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
 
 class SetOrderQuantity extends StatefulWidget {
   final Product product;
-  final ProductController productController;
+  final InventoryProvider inventoryProvider;
   const SetOrderQuantity(
-      {Key? key, required this.product, required this.productController})
+      {Key? key, required this.product, required this.inventoryProvider})
       : super(key: key);
 
   @override
@@ -89,7 +89,7 @@ class _SetOrderQuantityState extends State<SetOrderQuantity> {
                 setState(() {
                   quantityError = "Quantity cannot be empty";
                 });
-              } else if (!widget.productController.verifyQuantity(
+              } else if (!widget.inventoryProvider.verifyQuantity(
                   widget.product, int.parse(quantityController.text))) {
                 setState(() {
                   quantityError = "Order quantity cannot exceed stock";
@@ -99,9 +99,9 @@ class _SetOrderQuantityState extends State<SetOrderQuantity> {
                   quantityError = "Order cannot be 0";
                 });
               } else {
-                widget.productController.addToOrder(
+                widget.inventoryProvider.addToOrder(
                     widget.product, int.parse(quantityController.text));
-                print(widget.productController.openOrder);
+                print(widget.inventoryProvider.openOrder);
                 Navigator.pop(context);
               }
             },
