@@ -90,7 +90,6 @@ class LuminBusiness extends StatelessWidget {
         },
       },
       initialRoute: '/sign-in',
-      // home: ChartExample(),
     );
   }
 }
