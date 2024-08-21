@@ -81,6 +81,39 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
     phoneNumberController = TextEditingController();
   }
 
+  @override
+  void dispose() {
+    nameController.dispose();
+    categoryController.dispose();
+    quantityController.dispose();
+    priceController.dispose();
+    amountController.dispose();
+    customerController.dispose();
+    supplierController.dispose();
+    descriptionController.dispose();
+    addressController.dispose();
+    dateController.dispose();
+    emailController.dispose();
+    phoneNumberController.dispose();
+    super.dispose();
+  }
+
+  void resetControllers() {
+    nameController.clear();
+    categoryController.clear();
+    quantityController.clear();
+    priceController.clear();
+    amountController.clear();
+    customerController.clear();
+    supplierController.clear();
+    descriptionController.clear();
+    addressController.clear();
+    dateController = TextEditingController()
+      ..text = LuminUtll.formatDate(DateTime.now());
+    emailController.clear();
+    phoneNumberController.clear();
+  }
+
   bool validateTransaction() {
     bool amountPass = true;
     bool typePass = true;
@@ -749,20 +782,6 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
         ),
       ),
     ];
-  }
-
-  void resetControllers() {
-    nameController.clear();
-    categoryController.clear();
-    quantityController.clear();
-    priceController.clear();
-    amountController.clear();
-    customerController.clear();
-    supplierController.clear();
-    descriptionController.clear();
-    selectedTransactionType = null;
-    dateController = TextEditingController()
-      ..text = LuminUtll.formatDate(DateTime.now());
   }
 
   Future<void> _handleSave(provider, String businessId) async {

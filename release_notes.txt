@@ -1,24 +1,38 @@
-Lumin Business - Version 1.2
+Lumin Business - Version 1.2.0
 
+Welcome to our latest release! Here’s what’s new in Version 1.2:
+
+Login Screen:
+Revamped login UI
 
 Dashboard:
+New dashboard design
 
 Accounting:
-
+Record income/expenses manually
+View all transactions
+View transaction details
 
 Customer Management:
-- New Models: We have introduced new models for managing your customers and suppliers. This is the first step towards a more comprehensive management system.
-- Future Enhancements: Stay tuned for additional functionalities in upcoming releases that will further enhance customer and supplier management.
+Add, delete, and view customers
+View customer details
 
 Supplier Management:
-- New Models: We have introduced new models for managing your customers and suppliers. This is the first step towards a more comprehensive management system.
-- Future Enhancements: Stay tuned for additional functionalities in upcoming releases that will further enhance customer and supplier management.
+Add, delete, and view suppliers
+View supplier details
 
 Settings:
+Updated settings UI
+View business/account info
 
 Upcoming Features:
-- 
+Real-time summary from all modules
+Auto-add customers to sales
+Link products to suppliers
+Automatic recording of product sales/orders as income/expenses
 
-We hope these new features enhance your experience with our platform. Your feedback is valuable to us, so please do not hesitate to share your thoughts and suggestions.
+Upcoming Enhancements:
+Improved product model for inventory
+Mobile/Tablet UI optimizations
 
-Thank you for choosing Lumin Business!
+We appreciate your feedback and thank you for using Lumin Business!
