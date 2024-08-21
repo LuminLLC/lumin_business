@@ -5,7 +5,7 @@ import 'package:lumin_business/common/app_text_theme.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
 import 'package:lumin_business/modules/general_platform/header_widget.dart';
-import 'package:lumin_business/modules/suppliers/supplier_provider.dart'; 
+import 'package:lumin_business/modules/suppliers/supplier_provider.dart';
 import 'package:lumin_business/widgets/add_record.dart';
 import 'package:lumin_business/widgets/general_list_tile.dart';
 import 'package:provider/provider.dart';
@@ -51,54 +51,55 @@ class _SupplierScreenState extends State<SupplierScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            HeaderWidget(
-              actions: [
-                IconButton(
-                  icon: Icon(
-                    Icons.add,
-                    color: AppColor.black,
+            if (sp.isDesktop(screenWidth))
+              HeaderWidget(
+                actions: [
+                  IconButton(
+                    icon: Icon(
+                      Icons.add,
+                      color: AppColor.black,
+                    ),
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AddRecord<SupplierProvider>(
+                              recordType: RecordType.supplier,
+                            );
+                          });
+                    },
                   ),
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AddRecord<SupplierProvider>(
-                          recordType: RecordType.supplier,
-                          );
-                        });
-                  },
-                ),
-                supplierProvider.allSuppliers.isNotEmpty
-                    ? IconButton(
-                        icon: Icon(
-                          Icons.download,
-                          color: AppColor.black,
-                        ),
-                        onPressed: () async {
-                          // List<String> products = [];
-                          // for (ProductModel p
-                          //     in supplierProvider.allSuppliers) {
-                          //   products.add(p.toFormattedString());
-                          // }
-                          // if (!generatingPDF &&
-                          //     supplierProvider.allSuppliers.isNotEmpty) {
-                          //   setState(() {
-                          //     generatingPDF = true;
-                          //   });
-                          //   appState.createPdfAndDownload(products);
-                          //   setState(() {
-                          //     generatingPDF = false;
-                          //   });
-                          // }
-                        },
-                      )
-                    : SizedBox(),
-              ],
-              controller: supplierProvider.allSuppliers.isEmpty
-                  ? null
-                  : searchController,
-              hintText: "Search suppliers",
-            ),
+                  supplierProvider.allSuppliers.isNotEmpty
+                      ? IconButton(
+                          icon: Icon(
+                            Icons.download,
+                            color: AppColor.black,
+                          ),
+                          onPressed: () async {
+                            // List<String> products = [];
+                            // for (ProductModel p
+                            //     in supplierProvider.allSuppliers) {
+                            //   products.add(p.toFormattedString());
+                            // }
+                            // if (!generatingPDF &&
+                            //     supplierProvider.allSuppliers.isNotEmpty) {
+                            //   setState(() {
+                            //     generatingPDF = true;
+                            //   });
+                            //   appState.createPdfAndDownload(products);
+                            //   setState(() {
+                            //     generatingPDF = false;
+                            //   });
+                            // }
+                          },
+                        )
+                      : SizedBox(),
+                ],
+                controller: supplierProvider.allSuppliers.isEmpty
+                    ? null
+                    : searchController,
+                hintText: "Search suppliers",
+              ),
             Expanded(
               child: !supplierProvider.isSuppliersFetched
                   ? Center(
@@ -158,8 +159,9 @@ class _SupplierScreenState extends State<SupplierScreen> {
                           itemCount: appState.searchText.isEmpty
                               ? supplierProvider.allSuppliers.length
                               : supplierProvider.allSuppliers
-                                  .where((p) =>
-                                      p.name.toLowerCase().contains(appState.searchText))
+                                  .where((p) => p.name
+                                      .toLowerCase()
+                                      .contains(appState.searchText))
                                   .length),
             ),
             SizedBox(height: sp.getHeight(30, screenHeight, screenWidth)),

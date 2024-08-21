@@ -52,9 +52,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            HeaderWidget(
-              actions: [],
-            ),
+            if (sp.isDesktop(screenWidth))
+              HeaderWidget(
+                actions: [],
+              ),
             Expanded(
               child: appState.businessInfo == null
                   ? Center(

@@ -28,8 +28,14 @@ class _DashboadScreenState extends State<DashboadScreen> {
     return Consumer2<AccountingProvider, InventoryProvider>(
         builder: (context, accountingProvider, inventoryProvider, _) {
       return Container(
-        margin: EdgeInsets.all(sp.getWidth(10, screenWidth)),
-        padding: EdgeInsets.all(sp.getWidth(10, screenWidth)),
+        margin: EdgeInsets.all(
+            sp.getWidth(sp.isDesktop(screenWidth) ? 10 : 0, screenWidth)),
+        padding: EdgeInsets.only(
+          top: sp.getWidth(sp.isDesktop(screenWidth) ? 10 : 5, screenWidth),
+          bottom: sp.getWidth(sp.isDesktop(screenWidth) ? 10 : 0, screenWidth),
+          left: sp.getWidth(sp.isDesktop(screenWidth) ? 10 : 0, screenWidth),
+          right: sp.getWidth(sp.isDesktop(screenWidth) ? 10 : 0, screenWidth),
+        ),
         decoration: BoxDecoration(
           color: AppColor.bgColor,
           borderRadius:
@@ -39,9 +45,10 @@ class _DashboadScreenState extends State<DashboadScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            HeaderWidget(
-              actions: [],
-            ),
+            if (sp.isDesktop(screenWidth))
+              HeaderWidget(
+                actions: [],
+              ),
             Container(
               height: 100,
               child: Row(
@@ -80,7 +87,7 @@ class _DashboadScreenState extends State<DashboadScreen> {
                                 FlSpot(10, 10),
                                 FlSpot(15, 15),
                                 FlSpot(20, 20),
-                                 FlSpot(40, 15),
+                                FlSpot(40, 15),
                               ])
                             ],
                             // backgroundColor: Colors.grey,

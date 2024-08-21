@@ -49,54 +49,55 @@ class _InventoryScreenState extends State<InventoryScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            HeaderWidget(
-              actions: [
-                IconButton(
-                  icon: Icon(
-                    Icons.add,
-                    color: AppColor.black,
+            if (sp.isDesktop(screenWidth))
+              HeaderWidget(
+                actions: [
+                  IconButton(
+                    icon: Icon(
+                      Icons.add,
+                      color: AppColor.black,
+                    ),
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AddRecord<InventoryProvider>(
+                              recordType: RecordType.product,
+                            );
+                          });
+                    },
                   ),
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AddRecord<InventoryProvider>(
-                            recordType: RecordType.product,
-                          );
-                        });
-                  },
-                ),
-                inventoryProvider.allProdcuts.isNotEmpty
-                    ? IconButton(
-                        icon: Icon(
-                          Icons.download,
-                          color: AppColor.black,
-                        ),
-                        onPressed: () async {
-                          List<String> products = [];
-                          for (ProductModel p
-                              in inventoryProvider.allProdcuts) {
-                            products.add(p.toFormattedString());
-                          }
-                          if (!generatingPDF &&
-                              inventoryProvider.allProdcuts.isNotEmpty) {
-                            setState(() {
-                              generatingPDF = true;
-                            });
-                            appState.createPdfAndDownload(products);
-                            setState(() {
-                              generatingPDF = false;
-                            });
-                          }
-                        },
-                      )
-                    : SizedBox(),
-              ],
-              controller: inventoryProvider.allProdcuts.isEmpty
-                  ? null
-                  : searchController,
-              hintText: "Search products",
-            ),
+                  inventoryProvider.allProdcuts.isNotEmpty
+                      ? IconButton(
+                          icon: Icon(
+                            Icons.download,
+                            color: AppColor.black,
+                          ),
+                          onPressed: () async {
+                            List<String> products = [];
+                            for (ProductModel p
+                                in inventoryProvider.allProdcuts) {
+                              products.add(p.toFormattedString());
+                            }
+                            if (!generatingPDF &&
+                                inventoryProvider.allProdcuts.isNotEmpty) {
+                              setState(() {
+                                generatingPDF = true;
+                              });
+                              appState.createPdfAndDownload(products);
+                              setState(() {
+                                generatingPDF = false;
+                              });
+                            }
+                          },
+                        )
+                      : SizedBox(),
+                ],
+                controller: inventoryProvider.allProdcuts.isEmpty
+                    ? null
+                    : searchController,
+                hintText: "Search products",
+              ),
             Expanded(
               child: !inventoryProvider.isProductFetched
                   ? Center(

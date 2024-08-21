@@ -51,54 +51,55 @@ class _CustomerScreenState extends State<CustomerScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            HeaderWidget(
-              actions: [
-                IconButton(
-                  icon: Icon(
-                    Icons.add,
-                    color: AppColor.black,
+            if (sp.isDesktop(screenWidth))
+              HeaderWidget(
+                actions: [
+                  IconButton(
+                    icon: Icon(
+                      Icons.add,
+                      color: AppColor.black,
+                    ),
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AddRecord<CustomerProvider>(
+                              recordType: RecordType.customer,
+                            );
+                          });
+                    },
                   ),
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AddRecord<CustomerProvider>(
-                            recordType: RecordType.customer,
-                          );
-                        });
-                  },
-                ),
-                customerProvider.allCustomers.isNotEmpty
-                    ? IconButton(
-                        icon: Icon(
-                          Icons.download,
-                          color: AppColor.black,
-                        ),
-                        onPressed: () async {
-                          // List<String> products = [];
-                          // for (CustomerModel c
-                          //     in customerProvider.allCustomers) {
-                          //   // products.add(p.toFormattedString());
-                          // }
-                          // if (!generatingPDF &&
-                          //     customerProvider.allCustomers.isNotEmpty) {
-                          //   setState(() {
-                          //     generatingPDF = true;
-                          //   });
-                          //   appState.createPdfAndDownload(products);
-                          //   setState(() {
-                          //     generatingPDF = false;
-                          //   });
-                          // }
-                        },
-                      )
-                    : SizedBox(),
-              ],
-              controller: customerProvider.allCustomers.isEmpty
-                  ? null
-                  : searchController,
-              hintText: "Search customers",
-            ),
+                  customerProvider.allCustomers.isNotEmpty
+                      ? IconButton(
+                          icon: Icon(
+                            Icons.download,
+                            color: AppColor.black,
+                          ),
+                          onPressed: () async {
+                            // List<String> products = [];
+                            // for (CustomerModel c
+                            //     in customerProvider.allCustomers) {
+                            //   // products.add(p.toFormattedString());
+                            // }
+                            // if (!generatingPDF &&
+                            //     customerProvider.allCustomers.isNotEmpty) {
+                            //   setState(() {
+                            //     generatingPDF = true;
+                            //   });
+                            //   appState.createPdfAndDownload(products);
+                            //   setState(() {
+                            //     generatingPDF = false;
+                            //   });
+                            // }
+                          },
+                        )
+                      : SizedBox(),
+                ],
+                controller: customerProvider.allCustomers.isEmpty
+                    ? null
+                    : searchController,
+                hintText: "Search customers",
+              ),
             Expanded(
               child: !customerProvider.isCustomersFetched
                   ? Center(
