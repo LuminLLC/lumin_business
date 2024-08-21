@@ -4,6 +4,7 @@ import 'package:lumin_business/common/app_colors.dart';
 import 'package:lumin_business/common/app_text_theme.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
+import 'package:lumin_business/modules/general_platform/menu_controller.dart';
 import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
 
 import 'package:provider/provider.dart';
@@ -24,7 +25,8 @@ class _MenuState extends State<Menu> {
     super.initState();
   }
 
-  void _getMenuItems(BuildContext context, AppState appState) {
+  void _getMenuItems(
+      BuildContext context, AppState appState, double screenWidth) {
     menuItems = [
       menuItemDesktop(
         title: "Dashboard",
@@ -35,6 +37,12 @@ class _MenuState extends State<Menu> {
         appState: appState,
         press: () {
           appState.setIndex(0);
+          if (!(sp.isDesktop(screenWidth))) {
+            Provider.of<PlatformMenuController>(context, listen: false)
+                .scaffoldKey
+                .currentState!
+                .closeDrawer();
+          }
         },
       ),
       menuItemDesktop(
@@ -46,6 +54,12 @@ class _MenuState extends State<Menu> {
         appState: appState,
         press: () {
           appState.setIndex(1);
+          if (!(sp.isDesktop(screenWidth))) {
+            Provider.of<PlatformMenuController>(context, listen: false)
+                .scaffoldKey
+                .currentState!
+                .closeDrawer();
+          }
         },
       ),
       menuItemDesktop(
@@ -57,6 +71,12 @@ class _MenuState extends State<Menu> {
         appState: appState,
         press: () {
           appState.setIndex(2);
+          if (!(sp.isDesktop(screenWidth))) {
+            Provider.of<PlatformMenuController>(context, listen: false)
+                .scaffoldKey
+                .currentState!
+                .closeDrawer();
+          }
         },
       ),
       menuItemDesktop(
@@ -68,6 +88,12 @@ class _MenuState extends State<Menu> {
         appState: appState,
         press: () {
           appState.setIndex(3);
+          if (!(sp.isDesktop(screenWidth))) {
+            Provider.of<PlatformMenuController>(context, listen: false)
+                .scaffoldKey
+                .currentState!
+                .closeDrawer();
+          }
         },
       ),
       menuItemDesktop(
@@ -79,6 +105,12 @@ class _MenuState extends State<Menu> {
         appState: appState,
         press: () {
           appState.setIndex(4);
+          if (!(sp.isDesktop(screenWidth))) {
+            Provider.of<PlatformMenuController>(context, listen: false)
+                .scaffoldKey
+                .currentState!
+                .closeDrawer();
+          }
         },
       ),
       menuItemDesktop(
@@ -90,6 +122,12 @@ class _MenuState extends State<Menu> {
         hasTrailing: true,
         press: () {
           appState.setIndex(5);
+          if (!(sp.isDesktop(screenWidth))) {
+            Provider.of<PlatformMenuController>(context, listen: false)
+                .scaffoldKey
+                .currentState!
+                .closeDrawer();
+          }
         },
       )
     ];
@@ -101,7 +139,7 @@ class _MenuState extends State<Menu> {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
     return Consumer<AppState>(builder: (context, appState, _) {
-      _getMenuItems(context, appState);
+      _getMenuItems(context, appState, screenWidth);
       return Container(
         color: AppColor.bgSideMenu,
         width: !sp.isDesktop(screenWidth) ? screenWidth / 2 : null,

@@ -41,8 +41,14 @@ class _CustomerScreenState extends State<CustomerScreen> {
             .fetchCustomers(appState.businessInfo!.businessId);
       }
       return Container(
-        margin: EdgeInsets.all(sp.getWidth(20, screenWidth)),
-        padding: EdgeInsets.all(sp.getWidth(20, screenWidth)),
+        margin: EdgeInsets.all(
+            sp.getWidth(sp.isDesktop(screenWidth) ? 10 : 0, screenWidth)),
+        padding: EdgeInsets.only(
+          top: sp.getWidth(sp.isDesktop(screenWidth) ? 10 : 5, screenWidth),
+          bottom: sp.getWidth(sp.isDesktop(screenWidth) ? 10 : 0, screenWidth),
+          left: sp.getWidth(sp.isDesktop(screenWidth) ? 10 : 0, screenWidth),
+          right: sp.getWidth(sp.isDesktop(screenWidth) ? 10 : 0, screenWidth),
+        ),
         decoration: BoxDecoration(
           color: AppColor.bgColor,
           borderRadius:
