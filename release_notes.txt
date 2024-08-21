@@ -1,5 +1,6 @@
 Lumin Business - Version 1.2.0
 
+
 Welcome to our latest release! Here’s what’s new in Version 1.2:
 
 Login Screen:

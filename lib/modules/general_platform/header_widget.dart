@@ -71,10 +71,10 @@ class _HeaderWidgetState extends State<HeaderWidget> {
                         ),
                         trailing: widget.controller!.text.isNotEmpty
                             ? [
-                                IconButton(
+                                IconButton( 
                                     onPressed: () {
                                       widget.controller!.clear();
-                                      appState.setSearchText("");
+                                      appState.setSearchText(""); 
                                     },
                                     icon: Icon(Icons.close))
                               ]

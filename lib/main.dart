@@ -77,11 +77,6 @@ class LuminBusiness extends StatelessWidget {
         "/uploadData": (context) => UploadData()
       },
       initialRoute: '/sign-in',
-      // home: Container(
-      //   child: AddRecord<CustomerProvider>(
-      //     recordType: RecordType.customer,
-      //   ),
-      // ),
     );
   }
 }
