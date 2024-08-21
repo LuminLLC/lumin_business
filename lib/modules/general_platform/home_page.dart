@@ -55,7 +55,7 @@ class _HomePageState extends State<HomePage> {
                                   : appState.index == 4
                                       ? "Suppliers"
                                       : "Settings",
-                  style: AppTextTheme().textTheme(screenWidth).displayMedium,
+                  style: AppTextTheme().textTheme(screenWidth).displaySmall,
                 ),
               )
             : null,
