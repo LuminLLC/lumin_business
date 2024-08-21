@@ -16,6 +16,7 @@ import 'package:lumin_business/modules/suppliers/supplier_model.dart';
 import 'package:lumin_business/modules/suppliers/supplier_provider.dart';
 import 'package:lumin_business/modules/inventory/set_order_quantity.dart';
 import 'package:lumin_business/modules/inventory/selected_product.dart';
+import 'package:lumin_business/modules/user_and_busness/business_model.dart';
 
 // ignore: must_be_immutable
 class GeneralListTile extends StatelessWidget {
@@ -24,9 +25,12 @@ class GeneralListTile extends StatelessWidget {
   ProductModel? product;
   SupplierModel? supplier;
   CustomerModel? customer;
+  BusinessModel? businessInfo;
+  int? index;
+  List<String>? itemLabels;
 
   TransactionModel? transaction;
-  final dynamic provider;
+  dynamic provider;
   final AppState appState;
 
   GeneralListTile.fromProduct(
@@ -56,6 +60,14 @@ class GeneralListTile extends StatelessWidget {
       required this.appState,
       required this.provider})
       : super(key: key);
+
+  GeneralListTile.fromSettings({
+    Key? key,
+    required this.businessInfo,
+    required this.index,
+    required this.itemLabels,
+    required this.appState,
+  }) : super(key: key);
 
   Color getTileColor(int quantity) {
     if (quantity > 10) {
@@ -92,13 +104,22 @@ class GeneralListTile extends StatelessWidget {
           provider: provider,
           screenWidth: screenWidth,
           context: context);
-    } else
+    } else if (transaction != null) {
       return transactionTile(
           screenHeight: screenHeight,
           transaction: transaction!,
           provider: provider,
           screenWidth: screenWidth,
           context: context);
+    } else {
+      return settingsTile(
+          screenHeight: screenHeight,
+          businessInfo: businessInfo!,
+          index: index!,
+          labels: itemLabels!,
+          screenWidth: screenWidth,
+          context: context);
+    }
   }
 
   Widget supplierTile(
@@ -490,6 +511,77 @@ class GeneralListTile extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget settingsTile({
+    required double screenWidth,
+    required double screenHeight,
+    required BusinessModel businessInfo,
+    required int index,
+    required List<String> labels,
+    required BuildContext context,
+  }) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(
+          vertical: sp.getHeight(10, screenHeight, screenWidth)),
+      child: ListTile(
+        leading: Text(
+          labels.elementAt(index),
+          style: textTheme
+              .textTheme(screenWidth)
+              .bodyLarge!
+              .copyWith(color: Colors.black),
+        ),
+        title: Text(
+          businessInfo.toList().elementAt(index),
+          style: textTheme
+              .textTheme(screenWidth)
+              .bodyLarge!
+              .copyWith(color: Colors.black),
+        ),
+        // subtitle: Row(
+        //   children: [
+        //     Text(
+        //       "Amount: GHS${transaction.amount.toStringAsFixed(2)}",
+        //       style: textTheme
+        //           .textTheme(screenWidth)
+        //           .bodySmall!
+        //           .copyWith(color: Colors.black),
+        //     ),
+        //     SizedBox(
+        //         height: sp.getHeight(20, screenHeight, screenWidth),
+        //         child: VerticalDivider()),
+        //     Text(
+        //       "Date: ${transaction.date}",
+        //       style: textTheme
+        //           .textTheme(screenWidth)
+        //           .bodySmall!
+        //           .copyWith(color: Colors.black),
+        //     ),
+        //   ],
+        // ),
+        // trailing: IconButton(
+        //   icon: Icon(
+        //     Icons.open_in_full,
+        //     size: sp.getWidth(20, screenWidth),
+        //     color: AppColor.bgSideMenu.withOpacity(0.8),
+        //   ),
+        //   onPressed: () {
+        //     showDialog(
+        //         // barrierDismissible: false,
+        //         context: context,
+        //         builder: (context) {
+        //           return SelectedTransaction(
+        //             transaction: transaction,
+        //             appState: appState,
+        //             accountingProvider: provider,
+        //           );
+        //         });
+        //   },
+        // ),
       ),
     );
   }

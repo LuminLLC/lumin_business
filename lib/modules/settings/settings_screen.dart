@@ -4,7 +4,8 @@ import 'package:lumin_business/common/app_text_theme.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
 import 'package:lumin_business/modules/general_platform/header_widget.dart';
-import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart'; 
+import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
+import 'package:lumin_business/widgets/general_list_tile.dart';
 import 'package:provider/provider.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -30,8 +31,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final double screenHeight = MediaQuery.of(context).size.height;
     final double screenWidth = MediaQuery.of(context).size.width;
 
-    return Consumer2<InventoryProvider, AppState>(
-        builder: (context, invetoryProvider, appState, _) {
+    return Consumer<AppState>(builder: (context, appState, _) {
+      List<String> itemLabels = [
+        "Business Name",
+        "Logo",
+        "Admin Email",
+        "Business Address",
+        "Primary Contact Number",
+        "Business Type",
+        "Business Description",
+        "Sub Accounts"
+      ];
       return Container(
         margin: EdgeInsets.all(sp.getWidth(20, screenWidth)),
         padding: EdgeInsets.all(sp.getWidth(20, screenWidth)),
@@ -45,6 +55,27 @@ class _SettingsScreenState extends State<SettingsScreen> {
           children: [
             HeaderWidget(
               actions: [],
+            ),
+            Expanded(
+              child: appState.businessInfo == null
+                  ? Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : ListView.separated(
+                      shrinkWrap: true,
+                      padding: EdgeInsets.zero,
+                      itemBuilder: (context, index) {
+                        return GeneralListTile.fromSettings(
+                          businessInfo: appState.businessInfo,
+                          itemLabels: itemLabels,
+                          index: index,
+                          appState: appState,
+                        );
+                      },
+                      separatorBuilder: (context, index) => Divider(
+                            color: Colors.grey[300],
+                          ),
+                      itemCount: appState.businessInfo!.toList().length),
             ),
           ],
         ),

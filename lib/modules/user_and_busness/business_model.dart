@@ -2,7 +2,6 @@ enum accountTypes {
   admin,
   user,
   business,
-
 }
 
 class BusinessModel {
@@ -12,10 +11,9 @@ class BusinessModel {
   final String adminEmail;
   final String businessAddress;
   final String contactNumber;
-  final String  businessType;
+  final String businessType;
   final String businessDescription;
-  final  Map<String, dynamic> accounts;
-
+  final Map<String, dynamic> accounts;
 
   BusinessModel({
     required this.businessId,
@@ -28,4 +26,19 @@ class BusinessModel {
     required this.businessDescription,
     required this.accounts,
   });
+
+  List<dynamic> toList() {
+    return [
+      businessName,
+      businessLogo,
+      adminEmail,
+      businessAddress,
+      contactNumber,
+      businessType,
+      businessDescription,
+      accounts.toString()
+    ];
+  }
+
+ 
 }
