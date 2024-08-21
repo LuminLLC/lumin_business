@@ -3,10 +3,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lumin_business/common/app_colors.dart';
 import 'package:lumin_business/common/app_text_theme.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
-import 'package:lumin_business/modules/accounting/accounting_provider.dart'; 
+import 'package:lumin_business/modules/accounting/accounting_provider.dart';
 import 'package:lumin_business/modules/accounting/transaction_model.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
-import 'package:lumin_business/modules/general_platform/header_widget.dart'; 
+import 'package:lumin_business/modules/general_platform/header_widget.dart';
 import 'package:lumin_business/widgets/add_record.dart';
 import 'package:lumin_business/widgets/general_list_tile.dart';
 import 'package:provider/provider.dart';
@@ -155,6 +155,7 @@ class _AccountingScreenState extends State<AccountingScreen> {
                                   ? accountingProvider.allTransactions[index]
                                   : accountingProvider.allTransactions
                                       .where((p) => p.description
+                                          .toLowerCase()
                                           .contains(appState.searchText))
                                       .elementAt(index),
                               appState: appState,
@@ -168,6 +169,7 @@ class _AccountingScreenState extends State<AccountingScreen> {
                               ? accountingProvider.allTransactions.length
                               : accountingProvider.allTransactions
                                   .where((p) => p.description
+                                      .toLowerCase()
                                       .contains(appState.searchText))
                                   .length),
             ),

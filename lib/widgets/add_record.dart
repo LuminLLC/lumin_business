@@ -5,6 +5,9 @@ import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/accounting/accounting_provider.dart';
 import 'package:lumin_business/modules/accounting/transaction_model.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
+import 'package:lumin_business/modules/inventory/category.dart';
+import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
+import 'package:lumin_business/modules/inventory/product_model.dart';
 import 'package:lumin_business/widgets/lumin_texticon_button.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
@@ -33,7 +36,9 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
   final SizeAndSpacing sp = SizeAndSpacing();
   List<DateTime> date = [];
   String? selectedTransactionType;
+  ProductCategory? selectedProductCategory;
   String? amountError;
+  String? nameError;
   String? transactionTypeError;
   final List<String> items = ["Income", 'Expense'];
   late TextEditingController nameController;
@@ -46,6 +51,7 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
   late TextEditingController supplierController;
   late TextEditingController dateController;
   String categoryCode = "";
+  String? priceError;
 
   @override
   void initState() {
@@ -89,6 +95,43 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
     }
 
     return amountPass && typePass && datePass;
+  }
+
+  bool validateProduct() {
+    bool namePass = true;
+    bool categoryPass = true;
+    bool quantityPass = true;
+    bool pricePass = true;
+
+    if (priceController.text.isEmpty || priceController.text == "GHS  0.00") {
+      pricePass = false;
+      setState(() {
+        priceError = "Price can't be zero";
+      });
+    }
+
+    if (amountController.text.isEmpty || amountController.text == "0") {
+      setState(() {
+        amountError = "Quantity can't be zero";
+      });
+      quantityPass = false;
+    }
+
+    if (nameController.text.isEmpty) {
+      setState(() {
+        nameError = "Name can't be empty";
+      });
+      namePass = false;
+    }
+
+    if (selectedProductCategory == null) {
+      setState(() {
+        transactionTypeError = "Category can't be empty";
+      });
+      categoryPass = false;
+    }
+
+    return namePass && categoryPass && quantityPass && pricePass;
   }
 
   @override
@@ -327,17 +370,125 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
     return [
       TextField(
         controller: nameController,
-        // onChanged: (value) => setState(() {
-        //   hasChanges = true;
-        // }),
         style: TextStyle(fontSize: sp.getFontSize(16, width)),
         decoration: InputDecoration(
           labelText: "Product Name",
+          errorText: nameError,
           border: OutlineInputBorder(),
           hintText: "Enter the name of your product",
         ),
       ),
-      // Add more product-specific fields here
+      SizedBox(
+        height: sp.getHeight(30, height, width),
+      ),
+      Consumer<InventoryProvider>(builder: (context, inventoryProvider, _) {
+        List<ProductCategory> categories = inventoryProvider.categories;
+        return DropdownButtonFormField<ProductCategory>(
+          hint: Text(
+            "Select product category",
+            style: TextStyle(
+              color: Colors.grey[300], // Adjust this color to match your style
+            ),
+          ),
+          value: selectedProductCategory,
+          decoration: InputDecoration(
+            errorText: transactionTypeError,
+            // hintText: "Select a transaction type",
+            // labelText: "Transaction Type",
+            hintStyle: TextStyle(
+              color: Colors.grey[300], // Adjust this color to match your style
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(5), // Rounded corners
+              borderSide: BorderSide(
+                color: Colors.grey, // Border color
+                width: 1.0,
+              ),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8.0), // Rounded corners
+              borderSide: BorderSide(
+                color: Colors.blue, // Border color when focused
+                width: 2.0,
+              ),
+            ),
+            contentPadding: EdgeInsets.only(
+              left: 12.0, // Horizontal padding inside the dropdown
+            ),
+          ),
+          icon: Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: Icon(
+              Icons.arrow_drop_down, // Icon for the dropdown
+              color: Colors.grey[700], // Adjust this color to match your style
+            ),
+          ),
+          style: TextStyle(
+            color: Colors.white, // Text color inside the dropdown
+            fontSize: 16.0, // Text size inside the dropdown
+          ),
+          onChanged: (value) {
+            if (transactionTypeError != null) {
+              setState(() {
+                transactionTypeError = null;
+              });
+            }
+            setState(() {
+              selectedProductCategory = value;
+            });
+          },
+          items: categories
+              .map<DropdownMenuItem<ProductCategory>>((ProductCategory value) {
+            return DropdownMenuItem<ProductCategory>(
+              value: value,
+              child: Text(value.name),
+            );
+          }).toList(),
+        );
+      }),
+      SizedBox(
+        height: sp.getHeight(30, height, width),
+      ),
+      TextField(
+        controller: amountController,
+        style: TextStyle(fontSize: sp.getFontSize(16, width)),
+        onChanged: (value) {
+          if (amountError != null) {
+            setState(() {
+              amountError = null;
+            });
+          }
+        },
+        keyboardType: TextInputType.number,
+        decoration: InputDecoration(
+          labelText: "Quantity",
+          errorText: amountError,
+          border: OutlineInputBorder(),
+          hintText: "Enter the product quantity",
+        ),
+      ),
+      SizedBox(
+        height: sp.getHeight(30, height, width),
+      ),
+      TextField(
+        controller: priceController,
+        inputFormatters: [CurrencyInputFormatter(currencySymbol: "GHS ")],
+        onChanged: (value) {
+          if (priceError != null) {
+            setState(() {
+              priceError = null;
+            });
+          }
+        },
+        keyboardType: TextInputType.number,
+        style: TextStyle(fontSize: sp.getFontSize(16, width)),
+        decoration: InputDecoration(
+          errorText: priceError,
+          labelText: "Unit Price",
+          border: OutlineInputBorder(),
+          hintText: "Enter the unit price",
+        ),
+      ),
     ];
   }
 
@@ -399,7 +550,8 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
           setState(() {
             isUpdating = true;
           });
-          await provider.addTransaction(
+          final accountingProvider = provider as AccountingProvider;
+          await accountingProvider.addTransaction(
             TransactionModel(
               id: uuid.v1(),
               description: descriptionController.text,
@@ -417,24 +569,23 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
 
         break;
       case RecordType.product:
-        bool isValid = validateTransaction();
+        bool isValid = validateProduct();
         if (isValid) {
           setState(() {
             isUpdating = true;
           });
-          await provider.addProduct(
-            
-          );
-          // await provider.addTransaction(
-          //   TransactionModel(
-          //     id: uuid.v1(),
-          //     description: descriptionController.text,
-          //     amount: CurrencyInputFormatter().getAmount(amountController.text),
-          //     date: dateController.text,
-          //     type: TransactionType.income,
-          //   ),
-          //   businessId,
-          // );
+          final inventoryProvider = provider as InventoryProvider;
+          await inventoryProvider.addProduct(
+              ProductModel(
+                id: "id",
+                name: nameController.text,
+                quantity: int.tryParse(amountController.text) ?? 0,
+                category: selectedProductCategory!.name,
+                unitPrice:
+                    CurrencyInputFormatter().getAmount(priceController.text),
+              ),
+              businessId,
+              selectedProductCategory!.code);
           resetControllers();
           setState(() {
             isUpdating = false;

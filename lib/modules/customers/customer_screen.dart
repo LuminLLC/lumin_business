@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lumin_business/common/app_colors.dart';
 import 'package:lumin_business/common/app_text_theme.dart';
-import 'package:lumin_business/common/size_and_spacing.dart'; 
+import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/customers/customer_provider.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
 import 'package:lumin_business/modules/general_platform/header_widget.dart';
@@ -145,8 +145,9 @@ class _CustomerScreenState extends State<CustomerScreen> {
                               customer: appState.searchText.isEmpty
                                   ? customerProvider.allCustomers[index]
                                   : customerProvider.allCustomers
-                                      .where((p) =>
-                                          p.name.contains(appState.searchText))
+                                      .where((p) => p.name
+                                          .toLowerCase()
+                                          .contains(appState.searchText))
                                       .elementAt(index),
                               appState: appState,
                               provider: customerProvider,
@@ -158,8 +159,9 @@ class _CustomerScreenState extends State<CustomerScreen> {
                           itemCount: appState.searchText.isEmpty
                               ? customerProvider.allCustomers.length
                               : customerProvider.allCustomers
-                                  .where((p) =>
-                                      p.name.contains(appState.searchText))
+                                  .where((p) => p.name
+                                      .toLowerCase()
+                                      .contains(appState.searchText))
                                   .length),
             ),
             SizedBox(height: sp.getHeight(30, screenHeight, screenWidth)),

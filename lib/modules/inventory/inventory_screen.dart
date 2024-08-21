@@ -143,8 +143,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
                               product: appState.searchText.isEmpty
                                   ? inventoryProvider.allProdcuts[index]
                                   : inventoryProvider.allProdcuts
-                                      .where((p) =>
-                                          p.name.contains(appState.searchText))
+                                      .where((p) => p.name
+                                          .toLowerCase()
+                                          .contains(appState.searchText))
                                       .elementAt(index),
                               appState: appState,
                               provider: inventoryProvider,
@@ -156,8 +157,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
                           itemCount: appState.searchText.isEmpty
                               ? inventoryProvider.allProdcuts.length
                               : inventoryProvider.allProdcuts
-                                  .where((p) =>
-                                      p.name.contains(appState.searchText))
+                                  .where((p) => p.name
+                                      .toLowerCase()
+                                      .contains(appState.searchText))
                                   .length),
             ),
             SizedBox(height: sp.getHeight(30, screenHeight, screenWidth)),

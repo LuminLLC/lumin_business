@@ -76,21 +76,21 @@ class _SupplierScreenState extends State<SupplierScreen> {
                           color: AppColor.black,
                         ),
                         onPressed: () async {
-                          List<String> products = [];
-                          for (ProductModel p
-                              in supplierProvider.allSuppliers) {
-                            products.add(p.toFormattedString());
-                          }
-                          if (!generatingPDF &&
-                              supplierProvider.allSuppliers.isNotEmpty) {
-                            setState(() {
-                              generatingPDF = true;
-                            });
-                            appState.createPdfAndDownload(products);
-                            setState(() {
-                              generatingPDF = false;
-                            });
-                          }
+                          // List<String> products = [];
+                          // for (ProductModel p
+                          //     in supplierProvider.allSuppliers) {
+                          //   products.add(p.toFormattedString());
+                          // }
+                          // if (!generatingPDF &&
+                          //     supplierProvider.allSuppliers.isNotEmpty) {
+                          //   setState(() {
+                          //     generatingPDF = true;
+                          //   });
+                          //   appState.createPdfAndDownload(products);
+                          //   setState(() {
+                          //     generatingPDF = false;
+                          //   });
+                          // }
                         },
                       )
                     : SizedBox(),
@@ -160,7 +160,7 @@ class _SupplierScreenState extends State<SupplierScreen> {
                               ? supplierProvider.allSuppliers.length
                               : supplierProvider.allSuppliers
                                   .where((p) =>
-                                      p.name.contains(appState.searchText))
+                                      p.name.toLowerCase().contains(appState.searchText))
                                   .length),
             ),
             SizedBox(height: sp.getHeight(30, screenHeight, screenWidth)),

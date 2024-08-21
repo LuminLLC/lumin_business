@@ -84,7 +84,6 @@ class InventoryProvider with ChangeNotifier {
   List<ProductModel> allProdcuts = [];
   List<ProductCategory> categories = [];
   Map<String, List<ProductModel>> productMap = {};
-  List<ProductCategory> productCategories = [];
 
   void clearSelectedCategory() {
     selectedCategory = null;
@@ -144,7 +143,7 @@ class InventoryProvider with ChangeNotifier {
       final file = uploadInput.files!.first;
       final reader = html.FileReader();
       reader.readAsDataUrl(file);
-      reader.onLoad.listen((event){
+      reader.onLoad.listen((event) {
         print("done");
       });
     });
@@ -194,7 +193,9 @@ class InventoryProvider with ChangeNotifier {
   }
 
   Future<void> addProduct(
-      ProductModel p, String businessID, String productCode) async {
+      ProductModel p, String businessID, String categoryCode) async {
+    // String categoryCode = generateCategoryCode(input, number);
+    String productCode = generateProductCode(categoryCode, p);
     Uint8List? imageData;
     if (photo != null) {
       print("not null");
