@@ -42,8 +42,14 @@ class _AccountingScreenState extends State<AccountingScreen> {
             .fetchTransactions(appState.businessInfo!.businessId);
       }
       return Container(
-        margin: EdgeInsets.all(sp.getWidth(20, screenWidth)),
-        padding: EdgeInsets.all(sp.getWidth(20, screenWidth)),
+        margin: EdgeInsets.all(
+            sp.getWidth(sp.isDesktop(screenWidth) ? 10 : 0, screenWidth)),
+        padding: EdgeInsets.only(
+          top: sp.getWidth(sp.isDesktop(screenWidth) ? 10 : 5, screenWidth),
+          bottom: sp.getWidth(sp.isDesktop(screenWidth) ? 10 : 0, screenWidth),
+          left: sp.getWidth(sp.isDesktop(screenWidth) ? 10 : 0, screenWidth),
+          right: sp.getWidth(sp.isDesktop(screenWidth) ? 10 : 0, screenWidth),
+        ),
         decoration: BoxDecoration(
           color: AppColor.bgColor,
           borderRadius:
@@ -52,61 +58,62 @@ class _AccountingScreenState extends State<AccountingScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            HeaderWidget(
-              actions: [
-                IconButton(
-                  icon: Icon(
-                    Icons.add,
-                    color: AppColor.black,
+            if (sp.isDesktop(screenWidth))
+              HeaderWidget(
+                actions: [
+                  IconButton(
+                    icon: Icon(
+                      Icons.add,
+                      color: AppColor.black,
+                    ),
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AddRecord<AccountingProvider>(
+                              recordType: RecordType.transaction,
+                            );
+                          });
+                      // showDialog(
+                      //     context: context,
+                      //     builder: (context) {
+                      //       return NewTransaction(
+                      //         appState: appState,
+                      //       );
+                      //     });
+                    },
                   ),
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AddRecord<AccountingProvider>(
-                            recordType: RecordType.transaction,
-                          );
-                        });
-                    // showDialog(
-                    //     context: context,
-                    //     builder: (context) {
-                    //       return NewTransaction(
-                    //         appState: appState,
-                    //       );
-                    //     });
-                  },
-                ),
-                accountingProvider.allTransactions.isNotEmpty
-                    ? IconButton(
-                        icon: Icon(
-                          Icons.download,
-                          color: AppColor.black,
-                        ),
-                        onPressed: () async {
-                          List<String> products = [];
-                          for (TransactionModel p
-                              in accountingProvider.allTransactions) {
-                            products.add(p.toString());
-                          }
-                          if (!generatingPDF &&
-                              accountingProvider.allTransactions.isNotEmpty) {
-                            setState(() {
-                              generatingPDF = true;
-                            });
-                            appState.createPdfAndDownload(products);
-                            setState(() {
-                              generatingPDF = false;
-                            });
-                          }
-                        },
-                      )
-                    : SizedBox(),
-              ],
-              controller: accountingProvider.allTransactions.isEmpty
-                  ? null
-                  : searchController,
-              hintText: "Search transactions",
-            ),
+                  accountingProvider.allTransactions.isNotEmpty
+                      ? IconButton(
+                          icon: Icon(
+                            Icons.download,
+                            color: AppColor.black,
+                          ),
+                          onPressed: () async {
+                            List<String> products = [];
+                            for (TransactionModel p
+                                in accountingProvider.allTransactions) {
+                              products.add(p.toString());
+                            }
+                            if (!generatingPDF &&
+                                accountingProvider.allTransactions.isNotEmpty) {
+                              setState(() {
+                                generatingPDF = true;
+                              });
+                              appState.createPdfAndDownload(products);
+                              setState(() {
+                                generatingPDF = false;
+                              });
+                            }
+                          },
+                        )
+                      : SizedBox(),
+                ],
+                controller: accountingProvider.allTransactions.isEmpty
+                    ? null
+                    : searchController,
+                hintText: "Search transactions",
+              ),
             Expanded(
               child: !accountingProvider.isAccountingFetched
                   ? Center(
