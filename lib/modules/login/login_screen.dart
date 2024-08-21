@@ -85,21 +85,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 : Expanded(
                     child: Padding(
                       padding: EdgeInsets.only(left: sp.getWidth(30, width)),
-                      child: Container(
-                        height: height * 0.8,
-                        decoration: BoxDecoration(
-                            color: AppColors.mainBlueColor,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(15))),
-                        child: Center(
-                          child: Text(
-                            'Lumin Business',
-                            style: ralewayStyle.copyWith(
-                              fontSize: 48.0,
-                              color: AppColors.whiteColor,
-                              fontWeight: FontWeight.w800,
-                            ),
-                          ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(15),
+                        child: Image.asset(
+                          "assets/login_image.png",
+                          height: height * 0.8,
+                          fit: BoxFit.fitWidth,
                         ),
                       ),
                     ),

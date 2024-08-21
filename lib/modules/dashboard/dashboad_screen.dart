@@ -6,7 +6,6 @@ import 'package:lumin_business/modules/accounting/accounting_provider.dart';
 import 'package:lumin_business/modules/general_platform/stat_card.dart';
 import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
 import 'package:lumin_business/widgets/row_to_column.dart';
-
 import 'package:provider/provider.dart';
 import '../general_platform/header_widget.dart';
 
