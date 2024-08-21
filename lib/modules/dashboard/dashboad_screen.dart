@@ -1,10 +1,10 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:lumin_business/common/app_colors.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/accounting/accounting_provider.dart';
 import 'package:lumin_business/modules/general_platform/stat_card.dart';
 import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
-import 'package:lumin_business/temp.dart';
 
 import 'package:provider/provider.dart';
 import '../general_platform/header_widget.dart';
@@ -72,7 +72,19 @@ class _DashboadScreenState extends State<DashboadScreen> {
                 padding: EdgeInsets.symmetric(vertical: 10),
                 child: Row(
                   children: [
-                    Container(width: screenWidth / 2.5, child: ChartExample()),
+                    Container(
+                        width: screenWidth / 2.5,
+                        child: LineChart(LineChartData(
+                            lineBarsData: [
+                              LineChartBarData(spots: [
+                                FlSpot(10, 10),
+                                FlSpot(15, 15),
+                                FlSpot(20, 20),
+                                 FlSpot(40, 15),
+                              ])
+                            ],
+                            // backgroundColor: Colors.grey,
+                            gridData: FlGridData()))),
                     Container(
                       color: Colors.blue,
                       width: screenWidth / 2.5,
