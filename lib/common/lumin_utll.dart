@@ -90,3 +90,68 @@ class CurrencyInputFormatter extends TextInputFormatter {
     return double.parse(numericString);
   }
 }
+
+class EmailInputFormatter extends TextInputFormatter {
+  String _email = '';
+
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    final RegExp emailRegex = RegExp(r'^[a-zA-Z0-9@._-]*$');
+
+    if (emailRegex.hasMatch(newValue.text)) {
+      _email = newValue.text; // Update the email string
+      return newValue;
+    } else {
+      return oldValue;
+    }
+  }
+
+  // Method to get the formatted email address
+  String getEmail() {
+    return _email;
+  }
+}
+
+class PhoneNumberInputFormatter extends TextInputFormatter {
+  String _phoneNumber = '';
+
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    String digitsOnly = newValue.text.replaceAll(RegExp(r'\D'), '');
+
+    if (digitsOnly.length > 10) {
+      digitsOnly = digitsOnly.substring(0, 10);
+    }
+
+    String formatted = '';
+
+    if (digitsOnly.length >= 1) {
+      formatted += digitsOnly.substring(0, digitsOnly.length.clamp(0, 3));
+    }
+    if (digitsOnly.length >= 4) {
+      formatted += '-' + digitsOnly.substring(3, digitsOnly.length.clamp(3, 6));
+    }
+    if (digitsOnly.length >= 7) {
+      formatted +=
+          '-' + digitsOnly.substring(6, digitsOnly.length.clamp(6, 10));
+    }
+
+    _phoneNumber = formatted; // Update the phone number string
+
+    return TextEditingValue(
+      text: formatted,
+      selection: TextSelection.collapsed(offset: formatted.length),
+    );
+  }
+
+  // Method to get the formatted phone number
+  String getPhoneNumber() {
+    return _phoneNumber;
+  }
+}

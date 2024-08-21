@@ -4,10 +4,14 @@ import 'package:lumin_business/common/lumin_utll.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/accounting/accounting_provider.dart';
 import 'package:lumin_business/modules/accounting/transaction_model.dart';
+import 'package:lumin_business/modules/customers/customer_model.dart';
+import 'package:lumin_business/modules/customers/customer_provider.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
 import 'package:lumin_business/modules/inventory/category.dart';
 import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
 import 'package:lumin_business/modules/inventory/product_model.dart';
+import 'package:lumin_business/modules/suppliers/supplier_model.dart';
+import 'package:lumin_business/modules/suppliers/supplier_provider.dart';
 import 'package:lumin_business/widgets/lumin_texticon_button.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
@@ -48,10 +52,16 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
   late TextEditingController amountController;
   late TextEditingController descriptionController;
   late TextEditingController customerController;
+  late TextEditingController addressController;
   late TextEditingController supplierController;
   late TextEditingController dateController;
+  late TextEditingController emailController;
+  late TextEditingController phoneNumberController;
   String categoryCode = "";
   String? priceError;
+  String? addressError;
+  String? phoneError;
+  String? emailError;
 
   @override
   void initState() {
@@ -64,8 +74,11 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
     customerController = TextEditingController();
     supplierController = TextEditingController();
     descriptionController = TextEditingController();
+    addressController = TextEditingController();
     dateController = TextEditingController()
       ..text = LuminUtll.formatDate(DateTime.now());
+    emailController = TextEditingController();
+    phoneNumberController = TextEditingController();
   }
 
   bool validateTransaction() {
@@ -134,6 +147,80 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
     return namePass && categoryPass && quantityPass && pricePass;
   }
 
+  bool validateCustomer() {
+    bool namePass = true;
+    bool addressPass = true;
+    bool emailPass = true;
+    bool phonePass = true;
+
+    if (customerController.text.isEmpty) {
+      setState(() {
+        nameError = "Name can't be empty";
+      });
+      namePass = false;
+    }
+
+    if (addressController.text.isEmpty) {
+      setState(() {
+        addressError = "Address can't be empty";
+      });
+      addressPass = false;
+    }
+
+    if (emailController.text.isEmpty) {
+      setState(() {
+        emailError = "Email can't be empty";
+      });
+      emailPass = false;
+    }
+
+    if (phoneNumberController.text.isEmpty) {
+      setState(() {
+        phoneError = "Phone can't be empty";
+      });
+      phonePass = false;
+    }
+
+    return namePass && addressPass && emailPass && phonePass;
+  }
+
+  bool validateSupplier() {
+    bool namePass = true;
+    bool addressPass = true;
+    bool emailPass = true;
+    bool phonePass = true;
+
+    if (customerController.text.isEmpty) {
+      setState(() {
+        nameError = "Name can't be empty";
+      });
+      namePass = false;
+    }
+
+    if (addressController.text.isEmpty) {
+      setState(() {
+        addressError = "Address can't be empty";
+      });
+      addressPass = false;
+    }
+
+    if (emailController.text.isEmpty) {
+      setState(() {
+        emailError = "Email can't be empty";
+      });
+      emailPass = false;
+    }
+
+    if (phoneNumberController.text.isEmpty) {
+      setState(() {
+        phoneError = "Phone can't be empty";
+      });
+      phonePass = false;
+    }
+
+    return namePass && addressPass && emailPass && phonePass;
+  }
+
   @override
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
@@ -168,7 +255,7 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
             isUpdating
                 ? SizedBox()
                 : LuminTextIconButton(
-                    text: "Add",
+                    text: "Add ${widget.recordType.name}",
                     icon: Icons.add,
                     onPressed: () => _handleSave(
                         provider, appState.businessInfo!.businessId),
@@ -496,35 +583,171 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
     return [
       TextField(
         controller: customerController,
-        // onChanged: (value) => setState(() {
-        //   hasChanges = true;
-        // }),
+        onChanged: (value) {
+          if (nameError != null) {
+            setState(() {
+              nameError = null;
+            });
+          }
+        },
         style: TextStyle(fontSize: sp.getFontSize(16, width)),
         decoration: InputDecoration(
           labelText: "Customer Name",
+          errorText: nameError,
           border: OutlineInputBorder(),
           hintText: "Enter the name of the customer",
         ),
       ),
-      // Add more customer-specific fields here
+      SizedBox(
+        height: sp.getHeight(30, height, width),
+      ),
+      TextField(
+        controller: addressController,
+        onChanged: (value) {
+          if (addressError != null) {
+            setState(() {
+              addressError = null;
+            });
+          }
+        },
+        style: TextStyle(fontSize: sp.getFontSize(16, width)),
+        decoration: InputDecoration(
+          labelText: "Customer Address",
+          errorText: addressError,
+          border: OutlineInputBorder(),
+          hintText: "Enter the customer's address",
+        ),
+      ),
+      SizedBox(
+        height: sp.getHeight(30, height, width),
+      ),
+      TextField(
+        controller: emailController,
+        onChanged: (value) {
+          if (emailError != null) {
+            setState(() {
+              emailError = null;
+            });
+          }
+        },
+        inputFormatters: [EmailInputFormatter()],
+        keyboardType: TextInputType.emailAddress,
+        style: TextStyle(fontSize: sp.getFontSize(16, width)),
+        decoration: InputDecoration(
+          labelText: "Customer Email",
+          errorText: emailError,
+          border: OutlineInputBorder(),
+          hintText: "Enter the customer's email",
+        ),
+      ),
+      SizedBox(
+        height: sp.getHeight(30, height, width),
+      ),
+      TextField(
+        controller: phoneNumberController,
+        onChanged: (value) {
+          if (phoneError != null) {
+            setState(() {
+              phoneError = null;
+            });
+          }
+        },
+        inputFormatters: [PhoneNumberInputFormatter()],
+        keyboardType: TextInputType.phone,
+        style: TextStyle(fontSize: sp.getFontSize(16, width)),
+        decoration: InputDecoration(
+          labelText: "Customer Phone Number",
+          errorText: phoneError,
+          border: OutlineInputBorder(),
+          hintText: "Enter the customer's phone number",
+        ),
+      ),
     ];
   }
 
   List<Widget> _getSupplierFields(double width, double height) {
     return [
       TextField(
-        controller: supplierController,
-        // onChanged: (value) => setState(() {
-        //   hasChanges = true;
-        // }),
+        controller: customerController,
+        onChanged: (value) {
+          if (nameError != null) {
+            setState(() {
+              nameError = null;
+            });
+          }
+        },
         style: TextStyle(fontSize: sp.getFontSize(16, width)),
         decoration: InputDecoration(
           labelText: "Supplier Name",
+          errorText: nameError,
           border: OutlineInputBorder(),
           hintText: "Enter the name of the supplier",
         ),
       ),
-      // Add more supplier-specific fields here
+      SizedBox(
+        height: sp.getHeight(30, height, width),
+      ),
+      TextField(
+        controller: addressController,
+        onChanged: (value) {
+          if (addressError != null) {
+            setState(() {
+              addressError = null;
+            });
+          }
+        },
+        style: TextStyle(fontSize: sp.getFontSize(16, width)),
+        decoration: InputDecoration(
+          labelText: "Supplier Address",
+          errorText: addressError,
+          border: OutlineInputBorder(),
+          hintText: "Enter the supplier's address",
+        ),
+      ),
+      SizedBox(
+        height: sp.getHeight(30, height, width),
+      ),
+      TextField(
+        controller: emailController,
+        onChanged: (value) {
+          if (emailError != null) {
+            setState(() {
+              emailError = null;
+            });
+          }
+        },
+        inputFormatters: [EmailInputFormatter()],
+        keyboardType: TextInputType.emailAddress,
+        style: TextStyle(fontSize: sp.getFontSize(16, width)),
+        decoration: InputDecoration(
+          labelText: "Supplier Email",
+          errorText: emailError,
+          border: OutlineInputBorder(),
+          hintText: "Enter the supplier's email",
+        ),
+      ),
+      SizedBox(
+        height: sp.getHeight(30, height, width),
+      ),
+      TextField(
+        controller: phoneNumberController,
+        onChanged: (value) {
+          if (phoneError != null) {
+            setState(() {
+              phoneError = null;
+            });
+          }
+        },
+        inputFormatters: [PhoneNumberInputFormatter()],
+        keyboardType: TextInputType.phone,
+        style: TextStyle(fontSize: sp.getFontSize(16, width)),
+        decoration: InputDecoration(
+          labelText: "Supplier Phone Number",
+          errorText: phoneError,
+          border: OutlineInputBorder(),
+          hintText: "Enter the supplier's phone number",
+        ),
+      ),
     ];
   }
 
@@ -593,10 +816,50 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
         }
         break;
       case RecordType.customer:
-        // Handle saving customer
+        bool isValid = validateCustomer();
+        if (isValid) {
+          setState(() {
+            isUpdating = true;
+          });
+          final customerProvider = provider as CustomerProvider;
+          await customerProvider.addCustomer(
+            CustomerModel(
+                id: uuid.v1(),
+                name: customerController.text,
+                address: addressController.text,
+                email: emailController.text,
+                phoneNumber: phoneNumberController.text,
+                orders: []),
+            businessId,
+          );
+          resetControllers();
+          setState(() {
+            isUpdating = false;
+          });
+        }
         break;
       case RecordType.supplier:
-        // Handle saving supplier
+        bool isValid = validateSupplier();
+        if (isValid) {
+          setState(() {
+            isUpdating = true;
+          });
+          final supplierProvider = provider as SupplierProvider;
+          await supplierProvider.addSupplier(
+            SupplierModel(
+              id: uuid.v1(),
+              name: customerController.text,
+              address: addressController.text,
+              email: emailController.text,
+              contactNumber: phoneNumberController.text,
+            ),
+            businessId,
+          );
+          resetControllers();
+          setState(() {
+            isUpdating = false;
+          });
+        }
         break;
     }
   }

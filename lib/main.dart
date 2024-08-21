@@ -77,10 +77,10 @@ class LuminBusiness extends StatelessWidget {
         "/createBusiness": (context) => CreateBusinessScreen(),
         "/uploadData": (context) => UploadData()
       },
-    initialRoute: '/sign-in',
+      initialRoute: '/sign-in',
       // home: Container(
-      //   child: AddRecord<InventoryProvider>(
-      //     recordType: RecordType.product,
+      //   child: AddRecord<CustomerProvider>(
+      //     recordType: RecordType.customer,
       //   ),
       // ),
     );
