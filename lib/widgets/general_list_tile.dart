@@ -1,4 +1,3 @@
-
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -304,7 +303,7 @@ class GeneralListTile extends StatelessWidget {
           ),
         ),
         title: Text(
-          transaction.description + " (ID: ${transaction.id})",
+          transaction.description,
           style: textTheme
               .textTheme(screenWidth)
               .bodyLarge!
@@ -313,7 +312,7 @@ class GeneralListTile extends StatelessWidget {
         subtitle: Row(
           children: [
             Text(
-              "Amount: \$${transaction.amount.toStringAsFixed(2)}",
+              "Amount: GHS${transaction.amount.toStringAsFixed(2)}",
               style: textTheme
                   .textTheme(screenWidth)
                   .bodySmall!
@@ -323,17 +322,7 @@ class GeneralListTile extends StatelessWidget {
                 height: sp.getHeight(20, screenHeight, screenWidth),
                 child: VerticalDivider()),
             Text(
-              "Date: ${transaction.date }" ,
-              style: textTheme
-                  .textTheme(screenWidth)
-                  .bodySmall!
-                  .copyWith(color: Colors.black),
-            ),
-            SizedBox(
-                height: sp.getHeight(20, screenHeight, screenWidth),
-                child: VerticalDivider()),
-            Text(
-              "Type: ${transaction.type == TransactionType.income ? 'Income' : 'Expense'}",
+              "Date: ${transaction.date}",
               style: textTheme
                   .textTheme(screenWidth)
                   .bodySmall!
