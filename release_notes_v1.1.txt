@@ -1,24 +1,39 @@
-Lumin Business - Version 1.1
+Lumin Business - Version 1.2.0
 
-New Features:
 
-Inventory Management:
-- Add New Products: Users can now seamlessly add new products to their inventory.
-- Adjust Quantities and Prices: Easily adjust the quantities and prices of existing products to keep your inventory up-to-date.
+Welcome to our latest release! Here’s what’s new in Version 1.2:
 
-Customer and Supplier Management:
-- New Models: We have introduced new models for managing your customers and suppliers. This is the first step towards a more comprehensive management system.
-- Future Enhancements: Stay tuned for additional functionalities in upcoming releases that will further enhance customer and supplier management.
-
-Upcoming Features:
+Login Screen:
+Revamped login UI
 
 Dashboard:
-- Business Summary: We are developing a dashboard that will provide users with a summary of key information about their business. This feature will give you an at-a-glance view of your business performance.
+New dashboard design
 
-Accounting Module:
-- Income and Expenses Tracking: Our team is working on an accounting module to help you track your income and expenses efficiently. This will streamline your financial management process.
+Accounting:
+Record income/expenses manually
+View all transactions
+View transaction details
 
-We hope these new features enhance your experience with our platform. Your feedback is valuable to us, so please do not hesitate to share your thoughts and suggestions.
+Customer Management:
+Add, delete, and view customers
+View customer details
 
-Thank you for using Lumin Business!
+Supplier Management:
+Add, delete, and view suppliers
+View supplier details
 
+Settings:
+Updated settings UI
+View business/account info
+
+Upcoming Features:
+Real-time summary from all modules
+Auto-add customers to sales
+Link products to suppliers
+Automatic recording of product sales/orders as income/expenses
+
+Upcoming Enhancements:
+Improved product model for inventory
+Mobile/Tablet UI optimizations
+
+We appreciate your feedback and thank you for using Lumin Business!
