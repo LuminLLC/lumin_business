@@ -28,7 +28,7 @@ class _ChartExampleState extends State<ChartExample> {
         ),
         // Chart title
         title: ChartTitle(
-            text: 'Half yearly sales analysis',
+            text: 'Sales Analysis',
             textStyle: AppTextTheme()
                 .textTheme(screenWidth)
                 .bodyLarge!

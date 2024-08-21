@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lumin_business/common/app_colors.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
+import 'package:lumin_business/modules/accounting/accounting_provider.dart';
 import 'package:lumin_business/modules/general_platform/stat_card.dart';
 import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
 import 'package:lumin_business/temp.dart';
@@ -24,8 +25,8 @@ class _DashboadScreenState extends State<DashboadScreen> {
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
-    return Consumer<InventoryProvider>(
-        builder: (context, InventoryProvider, _) {
+    return Consumer2<AccountingProvider, InventoryProvider>(
+        builder: (context, accountingProvider, inventoryProvider, _) {
       return Container(
         margin: EdgeInsets.all(sp.getWidth(10, screenWidth)),
         padding: EdgeInsets.all(sp.getWidth(10, screenWidth)),
@@ -47,13 +48,22 @@ class _DashboadScreenState extends State<DashboadScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   StatCardWidget(
-                      statName: "statName", value: "100", icon: Icons.abc),
+                      statName: "Net Income",
+                      value: "100",
+                      icon: Icons.show_chart),
                   StatCardWidget(
-                      statName: "statName", value: "100", icon: Icons.abc),
+                      statName: "Product Sales",
+                      value: "100",
+                      icon: Icons.point_of_sale),
                   StatCardWidget(
-                      statName: "statName", value: "100", icon: Icons.abc),
+                      statName: "Total Cost of Product",
+                      value:
+                          inventoryProvider.calculateCriticalLevel().toString(),
+                      icon: Icons.warning),
                   StatCardWidget(
-                      statName: "statName", value: "100", icon: Icons.abc),
+                      statName: "Stock Levels",
+                      value: inventoryProvider.calculateOutofStock().toString(),
+                      icon: Icons.dangerous),
                 ],
               ),
             ),
@@ -62,10 +72,7 @@ class _DashboadScreenState extends State<DashboadScreen> {
                 padding: EdgeInsets.symmetric(vertical: 10),
                 child: Row(
                   children: [
-                    Container(
-                        // height: screenHeight / 2.2,
-                        width: screenWidth / 2.5,
-                        child: ChartExample()),
+                    Container(width: screenWidth / 2.5, child: ChartExample()),
                     Container(
                       color: Colors.blue,
                       width: screenWidth / 2.5,
