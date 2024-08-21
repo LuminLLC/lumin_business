@@ -1,13 +1,13 @@
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
-
-import 'package:lumin_business/models/product.dart';
+import 'package:lumin_business/modules/inventory/product_model.dart';
 import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
 import 'package:lumin_business/widgets/lumin_texticon_button.dart';
 
 class SelectedProduct extends StatefulWidget {
-  final Product product;
+  final ProductModel product;
   final AppState appState;
   final InventoryProvider inventoryProvider;
   const SelectedProduct(
@@ -44,6 +44,11 @@ class _SelectedProductState extends State<SelectedProduct> {
 
   @override
   Widget build(BuildContext context) {
+    Uint8List? image;
+    if (widget.product.image != null &&
+        widget.product.image!.runtimeType != String) {
+      image = Uint8List.fromList(widget.product.image.cast<int>());
+    }
     final double width = MediaQuery.of(context).size.width;
     final double height = MediaQuery.of(context).size.height;
     return AlertDialog(
@@ -57,8 +62,8 @@ class _SelectedProductState extends State<SelectedProduct> {
                       color: Colors.blueGrey,
                       borderRadius: BorderRadius.circular(10)),
                 )
-              : Image.network(
-                  widget.product.image!,
+              : Image.memory(
+                  image ?? Uint8List.fromList([]),
                   height: sp.getWidth(100, width),
                   width: sp.getWidth(100, width),
                 ),
@@ -187,7 +192,7 @@ class _SelectedProductState extends State<SelectedProduct> {
                       isUpdating = true;
                     });
                     await widget.inventoryProvider.updateProduct(
-                        Product(
+                        ProductModel(
                             id: widget.product.id,
                             name: nameController.text,
                             quantity: int.parse(quantityController.text),

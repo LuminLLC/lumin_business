@@ -1,13 +1,39 @@
-Lumin Business - Version 1.1.3
-
-Hot Fix:
-
-This release addresses the following:
-
-- Addresses a bug that causes search results to be case sensitive
+Lumin Business - Version 1.2.0
 
 
-Your feedback is valuable to us, so please do not hesitate to share your thoughts and suggestions.
+Welcome to our latest release! Here’s what’s new in Version 1.2:
 
-Thank you for using Lumin Business!
+Login Screen:
+Revamped login UI
 
+Dashboard:
+New dashboard design
+
+Accounting:
+Record income/expenses manually
+View all transactions
+View transaction details
+
+Customer Management:
+Add, delete, and view customers
+View customer details
+
+Supplier Management:
+Add, delete, and view suppliers
+View supplier details
+
+Settings:
+Updated settings UI
+View business/account info
+
+Upcoming Features:
+Real-time summary from all modules
+Auto-add customers to sales
+Link products to suppliers
+Automatic recording of product sales/orders as income/expenses
+
+Upcoming Enhancements:
+Improved product model for inventory
+Mobile/Tablet UI optimizations
+
+We appreciate your feedback and thank you for using Lumin Business!

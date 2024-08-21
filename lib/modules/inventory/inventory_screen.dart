@@ -3,12 +3,13 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lumin_business/common/app_colors.dart';
 import 'package:lumin_business/common/app_text_theme.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
-import 'package:lumin_business/models/product.dart';
+import 'package:lumin_business/modules/inventory/product_model.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
 import 'package:lumin_business/modules/general_platform/header_widget.dart';
 import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
-import 'package:lumin_business/widgets/new_product.dart';
-import 'package:lumin_business/widgets/product_list_tile.dart';
+import 'package:lumin_business/widgets/add_record.dart';
+
+import 'package:lumin_business/widgets/general_list_tile.dart';
 import 'package:provider/provider.dart';
 
 class InventoryScreen extends StatefulWidget {
@@ -59,15 +60,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
                     showDialog(
                         context: context,
                         builder: (context) {
-                          return NewProduct(
-                              appState: appState,
-                              product: Product(
-                                  id: "id",
-                                  name: "name",
-                                  quantity: 100,
-                                  category: "category",
-                                  unitPrice: 100),
-                              inventoryProvider: inventoryProvider);
+                          return AddRecord<InventoryProvider>(
+                            recordType: RecordType.product,
+                          );
                         });
                   },
                 ),
@@ -79,7 +74,8 @@ class _InventoryScreenState extends State<InventoryScreen> {
                         ),
                         onPressed: () async {
                           List<String> products = [];
-                          for (Product p in inventoryProvider.allProdcuts) {
+                          for (ProductModel p
+                              in inventoryProvider.allProdcuts) {
                             products.add(p.toFormattedString());
                           }
                           if (!generatingPDF &&
@@ -143,7 +139,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                                 .toLowerCase()
                                 .compareTo(b.name.toLowerCase())); //
 
-                            return ProductListTile(
+                            return GeneralListTile.fromProduct(
                               product: appState.searchText.isEmpty
                                   ? inventoryProvider.allProdcuts[index]
                                   : inventoryProvider.allProdcuts
@@ -152,7 +148,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                                           .contains(appState.searchText))
                                       .elementAt(index),
                               appState: appState,
-                              inventoryProvider: inventoryProvider,
+                              provider: inventoryProvider,
                             );
                           },
                           separatorBuilder: (context, index) => Divider(

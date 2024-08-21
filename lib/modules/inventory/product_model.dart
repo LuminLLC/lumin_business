@@ -1,6 +1,7 @@
-class Product {
+
+class ProductModel {
   String? id;
-  String? image;
+  dynamic image;
   String name;
   String category;
   int quantity;
@@ -9,7 +10,7 @@ class Product {
   DateTime? expiryDate;
   Map<DateTime, int> dailySales = {};
 
-  Product(
+  ProductModel(
       {required this.id,
       required this.name,
       required this.quantity,

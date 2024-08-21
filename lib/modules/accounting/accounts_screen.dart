@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lumin_business/common/app_colors.dart';
 import 'package:lumin_business/common/app_text_theme.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
+import 'package:lumin_business/modules/accounting/accounting_provider.dart';
+import 'package:lumin_business/modules/accounting/transaction_model.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
 import 'package:lumin_business/modules/general_platform/header_widget.dart';
-import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
-import 'package:lumin_business/widgets/lumin_texticon_button.dart';
-import 'package:lumin_business/widgets/new_product.dart';
-import 'package:lumin_business/widgets/open_order.dart';
-import 'package:lumin_business/widgets/product_list_tile.dart';
+import 'package:lumin_business/widgets/add_record.dart';
+import 'package:lumin_business/widgets/general_list_tile.dart';
 import 'package:provider/provider.dart';
 
 class AccountingScreen extends StatefulWidget {
@@ -18,10 +18,10 @@ class AccountingScreen extends StatefulWidget {
 
 class _AccountingScreenState extends State<AccountingScreen> {
   final AppTextTheme textTheme = AppTextTheme();
+  bool generatingPDF = false;
   final SizeAndSpacing sp = SizeAndSpacing();
   late TextEditingController searchController;
   late TextEditingController quantityController;
-  String searchText = "";
 
   @override
   void initState() {
@@ -35,8 +35,12 @@ class _AccountingScreenState extends State<AccountingScreen> {
     final double screenHeight = MediaQuery.of(context).size.height;
     final double screenWidth = MediaQuery.of(context).size.width;
 
-    return Consumer2<InventoryProvider, AppState>(
-        builder: (context, invetoryProvider, appState, _) {
+    return Consumer2<AccountingProvider, AppState>(
+        builder: (context, accountingProvider, appState, _) {
+      if (appState.businessInfo != null) {
+        Provider.of<AccountingProvider>(context, listen: false)
+            .fetchTransactions(appState.businessInfo!.businessId);
+      }
       return Container(
         margin: EdgeInsets.all(sp.getWidth(20, screenWidth)),
         padding: EdgeInsets.all(sp.getWidth(20, screenWidth)),
@@ -49,114 +53,125 @@ class _AccountingScreenState extends State<AccountingScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             HeaderWidget(
-              actions: [],
-            ),
-            Padding(
-              padding: EdgeInsets.only(
-                  bottom: sp.getHeight(20, screenHeight, screenWidth)),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: searchController,
-                      cursorColor: AppColor.bgSideMenu,
-                      onChanged: (s) {
-                        setState(() {
-                          searchText = s;
+              actions: [
+                IconButton(
+                  icon: Icon(
+                    Icons.add,
+                    color: AppColor.black,
+                  ),
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AddRecord<AccountingProvider>(
+                            recordType: RecordType.transaction,
+                          );
                         });
-                      },
-                      style: textTheme
-                          .textTheme(screenWidth)
-                          .headlineMedium!
-                          .copyWith(color: Colors.black),
-                      decoration: InputDecoration(
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: AppColor.bgSideMenu),
-                          ),
-                          border: UnderlineInputBorder(
-                            borderSide: BorderSide(color: AppColor.bgSideMenu),
-                          ),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: AppColor.bgSideMenu),
-                          ),
-                          hintStyle: textTheme
-                              .textTheme(screenWidth)
-                              .bodyLarge!
-                              .copyWith(color: Colors.black),
-                          hintText: "All Products",
-                          suffixIcon: Icon(
-                            Icons.search,
-                            size: sp.getWidth(25, screenWidth),
-                            color: AppColor.bgSideMenu,
-                          )),
-                    ),
-                  ),
-                  Spacer(),
-                  invetoryProvider.openOrder.isNotEmpty
-                      ? Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: sp.getWidth(10, screenWidth)),
-                          child: LuminTextIconButton(
-                            text: "Open Order",
-                            onPressed: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return OpenOrder(
-                                        appState: appState,
-                                        inventoryProvider: invetoryProvider);
-                                  });
-                            },
-                            icon: Icons.shopping_bag,
-                          ),
-                        )
-                      : SizedBox(),
-                  LuminTextIconButton(
-                    text: "Add Product",
-                    onPressed: () {
-                      // showDialog(
-                      //     context: context,
-                      //     builder: (context) {
-                      //       return NewProduct(
-                      //         appState: appState,
-                      //         inventoryProvider: invetoryProvider,
-                      //       );
-                      //     });
-                    },
-                    icon: Icons.add,
-                  ),
-                ],
-              ),
+                    // showDialog(
+                    //     context: context,
+                    //     builder: (context) {
+                    //       return NewTransaction(
+                    //         appState: appState,
+                    //       );
+                    //     });
+                  },
+                ),
+                accountingProvider.allTransactions.isNotEmpty
+                    ? IconButton(
+                        icon: Icon(
+                          Icons.download,
+                          color: AppColor.black,
+                        ),
+                        onPressed: () async {
+                          List<String> products = [];
+                          for (TransactionModel p
+                              in accountingProvider.allTransactions) {
+                            products.add(p.toString());
+                          }
+                          if (!generatingPDF &&
+                              accountingProvider.allTransactions.isNotEmpty) {
+                            setState(() {
+                              generatingPDF = true;
+                            });
+                            appState.createPdfAndDownload(products);
+                            setState(() {
+                              generatingPDF = false;
+                            });
+                          }
+                        },
+                      )
+                    : SizedBox(),
+              ],
+              controller: accountingProvider.allTransactions.isEmpty
+                  ? null
+                  : searchController,
+              hintText: "Search transactions",
             ),
             Expanded(
-              child: ListView.separated(
-                  shrinkWrap: true,
-                  padding: EdgeInsets.zero,
-                  itemBuilder: (context, index) {
-                    //TODO: move this function out of widget tree and factor in different filter options
-                    invetoryProvider.allProdcuts.sort((a, b) => a.name
-                        .toLowerCase()
-                        .compareTo(b.name.toLowerCase())); //
+              child: !accountingProvider.isAccountingFetched
+                  ? Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : accountingProvider.allTransactions.isEmpty
+                      ? Center(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                FontAwesomeIcons.boxOpen,
+                                color: AppColor.bgSideMenu,
+                                size: sp.getWidth(100, screenWidth),
+                              ),
+                              SizedBox(
+                                height:
+                                    sp.getHeight(20, screenHeight, screenWidth),
+                              ),
+                              Text(
+                                "You don't have any products in your inventory yet.\nClick the '+' button, in the top right corner of this window, to add your first product",
+                                textAlign: TextAlign.center,
+                                style: AppTextTheme()
+                                    .textTheme(screenWidth)
+                                    .bodyMedium!
+                                    .copyWith(
+                                      color: AppColor.bgSideMenu,
+                                    ),
+                              ),
+                            ],
+                          ),
+                        )
+                      : ListView.separated(
+                          shrinkWrap: true,
+                          padding: EdgeInsets.zero,
+                          itemBuilder: (context, index) {
+                            //TODO: move this function out of widget tree and factor in different filter options
+                            accountingProvider.allTransactions.sort((a, b) => a
+                                .description
+                                .toLowerCase()
+                                .compareTo(b.description.toLowerCase())); //
 
-                    return ProductListTile(
-                      product: searchText.isEmpty
-                          ? invetoryProvider.allProdcuts[index]
-                          : invetoryProvider.allProdcuts
-                              .where((p) => p.name.contains(searchText))
-                              .elementAt(index),
-                      appState: appState,
-                      inventoryProvider: invetoryProvider,
-                    );
-                  },
-                  separatorBuilder: (context, index) => Divider(
-                        color: Colors.grey[300],
-                      ),
-                  itemCount: searchText.isEmpty
-                      ? invetoryProvider.allProdcuts.length
-                      : invetoryProvider.allProdcuts
-                          .where((p) => p.name.contains(searchText))
-                          .length),
+                            return GeneralListTile.fromTransaction(
+                              transaction: appState.searchText.isEmpty
+                                  ? accountingProvider.allTransactions[index]
+                                  : accountingProvider.allTransactions
+                                      .where((p) => p.description
+                                          .toLowerCase()
+                                          .contains(appState.searchText))
+                                      .elementAt(index),
+                              appState: appState,
+                              provider: accountingProvider,
+                            );
+                          },
+                          separatorBuilder: (context, index) => Divider(
+                                color: Colors.grey[300],
+                              ),
+                          itemCount: appState.searchText.isEmpty
+                              ? accountingProvider.allTransactions.length
+                              : accountingProvider.allTransactions
+                                  .where((p) => p.description
+                                      .toLowerCase()
+                                      .contains(appState.searchText))
+                                  .length),
             ),
             SizedBox(height: sp.getHeight(30, screenHeight, screenWidth)),
             SizedBox(
@@ -173,7 +188,7 @@ class _AccountingScreenState extends State<AccountingScreen> {
                     width: 10,
                   ),
                   Text(
-                    "Above critical level (${invetoryProvider.calculateAboveCriticalLevel()})",
+                    "Income  ",
                     style: textTheme
                         .textTheme(screenWidth)
                         .bodySmall!
@@ -189,37 +204,14 @@ class _AccountingScreenState extends State<AccountingScreen> {
                     height: sp.getWidth(10, screenWidth),
                     width: sp.getWidth(10, screenWidth),
                     decoration: BoxDecoration(
-                      color: Colors.yellow.shade100,
+                      color: Colors.red,
                     ),
                   ),
                   SizedBox(
                     width: 10,
                   ),
                   Text(
-                    "Below critical level (${invetoryProvider.calculateCriticalLevel()})",
-                    style: textTheme
-                        .textTheme(screenWidth)
-                        .bodySmall!
-                        .copyWith(color: Colors.black),
-                  ),
-                  SizedBox(
-                    height: sp.getHeight(20, screenHeight, screenWidth),
-                    child: VerticalDivider(
-                      color: AppColor.bgSideMenu.withOpacity(0.3),
-                    ),
-                  ),
-                  Container(
-                    height: sp.getWidth(10, screenWidth),
-                    width: sp.getWidth(10, screenWidth),
-                    decoration: BoxDecoration(
-                      color: Colors.red.shade100,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    "Out of stock (${invetoryProvider.calculateOutofStock()})",
+                    "Expenses",
                     style: textTheme
                         .textTheme(screenWidth)
                         .bodySmall!
@@ -227,23 +219,12 @@ class _AccountingScreenState extends State<AccountingScreen> {
                   ),
                   Spacer(),
                   Text(
-                    "Product Count: ${invetoryProvider.allProdcuts.length}",
+                    "Transaction Count: ${accountingProvider.allTransactions.length}",
                     style: textTheme
                         .textTheme(screenWidth)
                         .bodySmall!
                         .copyWith(color: Colors.black),
                   ),
-                  SizedBox(
-                    height: sp.getHeight(20, screenHeight, screenWidth),
-                    child: VerticalDivider(
-                      color: AppColor.bgSideMenu.withOpacity(0.3),
-                    ),
-                  ),
-                  Text("Inventory Count: ${invetoryProvider.inventoryCount()}",
-                      style: textTheme
-                          .textTheme(screenWidth)
-                          .bodySmall!
-                          .copyWith(color: Colors.black))
                 ],
               ),
             ),

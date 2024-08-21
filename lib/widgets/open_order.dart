@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
-
-import 'package:lumin_business/models/product.dart';
+import 'package:lumin_business/modules/inventory/product_model.dart';
 import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
 
 class OpenOrder extends StatefulWidget {
@@ -29,7 +28,7 @@ class _OpenOrderState extends State<OpenOrder> {
               )
             : Column(
                 children: [
-                  for (Product p
+                  for (ProductModel p
                       in widget.inventoryProvider.fetchOpenOrder().keys)
                     ListTile(
                       title: Text(p.name),
