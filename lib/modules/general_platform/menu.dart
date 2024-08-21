@@ -142,7 +142,7 @@ class _MenuState extends State<Menu> {
       _getMenuItems(context, appState, screenWidth);
       return Container(
         color: AppColor.bgSideMenu,
-        width: !sp.isDesktop(screenWidth) ? screenWidth / 2 : null,
+        width: !sp.isDesktop(screenWidth) ? screenWidth / 1.5 : null,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
