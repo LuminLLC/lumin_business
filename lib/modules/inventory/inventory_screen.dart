@@ -188,91 +188,102 @@ class _InventoryScreenState extends State<InventoryScreen> {
             ),
             SizedBox(height: sp.getHeight(30, screenHeight, screenWidth)),
             SizedBox(
-              child: Row(
-                children: [
-                  Container(
-                    height: sp.getWidth(10, screenWidth),
-                    width: sp.getWidth(10, screenWidth),
-                    decoration: BoxDecoration(
-                      color: Colors.green,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    if (sp.isDesktop(screenWidth))
+                      Container(
+                        height: sp.getWidth(10, screenWidth),
+                        width: sp.getWidth(10, screenWidth),
+                        decoration: BoxDecoration(
+                          color: Colors.green,
+                        ),
+                      ),
+                    if (sp.isDesktop(screenWidth))
+                      SizedBox(
+                        width: 10,
+                      ),
+                    if (sp.isDesktop(screenWidth))
+                      Text(
+                        "Above critical level (${inventoryProvider.calculateAboveCriticalLevel()})",
+                        style: textTheme
+                            .textTheme(screenWidth)
+                            .bodySmall!
+                            .copyWith(color: Colors.black),
+                      ),
+                    if (sp.isDesktop(screenWidth))
+                      SizedBox(
+                        height: sp.getHeight(20, screenHeight, screenWidth),
+                        child: VerticalDivider(
+                          color: AppColor.bgSideMenu.withOpacity(0.3),
+                        ),
+                      ),
+                    Container(
+                      height: sp.getWidth(10, screenWidth),
+                      width: sp.getWidth(10, screenWidth),
+                      decoration: BoxDecoration(
+                        color: Colors.yellow.shade100,
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    "Above critical level (${inventoryProvider.calculateAboveCriticalLevel()})",
-                    style: textTheme
-                        .textTheme(screenWidth)
-                        .bodySmall!
-                        .copyWith(color: Colors.black),
-                  ),
-                  SizedBox(
-                    height: sp.getHeight(20, screenHeight, screenWidth),
-                    child: VerticalDivider(
-                      color: AppColor.bgSideMenu.withOpacity(0.3),
+                    SizedBox(
+                      width: 10,
                     ),
-                  ),
-                  Container(
-                    height: sp.getWidth(10, screenWidth),
-                    width: sp.getWidth(10, screenWidth),
-                    decoration: BoxDecoration(
-                      color: Colors.yellow.shade100,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    "Below critical level (${inventoryProvider.calculateCriticalLevel()})",
-                    style: textTheme
-                        .textTheme(screenWidth)
-                        .bodySmall!
-                        .copyWith(color: Colors.black),
-                  ),
-                  SizedBox(
-                    height: sp.getHeight(20, screenHeight, screenWidth),
-                    child: VerticalDivider(
-                      color: AppColor.bgSideMenu.withOpacity(0.3),
-                    ),
-                  ),
-                  Container(
-                    height: sp.getWidth(10, screenWidth),
-                    width: sp.getWidth(10, screenWidth),
-                    decoration: BoxDecoration(
-                      color: Colors.red.shade100,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    "Out of stock (${inventoryProvider.calculateOutofStock()})",
-                    style: textTheme
-                        .textTheme(screenWidth)
-                        .bodySmall!
-                        .copyWith(color: Colors.black),
-                  ),
-                  Spacer(),
-                  Text(
-                    "Product Count: ${inventoryProvider.allProdcuts.length}",
-                    style: textTheme
-                        .textTheme(screenWidth)
-                        .bodySmall!
-                        .copyWith(color: Colors.black),
-                  ),
-                  SizedBox(
-                    height: sp.getHeight(20, screenHeight, screenWidth),
-                    child: VerticalDivider(
-                      color: AppColor.bgSideMenu.withOpacity(0.3),
-                    ),
-                  ),
-                  Text("Inventory Count: ${inventoryProvider.inventoryCount()}",
+                    Text(
+                      "Below critical level (${inventoryProvider.calculateCriticalLevel()})",
                       style: textTheme
                           .textTheme(screenWidth)
                           .bodySmall!
-                          .copyWith(color: Colors.black))
-                ],
+                          .copyWith(color: Colors.black),
+                    ),
+                    SizedBox(
+                      height: sp.getHeight(20, screenHeight, screenWidth),
+                      child: VerticalDivider(
+                        color: AppColor.bgSideMenu.withOpacity(0.3),
+                      ),
+                    ),
+                    Container(
+                      height: sp.getWidth(10, screenWidth),
+                      width: sp.getWidth(10, screenWidth),
+                      decoration: BoxDecoration(
+                        color: Colors.red.shade100,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      "Out of stock (${inventoryProvider.calculateOutofStock()})",
+                      style: textTheme
+                          .textTheme(screenWidth)
+                          .bodySmall!
+                          .copyWith(color: Colors.black),
+                    ),
+                    Spacer(),
+                    if (sp.isDesktop(screenWidth))
+                      Text(
+                        "Product Count: ${inventoryProvider.allProdcuts.length}",
+                        style: textTheme
+                            .textTheme(screenWidth)
+                            .bodySmall!
+                            .copyWith(color: Colors.black),
+                      ),
+                    if (sp.isDesktop(screenWidth))
+                      SizedBox(
+                        height: sp.getHeight(20, screenHeight, screenWidth),
+                        child: VerticalDivider(
+                          color: AppColor.bgSideMenu.withOpacity(0.3),
+                        ),
+                      ),
+                    if (sp.isDesktop(screenWidth))
+                      Text(
+                          "Inventory Count: ${inventoryProvider.inventoryCount()}",
+                          style: textTheme
+                              .textTheme(screenWidth)
+                              .bodySmall!
+                              .copyWith(color: Colors.black))
+                  ],
+                ),
               ),
             ),
           ],

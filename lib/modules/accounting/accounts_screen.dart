@@ -182,57 +182,61 @@ class _AccountingScreenState extends State<AccountingScreen> {
             ),
             SizedBox(height: sp.getHeight(30, screenHeight, screenWidth)),
             SizedBox(
-              child: Row(
-                children: [
-                  Container(
-                    height: sp.getWidth(10, screenWidth),
-                    width: sp.getWidth(10, screenWidth),
-                    decoration: BoxDecoration(
-                      color: Colors.green,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Container(
+                      height: sp.getWidth(10, screenWidth),
+                      width: sp.getWidth(10, screenWidth),
+                      decoration: BoxDecoration(
+                        color: Colors.green,
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    "Income  ",
-                    style: textTheme
-                        .textTheme(screenWidth)
-                        .bodySmall!
-                        .copyWith(color: Colors.black),
-                  ),
-                  SizedBox(
-                    height: sp.getHeight(20, screenHeight, screenWidth),
-                    child: VerticalDivider(
-                      color: AppColor.bgSideMenu.withOpacity(0.3),
+                    SizedBox(
+                      width: 10,
                     ),
-                  ),
-                  Container(
-                    height: sp.getWidth(10, screenWidth),
-                    width: sp.getWidth(10, screenWidth),
-                    decoration: BoxDecoration(
-                      color: Colors.red,
+                    Text(
+                      "Income  ",
+                      style: textTheme
+                          .textTheme(screenWidth)
+                          .bodySmall!
+                          .copyWith(color: Colors.black),
                     ),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    "Expenses",
-                    style: textTheme
-                        .textTheme(screenWidth)
-                        .bodySmall!
-                        .copyWith(color: Colors.black),
-                  ),
-                  Spacer(),
-                  Text(
-                    "Transaction Count: ${accountingProvider.allTransactions.length}",
-                    style: textTheme
-                        .textTheme(screenWidth)
-                        .bodySmall!
-                        .copyWith(color: Colors.black),
-                  ),
-                ],
+                    SizedBox(
+                      height: sp.getHeight(20, screenHeight, screenWidth),
+                      child: VerticalDivider(
+                        color: AppColor.bgSideMenu.withOpacity(0.3),
+                      ),
+                    ),
+                    Container(
+                      height: sp.getWidth(10, screenWidth),
+                      width: sp.getWidth(10, screenWidth),
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Text(
+                      "Expenses",
+                      style: textTheme
+                          .textTheme(screenWidth)
+                          .bodySmall!
+                          .copyWith(color: Colors.black),
+                    ),
+                    Spacer(),
+                    if (sp.isDesktop(screenWidth))
+                      Text(
+                        "Transaction Count: ${accountingProvider.allTransactions.length}",
+                        style: textTheme
+                            .textTheme(screenWidth)
+                            .bodySmall!
+                            .copyWith(color: Colors.black),
+                      ),
+                  ],
+                ),
               ),
             ),
           ],
