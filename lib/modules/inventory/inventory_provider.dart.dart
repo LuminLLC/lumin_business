@@ -80,8 +80,8 @@ class InventoryProvider with ChangeNotifier {
   File? photo;
   Map<ProductModel, int> openOrder = {};
   String? quantityError;
-  bool isProductFetched = false;
-  List<ProductModel> allProdcuts = [];
+  bool isProductFetched = true;
+  List<ProductModel> allProdcuts = dummyProductData;//[];
   List<ProductCategory> categories = [];
   Map<String, List<ProductModel>> productMap = {};
 

@@ -24,6 +24,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  bool isSearchPressed = false;
+  late TextEditingController searchController;
+  List<String> titles = [
+    "Dashboard",
+    "Accounting",
+    "Inventory",
+    "Customers",
+    "Supplier",
+    "Settings"
+  ];
   final SizeAndSpacing sp = SizeAndSpacing();
   List<Widget> _view = [
     DashboadScreen(),
@@ -35,6 +45,12 @@ class _HomePageState extends State<HomePage> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    searchController = TextEditingController();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     return Consumer<AppState>(builder: (context, appState, _) {
@@ -43,23 +59,70 @@ class _HomePageState extends State<HomePage> {
             ? AppBar(
                 backgroundColor: AppColor.bgSideMenu,
                 centerTitle: true,
-                title: Text(
-                  appState.index == 0
-                      ? "Dashboard"
-                      : appState.index == 1
-                          ? "Accounting"
-                          : appState.index == 2
-                              ? "Inventory"
-                              : appState.index == 3
-                                  ? "Customers"
-                                  : appState.index == 4
-                                      ? "Suppliers"
-                                      : "Settings",
-                  style: AppTextTheme().textTheme(screenWidth).displaySmall,
-                ),
+                actions: [
+                  Padding(
+                    padding:
+                        EdgeInsets.only(right: sp.getWidth(8, screenWidth)),
+                    child: IconButton(
+                      icon: Icon(isSearchPressed ? Icons.cancel : Icons.search),
+                      onPressed: () {
+                        setState(() {
+                          isSearchPressed = !isSearchPressed;
+                        });
+                      },
+                    ),
+                  )
+                ],
+                title: isSearchPressed
+                    ? SizedBox(
+                        width: double.infinity,
+                        height: 50,
+                        child: SearchBar(
+                          controller: searchController,
+                          onChanged: (newText) {
+                            appState.setSearchText(newText.toLowerCase());
+                          },
+                          textStyle: WidgetStatePropertyAll(AppTextTheme()
+                              .textTheme(screenWidth)
+                              .bodyLarge!
+                              .copyWith(color: AppColor.bgSideMenu)),
+                          leading: Padding(
+                            padding: EdgeInsets.only(right: 8.0),
+                            child: Icon(
+                              Icons.search,
+                              color: AppColor.bgSideMenu,
+                            ),
+                          ),
+                          // trailing: widget.controller!.text.isNotEmpty
+                          //     ? [
+                          //         IconButton(
+                          //             onPressed: () {
+                          //               widget.controller!.clear();
+                          //               appState.setSearchText("");
+                          //             },
+                          //             icon: Icon(Icons.close))
+                          //       ]
+                          //     : null,
+                          hintText: "Search",
+                          backgroundColor:
+                              WidgetStatePropertyAll(Colors.grey[100]),
+                          elevation: WidgetStatePropertyAll(0),
+                          shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10))),
+                        ),
+                      )
+                    : Text(
+                        titles[appState.index],
+                        style:
+                            AppTextTheme().textTheme(screenWidth).displaySmall,
+                      ),
               )
             : null,
-        drawer: sp.isDesktop(screenWidth) ? null : Menu(),
+        drawer: isSearchPressed
+            ? null
+            : sp.isDesktop(screenWidth)
+                ? null
+                : Menu(),
         key: Provider.of<PlatformMenuController>(context, listen: false)
             .scaffoldKey,
         floatingActionButton: !sp.isDesktop(screenWidth) &&

@@ -2,27 +2,27 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:lumin_business/modules/customers/customer_model.dart';
 
-// List<CustomerModel> dummyProductData = [
-//   CustomerModel(
-//       id: "id",
-//       name: "Stan Smith",
-//       address: "123 Apple Street, Any Town",
-//       email: "stan@luminllc.com",
-//       phoneNumber: "phoneNumber",
-//       orders: []),
-// CustomerModel(
-//     id: "id",
-//     name: "Abigail Smith",
-//     address: "123 Apple Street, Any Town",
-//     email: "stan@luminllc.com",
-//     phoneNumber: "phoneNumber",
-//     orders: []),
-// ];
+List<CustomerModel> dummyCustomerData = [
+  CustomerModel(
+      id: "id",
+      name: "Stan Smith",
+      address: "123 Apple Street, Any Town",
+      email: "stan@luminllc.com",
+      phoneNumber: "phoneNumber",
+      orders: []),
+  CustomerModel(
+      id: "id",
+      name: "Abigail Smith",
+      address: "123 Apple Street, Any Town",
+      email: "stan@luminllc.com",
+      phoneNumber: "phoneNumber",
+      orders: []),
+];
 
 class CustomerProvider with ChangeNotifier {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  List<CustomerModel> allCustomers = [];
-  bool isCustomersFetched = false;
+  List<CustomerModel> allCustomers = dummyCustomerData; // [];
+  bool isCustomersFetched = true;
 
   Future<void> addCustomer(CustomerModel c, String businessID) async {
     try {

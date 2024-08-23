@@ -324,31 +324,34 @@ class GeneralListTile extends StatelessWidget {
           ),
         ),
         title: Text(
-          transaction.description,
+          "GHS${transaction.amount.toStringAsFixed(2)}",
           style: textTheme
               .textTheme(screenWidth)
               .bodyLarge!
               .copyWith(color: Colors.black),
         ),
         subtitle: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              "Amount: GHS${transaction.amount.toStringAsFixed(2)}",
+              "Description: ${transaction.description}", //
               style: textTheme
                   .textTheme(screenWidth)
                   .bodySmall!
                   .copyWith(color: Colors.black),
             ),
-            SizedBox(
-                height: sp.getHeight(20, screenHeight, screenWidth),
-                child: VerticalDivider()),
-            Text(
-              "Date: ${transaction.date}",
-              style: textTheme
-                  .textTheme(screenWidth)
-                  .bodySmall!
-                  .copyWith(color: Colors.black),
-            ),
+            if (!sp.isMobile(screenWidth))
+              SizedBox(
+                  height: sp.getHeight(20, screenHeight, screenWidth),
+                  child: VerticalDivider()),
+            if (!sp.isMobile(screenWidth))
+              Text(
+                "Date: ${transaction.date}",
+                style: textTheme
+                    .textTheme(screenWidth)
+                    .bodySmall!
+                    .copyWith(color: Colors.black),
+              ),
           ],
         ),
         trailing: IconButton(
@@ -435,16 +438,18 @@ class GeneralListTile extends StatelessWidget {
         ),
         subtitle: Row(
           children: [
-            Text(
-              "Category: ${product.category}",
-              style: textTheme
-                  .textTheme(screenWidth)
-                  .bodySmall!
-                  .copyWith(color: Colors.black),
-            ),
-            SizedBox(
-                height: sp.getHeight(20, screenHeight, screenWidth),
-                child: VerticalDivider()),
+            if (sp.isDesktop(screenWidth))
+              Text(
+                "Category: ${product.category}",
+                style: textTheme
+                    .textTheme(screenWidth)
+                    .bodySmall!
+                    .copyWith(color: Colors.black),
+              ),
+            if (sp.isDesktop(screenWidth))
+              SizedBox(
+                  height: sp.getHeight(20, screenHeight, screenWidth),
+                  child: VerticalDivider()),
             Text(
               "Quantity in stock: ${product.quantity}",
               style: textTheme
@@ -464,15 +469,17 @@ class GeneralListTile extends StatelessWidget {
             ),
           ],
         ),
-        trailing: SizedBox(
-          width: sp.getWidth(200, screenWidth),
+        trailing: Container(
+         
+          width: sp.getWidth(sp.isDesktop(screenWidth)? 200:75, screenWidth),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               IconButton(
                 icon: Icon(
                   Icons.edit,
-                  size: sp.getWidth(25, screenWidth),
+                  size: sp.getWidth(
+                      sp.isDesktop(screenWidth) ? 25 : 15, screenWidth),
                   color: AppColor.bgSideMenu.withOpacity(0.8),
                 ),
                 onPressed: () {
@@ -492,7 +499,8 @@ class GeneralListTile extends StatelessWidget {
               IconButton(
                 icon: Icon(
                   Icons.add_shopping_cart,
-                  size: sp.getWidth(25, screenWidth),
+                  size: sp.getWidth(
+                      sp.isDesktop(screenWidth) ? 25 : 15, screenWidth),
                   color: getTileColor(product.quantity),
                 ),
                 onPressed: () {

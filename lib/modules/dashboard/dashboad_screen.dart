@@ -91,7 +91,7 @@ class _DashboadScreenState extends State<DashboadScreen> {
                                 FlSpot(10, 10),
                                 FlSpot(15, 15),
                                 FlSpot(20, 20),
-                                FlSpot(40, 15),
+                                FlSpot(20, 20),
                               ])
                             ],
                             // backgroundColor: Colors.grey,

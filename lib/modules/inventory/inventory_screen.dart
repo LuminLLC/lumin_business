@@ -10,6 +10,7 @@ import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
 import 'package:lumin_business/widgets/add_record.dart';
 
 import 'package:lumin_business/widgets/general_list_tile.dart';
+import 'package:lumin_business/widgets/open_order.dart';
 import 'package:provider/provider.dart';
 
 class InventoryScreen extends StatefulWidget {
@@ -43,7 +44,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
             sp.getWidth(sp.isDesktop(screenWidth) ? 10 : 0, screenWidth)),
         padding: EdgeInsets.only(
           top: sp.getWidth(sp.isDesktop(screenWidth) ? 10 : 5, screenWidth),
-          bottom: sp.getWidth(sp.isDesktop(screenWidth) ? 10 : 0, screenWidth),
+          bottom: sp.getWidth(sp.isDesktop(screenWidth) ? 10 : 5, screenWidth),
           left: sp.getWidth(sp.isDesktop(screenWidth) ? 10 : 0, screenWidth),
           right: sp.getWidth(sp.isDesktop(screenWidth) ? 10 : 0, screenWidth),
         ),
@@ -58,6 +59,22 @@ class _InventoryScreenState extends State<InventoryScreen> {
             if (sp.isDesktop(screenWidth))
               HeaderWidget(
                 actions: [
+                  inventoryProvider.fetchOpenOrder().length != 0
+                      ? IconButton(
+                          onPressed: () {
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return OpenOrder(
+                                      inventoryProvider: inventoryProvider,
+                                      appState: appState);
+                                });
+                          },
+                          icon: Icon(
+                            Icons.shopping_cart,
+                            color: AppColor.black,
+                          ))
+                      : SizedBox(),
                   IconButton(
                     icon: Icon(
                       Icons.add,

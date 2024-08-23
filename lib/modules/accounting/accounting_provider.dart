@@ -2,39 +2,39 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:lumin_business/modules/accounting/transaction_model.dart';
 
-// List<TransactionModel> dummyProductData = [
-//   TransactionModel(
-//       id: "id",
-//       description: "Sale of book",
-//       amount: 100,
-//       date: DateTime.now(),
-//       type: TransactionType.income),
-//   TransactionModel(
-//       id: "id",
-//       description: "Purchase 100 boxes of books",
-//       amount: 100,
-//       date: DateTime.now(),
-//       type: TransactionType.expense),
-//   TransactionModel(
-//       id: "id",
-//       description: "Sale of pens",
-//       amount: 100,
-//       date: DateTime.now(),
-//       type: TransactionType.income),
-//   TransactionModel(
-//       id: "id",
-//       description: "Purchase of store electricity",
-//       amount: 100,
-//       date: DateTime.now(),
-//       type: TransactionType.expense),
-// ];
+List<TransactionModel> dummyTransactionData = [
+  TransactionModel(
+      id: "id",
+      description: "Sale of book",
+      amount: 100,
+   date: DateTime.now().toString(),
+      type: TransactionType.income),
+  TransactionModel(
+      id: "id",
+      description: "Purchase 100 boxes of books",
+      amount: 100,
+      date: DateTime.now().toString(),
+      type: TransactionType.expense),
+  TransactionModel(
+      id: "id",
+      description: "Sale of pens",
+      amount: 100,
+       date: DateTime.now().toString(),
+      type: TransactionType.income),
+  TransactionModel(
+      id: "id",
+      description: "Purchase of store electricity",
+      amount: 100,
+      date: DateTime.now().toString(),
+      type: TransactionType.expense),
+];
 
 class AccountingProvider with ChangeNotifier {
   String? photo;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  bool isAccountingFetched = false;
+  bool isAccountingFetched = true;
   String? newTransactionType;
-  List<TransactionModel> allTransactions = [];
+  List<TransactionModel> allTransactions = dummyTransactionData; //[];
 
   Future<void> addTransaction(TransactionModel t, String businessID) async {
     try {
