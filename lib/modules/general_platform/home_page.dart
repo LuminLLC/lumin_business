@@ -61,7 +61,8 @@ class _HomePageState extends State<HomePage> {
                     isSearchPressed ? Colors.grey[100] : AppColor.bgSideMenu,
                 centerTitle: true,
                 actions: [
-                  appState.index != 0
+                  appState.index != 0 &&
+                          appState.index != titles.indexOf(titles.last)
                       ? Padding(
                           padding: EdgeInsets.only(
                               right: sp.getWidth(8, screenWidth)),
@@ -80,7 +81,9 @@ class _HomePageState extends State<HomePage> {
                         )
                       : SizedBox()
                 ],
-                title: isSearchPressed && appState.index != 0
+                title: isSearchPressed &&
+                        appState.index != 0 &&
+                        appState.index != titles.indexOf(titles.last)
                     ? SizedBox(
                         width: double.infinity,
                         height: 50,
