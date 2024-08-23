@@ -57,23 +57,30 @@ class _HomePageState extends State<HomePage> {
       return Scaffold(
         appBar: !sp.isDesktop(screenWidth)
             ? AppBar(
-                backgroundColor: AppColor.bgSideMenu,
+                backgroundColor:
+                    isSearchPressed ? Colors.grey[100] : AppColor.bgSideMenu,
                 centerTitle: true,
                 actions: [
-                  Padding(
-                    padding:
-                        EdgeInsets.only(right: sp.getWidth(8, screenWidth)),
-                    child: IconButton(
-                      icon: Icon(isSearchPressed ? Icons.cancel : Icons.search),
-                      onPressed: () {
-                        setState(() {
-                          isSearchPressed = !isSearchPressed;
-                        });
-                      },
-                    ),
-                  )
+                  appState.index != 0
+                      ? Padding(
+                          padding: EdgeInsets.only(
+                              right: sp.getWidth(8, screenWidth)),
+                          child: IconButton(
+                            icon: Icon(
+                              isSearchPressed ? Icons.cancel : Icons.search,
+                              color: isSearchPressed ? Colors.black : null,
+                            ),
+                            onPressed: () {
+                              searchController.clear();
+                              setState(() {
+                                isSearchPressed = !isSearchPressed;
+                              });
+                            },
+                          ),
+                        )
+                      : SizedBox()
                 ],
-                title: isSearchPressed
+                title: isSearchPressed && appState.index != 0
                     ? SizedBox(
                         width: double.infinity,
                         height: 50,
@@ -93,17 +100,8 @@ class _HomePageState extends State<HomePage> {
                               color: AppColor.bgSideMenu,
                             ),
                           ),
-                          // trailing: widget.controller!.text.isNotEmpty
-                          //     ? [
-                          //         IconButton(
-                          //             onPressed: () {
-                          //               widget.controller!.clear();
-                          //               appState.setSearchText("");
-                          //             },
-                          //             icon: Icon(Icons.close))
-                          //       ]
-                          //     : null,
-                          hintText: "Search",
+                          hintText:
+                              "Search ${titles[appState.index].toLowerCase()}",
                           backgroundColor:
                               WidgetStatePropertyAll(Colors.grey[100]),
                           elevation: WidgetStatePropertyAll(0),
