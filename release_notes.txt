@@ -1,6 +1,23 @@
-Lumin Business - Version 1.2.1.1
+Lumin Business - Version 1.2.3
 
 
-UI Improvements
+Welcome to our latest release! Here’s what’s new in Version 1.2.3:
+
+Mobile optimization:
+- All module viewports that diplay the entire data set have been fully optimized for mobile
+
+Bug Fix:
+- Fixed a bug that prevented customers from viewing and fulfilling cart items
+- Fixed a bug that prevented customers from adding an empty space in all search boxes
+
+Upcoming Features:
+Real-time summary from all modules
+Auto-add customers to sales
+Link products to suppliers
+Automatic recording of product sales/orders as income/expenses
+
+Upcoming Enhancements:
+Improved product model for inventory
+Mobile/Tablet UI optimizations
 
 We appreciate your feedback and thank you for using Lumin Business!
