@@ -153,8 +153,12 @@ class _MenuState extends State<Menu> {
                     width: double.infinity,
                   )
                 : Container(
-                    margin:
-                        sp.isDesktop(screenWidth) ? EdgeInsets.all(10) : null,
+                    margin: sp.isDesktop(screenWidth)
+                        ? EdgeInsets.all(10)
+                        : EdgeInsets.only(
+                            top: sp.getHeight(30, screenHeight, screenWidth),
+                            left: sp.getWidth(20, screenWidth),
+                            right: sp.getHeight(20, screenHeight, screenWidth)),
                     padding:
                         sp.isDesktop(screenWidth) ? EdgeInsets.all(10) : null,
                     decoration: BoxDecoration(

@@ -104,6 +104,7 @@ class _CreateBusinessScreenState extends State<CreateBusinessScreen> {
         margin: EdgeInsets.symmetric(horizontal: height * 0.5),
         color: AppColors.backColor,
         child: SingleChildScrollView(
+          primary: false,
           padding: const EdgeInsets.only(bottom: 40.0),
           child: Form(
             child: Column(

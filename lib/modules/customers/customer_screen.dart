@@ -175,94 +175,17 @@ class _CustomerScreenState extends State<CustomerScreen> {
             SizedBox(
               child: Row(
                 children: [
-                  Container(
-                    height: sp.getWidth(10, screenWidth),
-                    width: sp.getWidth(10, screenWidth),
-                    decoration: BoxDecoration(
-                      color: Colors.green,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    "",
-                    // "Above critical level (${customerProvider.calculateAboveCriticalLevel()})",
-                    style: textTheme
-                        .textTheme(screenWidth)
-                        .bodySmall!
-                        .copyWith(color: Colors.black),
-                  ),
-                  SizedBox(
-                    height: sp.getHeight(20, screenHeight, screenWidth),
-                    child: VerticalDivider(
-                      color: AppColor.bgSideMenu.withOpacity(0.3),
-                    ),
-                  ),
-                  Container(
-                    height: sp.getWidth(10, screenWidth),
-                    width: sp.getWidth(10, screenWidth),
-                    decoration: BoxDecoration(
-                      color: Colors.yellow.shade100,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    // "Below critical level (${customerProvider.calculateCriticalLevel()})",
-                    "",
-                    style: textTheme
-                        .textTheme(screenWidth)
-                        .bodySmall!
-                        .copyWith(color: Colors.black),
-                  ),
-                  SizedBox(
-                    height: sp.getHeight(20, screenHeight, screenWidth),
-                    child: VerticalDivider(
-                      color: AppColor.bgSideMenu.withOpacity(0.3),
-                    ),
-                  ),
-                  Container(
-                    height: sp.getWidth(10, screenWidth),
-                    width: sp.getWidth(10, screenWidth),
-                    decoration: BoxDecoration(
-                      color: Colors.red.shade100,
-                    ),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    // "Out of stock (${customerProvider.calculateOutofStock()})",
-                    "",
-                    style: textTheme
-                        .textTheme(screenWidth)
-                        .bodySmall!
-                        .copyWith(color: Colors.black),
-                  ),
-                  Spacer(),
-                  Text(
-                    // "Product Count: ${customerProvider.allProdcuts.length}",
-                    "",
-                    style: textTheme
-                        .textTheme(screenWidth)
-                        .bodySmall!
-                        .copyWith(color: Colors.black),
-                  ),
-                  SizedBox(
-                    height: sp.getHeight(20, screenHeight, screenWidth),
-                    child: VerticalDivider(
-                      color: AppColor.bgSideMenu.withOpacity(0.3),
-                    ),
-                  ),
-                  Text(
-                      // "Inventory Count: ${customerProvider.inventoryCount()}",
-                      "",
+                  if (sp.isDesktop(screenWidth)) Spacer(),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      "Customer Count: ${customerProvider.allCustomers.length}",
                       style: textTheme
                           .textTheme(screenWidth)
                           .bodySmall!
-                          .copyWith(color: Colors.black))
+                          .copyWith(color: Colors.black),
+                    ),
+                  ),
                 ],
               ),
             ),

@@ -276,6 +276,7 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
                     ),
                   )
                 : SingleChildScrollView(
+                  primary: false,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.start,

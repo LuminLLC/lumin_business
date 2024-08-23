@@ -126,6 +126,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         : height * 0.12),
                 color: AppColors.backColor,
                 child: SingleChildScrollView(
+                  primary: false,
                   padding: const EdgeInsets.only(bottom: 40.0),
                   child: Form(
                     child: Column(

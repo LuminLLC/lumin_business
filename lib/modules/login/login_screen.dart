@@ -88,7 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(15),
                         child: Image.asset(
-                          "assets/login_image.png",
+                          "assets/login_image.webp",
                           height: height * 0.8,
                           fit: BoxFit.fitWidth,
                         ),
@@ -104,6 +104,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         : height * 0.12),
                 color: AppColors.backColor,
                 child: SingleChildScrollView(
+                  primary: false,
                   padding: const EdgeInsets.only(bottom: 40.0),
                   child: Form(
                     child: Column(

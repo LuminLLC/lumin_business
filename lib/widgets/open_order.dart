@@ -22,6 +22,7 @@ class _OpenOrderState extends State<OpenOrder> {
     return AlertDialog(
       title: Text("Open Order"),
       content: SingleChildScrollView(
+        primary: false,
         child: isCompletedOrderClicked
             ? Center(
                 child: CircularProgressIndicator(),

@@ -61,7 +61,8 @@ class AppTextTheme {
           height: 1.57, // equivalent to line height of 22.0
         ),
         bodySmall: TextStyle(
-          fontSize: sp.getFontSize(12.0, screenWidth),
+          fontSize: sp.getFontSize(
+              sp.isDesktop(screenWidth) ? 12.0 : 10, screenWidth),
           fontWeight: FontWeight.normal,
           height: 1.33, // equivalent to line height of 16.0
         ),

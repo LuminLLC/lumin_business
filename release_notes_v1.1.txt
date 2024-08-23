@@ -1,30 +1,14 @@
-Lumin Business - Version 1.2.0
+Lumin Business - Version 1.2.3
 
 
-Welcome to our latest release! Here’s what’s new in Version 1.2:
+Welcome to our latest release! Here’s what’s new in Version 1.2.3:
 
-Login Screen:
-Revamped login UI
+Mobile optimization:
+- All module viewports that diplay the entire data set have been fully optimized for mobile
 
-Dashboard:
-New dashboard design
-
-Accounting:
-Record income/expenses manually
-View all transactions
-View transaction details
-
-Customer Management:
-Add, delete, and view customers
-View customer details
-
-Supplier Management:
-Add, delete, and view suppliers
-View supplier details
-
-Settings:
-Updated settings UI
-View business/account info
+Bug Fix:
+- Fixed a bug that prevented customers from viewing and fulfilling cart items
+- Fixed a bug that prevented customers from adding an empty space in all search boxes
 
 Upcoming Features:
 Real-time summary from all modules

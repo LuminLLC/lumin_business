@@ -37,8 +37,7 @@ class _SelectedTransactionState extends State<SelectedTransaction> {
       ..text = widget.transaction.type.toString();
     quantityController = TextEditingController()
       ..text = widget.transaction.amount.toString();
-    priceController = TextEditingController()
-      ..text = widget.transaction.date;
+    priceController = TextEditingController()..text = widget.transaction.date;
   }
 
   @override
@@ -88,6 +87,7 @@ class _SelectedTransactionState extends State<SelectedTransaction> {
                     child: CircularProgressIndicator()),
               )
             : SingleChildScrollView(
+                primary: false,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.start,

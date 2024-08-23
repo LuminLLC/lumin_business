@@ -88,6 +88,7 @@ class _SelectedCustomerState extends State<SelectedCustomer> {
                     child: CircularProgressIndicator()),
               )
             : SingleChildScrollView(
+              primary: false,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.start,
