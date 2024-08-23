@@ -161,20 +161,22 @@ class GeneralListTile extends StatelessWidget {
                   .bodySmall!
                   .copyWith(color: Colors.black),
             ),
-            SizedBox(
+            if (sp.isDesktop(screenWidth))
+              SizedBox(
+                  height: sp.getHeight(20, screenHeight, screenWidth),
+                  child: VerticalDivider()),
+            if (sp.isDesktop(screenWidth))
+              Text(
+                "Address: ${supplier.address}",
+                style: textTheme
+                    .textTheme(screenWidth)
+                    .bodySmall!
+                    .copyWith(color: Colors.black),
+              ),
+           if (sp.isDesktop(screenWidth))   SizedBox(
                 height: sp.getHeight(20, screenHeight, screenWidth),
                 child: VerticalDivider()),
-            Text(
-              "Address: ${supplier.address}",
-              style: textTheme
-                  .textTheme(screenWidth)
-                  .bodySmall!
-                  .copyWith(color: Colors.black),
-            ),
-            SizedBox(
-                height: sp.getHeight(20, screenHeight, screenWidth),
-                child: VerticalDivider()),
-            Text(
+         if (sp.isDesktop(screenWidth))     Text(
               "Contact: ${supplier.contactNumber}",
               style: textTheme
                   .textTheme(screenWidth)
@@ -245,20 +247,22 @@ class GeneralListTile extends StatelessWidget {
                   .bodySmall!
                   .copyWith(color: Colors.black),
             ),
-            SizedBox(
+            if (sp.isDesktop(screenWidth))
+              SizedBox(
+                  height: sp.getHeight(20, screenHeight, screenWidth),
+                  child: VerticalDivider()),
+            if (sp.isDesktop(screenWidth))
+              Text(
+                "Address: ${customer.address}",
+                style: textTheme
+                    .textTheme(screenWidth)
+                    .bodySmall!
+                    .copyWith(color: Colors.black),
+              ),
+            if (sp.isDesktop(screenWidth)) SizedBox(
                 height: sp.getHeight(20, screenHeight, screenWidth),
                 child: VerticalDivider()),
-            Text(
-              "Address: ${customer.address}",
-              style: textTheme
-                  .textTheme(screenWidth)
-                  .bodySmall!
-                  .copyWith(color: Colors.black),
-            ),
-            SizedBox(
-                height: sp.getHeight(20, screenHeight, screenWidth),
-                child: VerticalDivider()),
-            Text(
+           if (sp.isDesktop(screenWidth))  Text(
               "Contact: ${customer.phoneNumber}",
               style: textTheme
                   .textTheme(screenWidth)
@@ -451,7 +455,7 @@ class GeneralListTile extends StatelessWidget {
                   height: sp.getHeight(20, screenHeight, screenWidth),
                   child: VerticalDivider()),
             Text(
-              "Quantity in stock: ${product.quantity}",
+              "Quantity: ${product.quantity}",
               style: textTheme
                   .textTheme(screenWidth)
                   .bodySmall!
@@ -470,8 +474,7 @@ class GeneralListTile extends StatelessWidget {
           ],
         ),
         trailing: Container(
-         
-          width: sp.getWidth(sp.isDesktop(screenWidth)? 200:75, screenWidth),
+          width: sp.getWidth(sp.isDesktop(screenWidth) ? 200 : 75, screenWidth),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
