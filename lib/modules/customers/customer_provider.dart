@@ -21,8 +21,8 @@ List<CustomerModel> dummyCustomerData = [
 
 class CustomerProvider with ChangeNotifier {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  List<CustomerModel> allCustomers = dummyCustomerData; // [];
-  bool isCustomersFetched = true;
+  List<CustomerModel> allCustomers = [];
+  bool isCustomersFetched = false;
 
   Future<void> addCustomer(CustomerModel c, String businessID) async {
     try {

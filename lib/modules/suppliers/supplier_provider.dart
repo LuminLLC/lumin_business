@@ -37,8 +37,8 @@ List<SupplierModel> dummySupplierData = [
 
 class SupplierProvider with ChangeNotifier {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  List<SupplierModel> allSuppliers = dummySupplierData; //[];
-  bool isSuppliersFetched = true;
+  List<SupplierModel> allSuppliers = [];
+  bool isSuppliersFetched = false;
 
   Future<void> addSupplier(SupplierModel s, String businessID) async {
     try {

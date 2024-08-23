@@ -11,68 +11,68 @@ import 'package:lumin_business/modules/inventory/category.dart';
 import 'package:lumin_business/modules/inventory/product_model.dart';
 import 'package:universal_html/html.dart' as html;
 
-List<ProductModel> dummyProductData = [
-  ProductModel(
-      id: "id",
-      name: "name",
-      quantity: 20,
-      category: "category",
-      unitPrice: 1.2),
-  ProductModel(
-      id: "id",
-      name: "name",
-      quantity: 20,
-      category: "category",
-      unitPrice: 1.2),
-  ProductModel(
-      id: "id",
-      name: "name",
-      quantity: 20,
-      category: "category",
-      unitPrice: 1.2),
-  ProductModel(
-      id: "id",
-      name: "name",
-      quantity: 20,
-      category: "category",
-      unitPrice: 1.2),
-  ProductModel(
-      id: "id",
-      name: "name",
-      quantity: 20,
-      category: "category",
-      unitPrice: 1.2),
-  ProductModel(
-      id: "id",
-      name: "name",
-      quantity: 20,
-      category: "category",
-      unitPrice: 1.2),
-  ProductModel(
-      id: "id",
-      name: "name",
-      quantity: 20,
-      category: "category",
-      unitPrice: 1.2),
-  ProductModel(
-      id: "id",
-      name: "name",
-      quantity: 20,
-      category: "category",
-      unitPrice: 1.2),
-  ProductModel(
-      id: "id",
-      name: "name",
-      quantity: 20,
-      category: "category",
-      unitPrice: 1.2),
-  ProductModel(
-      id: "id",
-      name: "name",
-      quantity: 20,
-      category: "category",
-      unitPrice: 1.2),
-];
+// List<ProductModel> dummyProductData = [
+//  ProductModel(
+//       id: "id",
+//       name: "name",
+//       quantity: 20,
+//       category: "category",
+//       unitPrice: 1.2),
+//   ProductModel(
+//       id: "id",
+//       name: "name",
+//       quantity: 20,
+//       category: "category",
+//       unitPrice: 1.2),
+//   ProductModel(
+//       id: "id",
+//       name: "name",
+//       quantity: 20,
+//       category: "category",
+//       unitPrice: 1.2),
+//   ProductModel(
+//       id: "id",
+//       name: "name",
+//       quantity: 20,
+//       category: "category",
+//       unitPrice: 1.2),
+//   ProductModel(
+//       id: "id",
+//       name: "name",
+//       quantity: 20,
+//       category: "category",
+//       unitPrice: 1.2),
+//   ProductModel(
+//       id: "id",
+//       name: "name",
+//       quantity: 20,
+//       category: "category",
+//       unitPrice: 1.2),
+//   ProductModel(
+//       id: "id",
+//       name: "name",
+//       quantity: 20,
+//       category: "category",
+//       unitPrice: 1.2),
+//   ProductModel(
+//       id: "id",
+//       name: "name",
+//       quantity: 20,
+//       category: "category",
+//       unitPrice: 1.2),
+//   ProductModel(
+//       id: "id",
+//       name: "name",
+//       quantity: 20,
+//       category: "category",
+//       unitPrice: 1.2),
+//   ProductModel(
+//       id: "id",
+//       name: "name",
+//       quantity: 20,
+//       category: "category",
+//       unitPrice: 1.2),
+// ];
 
 class InventoryProvider with ChangeNotifier {
   final FirebaseFirestore _firestore = Config().firestoreEnv;
@@ -80,8 +80,8 @@ class InventoryProvider with ChangeNotifier {
   File? photo;
   Map<ProductModel, int> openOrder = {};
   String? quantityError;
-  bool isProductFetched = true;
-  List<ProductModel> allProdcuts = dummyProductData;//[];
+  bool isProductFetched = false;
+  List<ProductModel> allProdcuts = [];
   List<ProductCategory> categories = [];
   Map<String, List<ProductModel>> productMap = {};
 

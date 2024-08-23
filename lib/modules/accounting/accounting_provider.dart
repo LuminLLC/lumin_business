@@ -32,9 +32,9 @@ List<TransactionModel> dummyTransactionData = [
 class AccountingProvider with ChangeNotifier {
   String? photo;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  bool isAccountingFetched = true;
+  bool isAccountingFetched = false;
   String? newTransactionType;
-  List<TransactionModel> allTransactions = dummyTransactionData; //[];
+  List<TransactionModel> allTransactions =  [];
 
   Future<void> addTransaction(TransactionModel t, String businessID) async {
     try {
