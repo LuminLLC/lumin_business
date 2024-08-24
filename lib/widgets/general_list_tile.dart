@@ -6,7 +6,7 @@ import 'package:lumin_business/common/app_text_theme.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/accounting/accounting_provider.dart';
 import 'package:lumin_business/modules/accounting/widgets/selected_transaction.dart';
-import 'package:lumin_business/modules/accounting/transaction_model.dart';
+import 'package:lumin_business/modules/accounting/accounting_model.dart';
 import 'package:lumin_business/modules/customers/customer_model.dart';
 import 'package:lumin_business/modules/customers/customer_provider.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
@@ -29,7 +29,7 @@ class GeneralListTile extends StatelessWidget {
   int? index;
   List<String>? itemLabels;
 
-  TransactionModel? transaction;
+  AccountingModel? transaction;
   dynamic provider;
   final AppState appState;
 
@@ -297,7 +297,7 @@ class GeneralListTile extends StatelessWidget {
   Widget transactionTile({
     required double screenWidth,
     required double screenHeight,
-    required TransactionModel transaction,
+    required AccountingModel transaction,
     required dynamic provider,
     required BuildContext context,
   }) {

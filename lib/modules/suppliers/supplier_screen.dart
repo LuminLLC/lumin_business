@@ -41,7 +41,7 @@ class _SupplierScreenState extends State<SupplierScreen> {
             .fetchSuppliers(appState.businessInfo!.businessId);
       }
       return Container(
-         margin: EdgeInsets.all(
+        margin: EdgeInsets.all(
             sp.getWidth(sp.isDesktop(screenWidth) ? 10 : 0, screenWidth)),
         padding: EdgeInsets.only(
           top: sp.getWidth(sp.isDesktop(screenWidth) ? 10 : 5, screenWidth),
@@ -82,21 +82,7 @@ class _SupplierScreenState extends State<SupplierScreen> {
                             color: AppColor.black,
                           ),
                           onPressed: () async {
-                            // List<String> products = [];
-                            // for (ProductModel p
-                            //     in supplierProvider.allSuppliers) {
-                            //   products.add(p.toFormattedString());
-                            // }
-                            // if (!generatingPDF &&
-                            //     supplierProvider.allSuppliers.isNotEmpty) {
-                            //   setState(() {
-                            //     generatingPDF = true;
-                            //   });
-                            //   appState.createPdfAndDownload(products);
-                            //   setState(() {
-                            //     generatingPDF = false;
-                            //   });
-                            // }
+                            supplierProvider.downloadSuppliersToCSV();
                           },
                         )
                       : SizedBox(),

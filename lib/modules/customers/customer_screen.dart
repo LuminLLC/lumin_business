@@ -82,21 +82,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                             color: AppColor.black,
                           ),
                           onPressed: () async {
-                            // List<String> products = [];
-                            // for (CustomerModel c
-                            //     in customerProvider.allCustomers) {
-                            //   // products.add(p.toFormattedString());
-                            // }
-                            // if (!generatingPDF &&
-                            //     customerProvider.allCustomers.isNotEmpty) {
-                            //   setState(() {
-                            //     generatingPDF = true;
-                            //   });
-                            //   appState.createPdfAndDownload(products);
-                            //   setState(() {
-                            //     generatingPDF = false;
-                            //   });
-                            // }
+                            customerProvider.downloadCustomersToCSV();
                           },
                         )
                       : SizedBox(),

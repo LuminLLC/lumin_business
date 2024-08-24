@@ -6,7 +6,7 @@ import 'package:lumin_business/modules/accounting/accounting_provider.dart';
 import 'package:lumin_business/modules/customers/customer_provider.dart';
 import 'package:lumin_business/modules/customers/customer_screen.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
-import 'package:lumin_business/modules/accounting/accounts_screen.dart';
+import 'package:lumin_business/modules/accounting/accounting_screen.dart';
 import 'package:lumin_business/modules/dashboard/dashboad_screen.dart';
 import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
 import 'package:lumin_business/modules/settings/settings_screen.dart';

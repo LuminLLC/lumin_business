@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:lumin_business/common/lumin_utll.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/accounting/accounting_provider.dart';
-import 'package:lumin_business/modules/accounting/transaction_model.dart';
+import 'package:lumin_business/modules/accounting/accounting_model.dart';
 import 'package:lumin_business/modules/customers/customer_model.dart';
 import 'package:lumin_business/modules/customers/customer_provider.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
@@ -795,7 +795,7 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
           });
           final accountingProvider = provider as AccountingProvider;
           await accountingProvider.addTransaction(
-            TransactionModel(
+            AccountingModel(
               id: uuid.v1(),
               description: descriptionController.text,
               amount: CurrencyInputFormatter().getAmount(amountController.text),

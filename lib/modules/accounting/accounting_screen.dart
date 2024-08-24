@@ -3,10 +3,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lumin_business/common/app_colors.dart';
 import 'package:lumin_business/common/app_text_theme.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
+import 'package:lumin_business/modules/accounting/accounting_model.dart';
 import 'package:lumin_business/modules/accounting/accounting_provider.dart';
-import 'package:lumin_business/modules/accounting/transaction_model.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
 import 'package:lumin_business/modules/general_platform/header_widget.dart';
+import 'package:lumin_business/common/csv_module.dart';
 import 'package:lumin_business/widgets/add_record.dart';
 import 'package:lumin_business/widgets/general_list_tile.dart';
 import 'package:provider/provider.dart';
@@ -90,21 +91,22 @@ class _AccountingScreenState extends State<AccountingScreen> {
                             color: AppColor.black,
                           ),
                           onPressed: () async {
-                            List<String> products = [];
-                            for (TransactionModel p
-                                in accountingProvider.allTransactions) {
-                              products.add(p.toString());
-                            }
-                            if (!generatingPDF &&
-                                accountingProvider.allTransactions.isNotEmpty) {
-                              setState(() {
-                                generatingPDF = true;
-                              });
-                              appState.createPdfAndDownload(products);
-                              setState(() {
-                                generatingPDF = false;
-                              });
-                            }
+                           accountingProvider.downloadAccountingToCSV();
+                            // List<String> products = [];
+                            // for (AccountingModel a
+                            //     in accountingProvider.allTransactions) {
+                            //   products.add(a.toString());
+                            // }
+                            // if (!generatingPDF &&
+                            //     accountingProvider.allTransactions.isNotEmpty) {
+                            //   setState(() {
+                            //     generatingPDF = true;
+                            //   });
+                            //   appState.createPdfAndDownload(products);
+                            //   setState(() {
+                            //     generatingPDF = false;
+                            //   });
+                            // }
                           },
                         )
                       : SizedBox(),

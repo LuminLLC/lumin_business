@@ -6,73 +6,74 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:lumin_business/common/csv_module.dart';
 import 'package:lumin_business/config.dart';
 import 'package:lumin_business/modules/inventory/category.dart';
 import 'package:lumin_business/modules/inventory/product_model.dart';
 import 'package:universal_html/html.dart' as html;
 
-// List<ProductModel> dummyProductData = [
-//  ProductModel(
-//       id: "id",
-//       name: "name",
-//       quantity: 20,
-//       category: "category",
-//       unitPrice: 1.2),
-//   ProductModel(
-//       id: "id",
-//       name: "name",
-//       quantity: 20,
-//       category: "category",
-//       unitPrice: 1.2),
-//   ProductModel(
-//       id: "id",
-//       name: "name",
-//       quantity: 20,
-//       category: "category",
-//       unitPrice: 1.2),
-//   ProductModel(
-//       id: "id",
-//       name: "name",
-//       quantity: 20,
-//       category: "category",
-//       unitPrice: 1.2),
-//   ProductModel(
-//       id: "id",
-//       name: "name",
-//       quantity: 20,
-//       category: "category",
-//       unitPrice: 1.2),
-//   ProductModel(
-//       id: "id",
-//       name: "name",
-//       quantity: 20,
-//       category: "category",
-//       unitPrice: 1.2),
-//   ProductModel(
-//       id: "id",
-//       name: "name",
-//       quantity: 20,
-//       category: "category",
-//       unitPrice: 1.2),
-//   ProductModel(
-//       id: "id",
-//       name: "name",
-//       quantity: 20,
-//       category: "category",
-//       unitPrice: 1.2),
-//   ProductModel(
-//       id: "id",
-//       name: "name",
-//       quantity: 20,
-//       category: "category",
-//       unitPrice: 1.2),
-//   ProductModel(
-//       id: "id",
-//       name: "name",
-//       quantity: 20,
-//       category: "category",
-//       unitPrice: 1.2),
-// ];
+List<ProductModel> dummyProductData = [
+  ProductModel(
+      id: "1",
+      name: "Laptop",
+      quantity: 15,
+      category: "Electronics",
+      unitPrice: 1200.0),
+  ProductModel(
+      id: "2",
+      name: "Smartphone",
+      quantity: 30,
+      category: "Electronics",
+      unitPrice: 800.0),
+  ProductModel(
+      id: "3",
+      name: "Office Chair",
+      quantity: 25,
+      category: "Furniture",
+      unitPrice: 150.0),
+  ProductModel(
+      id: "4",
+      name: "Coffee Maker",
+      quantity: 40,
+      category: "Appliances",
+      unitPrice: 60.0),
+  ProductModel(
+      id: "5",
+      name: "Running Shoes",
+      quantity: 50,
+      category: "Footwear",
+      unitPrice: 85.0),
+  ProductModel(
+      id: "6",
+      name: "Blender",
+      quantity: 20,
+      category: "Appliances",
+      unitPrice: 45.0),
+  ProductModel(
+      id: "7",
+      name: "Wireless Mouse",
+      quantity: 100,
+      category: "Accessories",
+      unitPrice: 25.0),
+  ProductModel(
+      id: "8",
+      name: "Desk Lamp",
+      quantity: 70,
+      category: "Furniture",
+      unitPrice: 35.0),
+  ProductModel(
+      id: "9",
+      name: "Gaming Console",
+      quantity: 10,
+      category: "Entertainment",
+      unitPrice: 500.0),
+  ProductModel(
+      id: "10",
+      name: "Water Bottle",
+      quantity: 200,
+      category: "Accessories",
+      unitPrice: 12.0),
+];
 
 class InventoryProvider with ChangeNotifier {
   final FirebaseFirestore _firestore = Config().firestoreEnv;
@@ -80,10 +81,24 @@ class InventoryProvider with ChangeNotifier {
   File? photo;
   Map<ProductModel, int> openOrder = {};
   String? quantityError;
-  bool isProductFetched = false;
-  List<ProductModel> allProdcuts = [];
+  bool isProductFetched = true;
+  List<ProductModel> allProdcuts = dummyProductData; //[];
   List<ProductCategory> categories = [];
   Map<String, List<ProductModel>> productMap = {};
+
+  void downloadProductsToCSV() {
+    CSVModule.downloadToCSV<ProductModel>(
+        allProdcuts,
+        ["ID", "Name", "Quantity", "Category", "Unit Price"],
+        (product) => [
+              product.id,
+              product.name,
+              product.quantity,
+              product.category,
+              product.unitPrice
+            ],
+        "Products");
+  }
 
   void clearSelectedCategory() {
     selectedCategory = null;

@@ -97,21 +97,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                             color: AppColor.black,
                           ),
                           onPressed: () async {
-                            List<String> products = [];
-                            for (ProductModel p
-                                in inventoryProvider.allProdcuts) {
-                              products.add(p.toFormattedString());
-                            }
-                            if (!generatingPDF &&
-                                inventoryProvider.allProdcuts.isNotEmpty) {
-                              setState(() {
-                                generatingPDF = true;
-                              });
-                              appState.createPdfAndDownload(products);
-                              setState(() {
-                                generatingPDF = false;
-                              });
-                            }
+                            inventoryProvider.downloadProductsToCSV();
                           },
                         )
                       : SizedBox(),
