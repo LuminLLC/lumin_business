@@ -1,12 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:excel/excel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:lumin_business/config.dart';
-import 'package:lumin_business/modules/inventory/product_model.dart';
-import 'package:pdf/widgets.dart' as pw;
-import 'package:printing/printing.dart';
+import 'package:lumin_business/modules/accounting/accounting_provider.dart';
+import 'package:lumin_business/modules/customers/customer_provider.dart';
+import 'package:lumin_business/modules/suppliers/supplier_provider.dart';
 import 'package:lumin_business/modules/user_and_busness/business_model.dart';
 import 'package:lumin_business/modules/user_and_busness/lumin_user.dart';
 import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
@@ -19,90 +17,33 @@ class AppState with ChangeNotifier {
   LuminUser? user;
   int index = 0;
 
-  Future<void> exportToExcel(List<ProductModel> products) async {
-    var excel = Excel.createExcel();
-    Sheet sheetObject = excel['Sheet1'];
-
-    // Adding header row
-    sheetObject.appendRow([
-      TextCellValue("ID"),
-      TextCellValue("Name"),
-      TextCellValue("Category"),
-      TextCellValue("Quantity"),
-      TextCellValue("Unit Price"),
-      TextCellValue("Is Perishable"),
-      TextCellValue("Expiry Date"),
-    ]);
-
-    // Adding data rows
-    for (var product in products) {
-      sheetObject.appendRow([
-        TextCellValue(product.id ?? 'N/A'),
-        TextCellValue(product.name),
-        TextCellValue(product.category),
-        IntCellValue(product.quantity),
-        DoubleCellValue(product.unitPrice),
-        BoolCellValue(product.isPerishable),
-        TextCellValue(product.isPerishable && product.expiryDate != null
-            ? product.expiryDate.toString()
-            : 'N/A')
-      ]);
-    }
-
-    String outputFile = "/Users/kawal/Desktop/git_projects/r.xlsx";
-
-    //stopwatch.reset();
-    List<int>? fileBytes = excel.save();
-    //print('saving executed in ${stopwatch.elapsed}');
-    // if (fileBytes != null) {
-    //   File(outputFile)
-    //     ..createSync(recursive: true)
-    //     ..writeAsBytesSync(fileBytes);
-    // }
-    // try {
-    //   // Save the file to the device
-    //   Directory? directory = await getExternalStorageDirectory();
-    //   String outputFile = directory!.path + 'Products.xlsx';
-
-    //   List<int>? fileBytes = excel.save();
-    //   if (fileBytes != null) {
-    //     File(outputFile)
-    //       ..createSync(recursive: true)
-    //       ..writeAsBytesSync(fileBytes);
-    //   }
-    // } on Exception catch (e) {
-    //   print(e);
-    // }
+  Future<String> _fetchBusinessID(String userID) async {
+    DocumentSnapshot<Map<String, dynamic>> rawUser =
+        await _firestore.collection("users").doc(userID).get();
+    String businessID = rawUser.data()!["business_id"];
+    return businessID;
   }
 
-  Future<void> createPdfAndDownload(List<String> items) async {
-    final pdf = pw.Document();
-
-    // Load the custom DM Sans font
-    final fontData =
-        await rootBundle.load('assets/fonts/DMSans-VariableFont_opsz,wght.ttf');
-    final ttf = pw.Font.ttf(fontData);
-
-    const int itemsPerPage = 5;
-
-    // Generate pages based on itemsPerPage
-    for (int i = 0; i < items.length; i += itemsPerPage) {
-      final sublist = items.skip(i).take(itemsPerPage).toList();
-      pdf.addPage(
-        pw.Page(
-          build: (pw.Context context) {
-            return pw.Column(
-              children: sublist
-                  .map((item) => pw.Text(item, style: pw.TextStyle(font: ttf)))
-                  .toList(),
-            );
-          },
-        ),
-      );
+  Future<dynamic> setBusiness(
+      {required String user,
+      required String businessName,
+      required String businessType,
+      required String address,
+      required String contact,
+      required String ref}) async {
+    try {
+      String businessID = await _fetchBusinessID(user);
+      await _firestore.collection("businesses").doc(businessID).update({
+        "business_name": businessName,
+        "business_type": businessType,
+        "contact_number": contact,
+        "location": address,
+        "ref": ref
+      });
+    } catch (e) {
+      print(e);
+      return e.toString();
     }
-
-    // Save and print the PDF
-    Printing.layoutPdf(onLayout: (format) => pdf.save());
   }
 
   void setSearchText(newText) {
@@ -150,8 +91,15 @@ class AppState with ChangeNotifier {
           .collection('users')
           .doc(FirebaseAuth.instance.currentUser!.uid)
           .get();
+      Provider.of<AccountingProvider>(context, listen: false)
+          .fetchTransactions(temp.data()!['business_id']);
+
       Provider.of<InventoryProvider>(context, listen: false)
           .fetchProducts(temp.data()!['business_id']);
+      Provider.of<CustomerProvider>(context, listen: false)
+          .fetchCustomers(temp.data()!['business_id']);
+      Provider.of<SupplierProvider>(context, listen: false)
+          .fetchSuppliers(temp.data()!['business_id']);
       user = LuminUser(
         id: temp.id,
         email: temp.data()!['email'],
@@ -166,6 +114,7 @@ class AppState with ChangeNotifier {
 
   Future<void> signOut() async {
     await FirebaseAuth.instance.signOut();
+    index = 0;
     user = null;
     businessInfo = null;
     notifyListeners();

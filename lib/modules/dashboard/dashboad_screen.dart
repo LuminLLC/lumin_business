@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:lumin_business/common/app_colors.dart';
+import 'package:lumin_business/common/lumin_utll.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/accounting/accounting_provider.dart';
 import 'package:lumin_business/modules/general_platform/stat_card.dart';
@@ -56,7 +57,8 @@ class _DashboadScreenState extends State<DashboadScreen> {
                 children: [
                   StatCardWidget(
                       statName: "Net Income",
-                      value: "100",
+                      value: LuminUtll.formatCurrency(
+                          accountingProvider.netIncome),
                       icon: Icons.show_chart),
                   StatCardWidget(
                       statName: "Product Sales",

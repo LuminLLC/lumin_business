@@ -1,11 +1,14 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/inventory/app_styles.dart';
 import 'package:lumin_business/modules/login/app_colors.dart';
 import 'package:lumin_business/modules/login/app_icons.dart';
+import 'package:lumin_business/modules/login/create_business.dart';
 import 'package:lumin_business/modules/login/lumin_auth_provider.dart';
 import 'package:lumin_business/modules/login/responsive_widget.dart';
+import 'package:lumin_business/modules/user_and_busness/lumin_user.dart';
 import 'package:provider/provider.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -17,7 +20,7 @@ class SignupScreen extends StatefulWidget {
 
 class _SignupScreenState extends State<SignupScreen> {
   final SizeAndSpacing sp = SizeAndSpacing();
-
+  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
@@ -25,6 +28,7 @@ class _SignupScreenState extends State<SignupScreen> {
   bool obscureText = true;
   String? _emailError;
   String? _passwordError;
+  String? _nameError;
   String? _confirmPasswordError;
   String? signInError;
   bool formSubmitted = false;
@@ -33,7 +37,19 @@ class _SignupScreenState extends State<SignupScreen> {
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    _nameController.dispose();
     super.dispose();
+  }
+
+  bool _validateName() {
+    if (_nameController.text.isEmpty) {
+      setState(() {
+        _nameError = "Please enter your name";
+      });
+      return false;
+    }
+    return true;
   }
 
   bool _validateEmail() {
@@ -96,23 +112,20 @@ class _SignupScreenState extends State<SignupScreen> {
         height: height,
         width: width,
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             ResponsiveWidget.isSmallScreen(context)
                 ? const SizedBox()
                 : Expanded(
-                    child: Container(
-                      height: height,
-                      color: AppColors.mainBlueColor,
-                      child: Center(
-                        child: Text(
-                          'Lumin Business',
-                          style: ralewayStyle.copyWith(
-                            fontSize: 48.0,
-                            color: AppColors.whiteColor,
-                            fontWeight: FontWeight.w800,
-                          ),
+                    child: Padding(
+                      padding: EdgeInsets.only(left: sp.getWidth(30, width)),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(15),
+                        child: Image.asset(
+                          "assets/login_image.webp",
+                          height: height * 0.8,
+                          fit: BoxFit.fitWidth,
                         ),
                       ),
                     ),
@@ -133,7 +146,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        SizedBox(height: height * 0.2),
+                        SizedBox(height: height * 0.15),
                         Text(
                           "Let's Get you started ✨",
                           style: ralewayStyle.copyWith(
@@ -151,7 +164,55 @@ class _SignupScreenState extends State<SignupScreen> {
                             color: AppColors.textColor,
                           ),
                         ),
-                        SizedBox(height: height * 0.064),
+                        SizedBox(height: height * 0.05),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 16.0),
+                          child: Text(
+                            'Name',
+                            style: ralewayStyle.copyWith(
+                              fontSize: 12.0,
+                              color: AppColors.blueDarkColor,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 6.0),
+                        Container(
+                          height: 50.0,
+                          width: width,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16.0),
+                            color: AppColors.whiteColor,
+                          ),
+                          child: TextFormField(
+                            onChanged: (value) {
+                              if (_nameError != null) {
+                                setState(() {
+                                  _nameError = null;
+                                });
+                              }
+                            },
+                            controller: _nameController,
+                            style: ralewayStyle.copyWith(
+                              fontWeight: FontWeight.w400,
+                              color: AppColors.blueDarkColor,
+                              fontSize: 12.0,
+                            ),
+                            decoration: InputDecoration(
+                              errorText: _nameError,
+                              border: InputBorder.none,
+                              prefixIcon: Icon(FontAwesomeIcons.person),
+                              contentPadding: const EdgeInsets.only(top: 16.0),
+                              hintText: 'Enter you name',
+                              hintStyle: ralewayStyle.copyWith(
+                                fontWeight: FontWeight.w400,
+                                color: AppColors.blueDarkColor.withOpacity(0.5),
+                                fontSize: 12.0,
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: height * 0.014),
                         Padding(
                           padding: const EdgeInsets.only(left: 16.0),
                           child: Text(
@@ -328,18 +389,21 @@ class _SignupScreenState extends State<SignupScreen> {
                           child: Consumer<LuminAuthProvider>(
                             builder: (context, luminAuth, _) => InkWell(
                               onTap: () async {
+                                bool isNameValid = _validateName();
                                 bool isEmailValid = _validateEmail();
                                 bool isPasswordValid = _validatePassword();
                                 bool isConfirmPasswordValid =
                                     _validateConfirmPassword();
                                 if (isPasswordValid &&
                                     isEmailValid &&
+                                    isNameValid &&
                                     isConfirmPasswordValid) {
                                   setState(() {
                                     formSubmitted = true;
                                   });
                                   await luminAuth
                                       .createUserWithEmail(
+                                          _nameController.text,
                                           _emailController.text,
                                           _passwordController.text)
                                       .then((response) {
@@ -353,9 +417,15 @@ class _SignupScreenState extends State<SignupScreen> {
                                         signInError = response;
                                       });
                                     } else {
-                                      print(response.user!.uid);
-                                      Navigator.pushReplacementNamed(
-                                          context, "/createBusiness");
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute<void>(
+                                          builder: (BuildContext context) =>
+                                              CreateBusinessScreen(
+                                            userID: response.user!.uid,
+                                          ),
+                                        ),
+                                      );
                                     }
                                   });
                                 }

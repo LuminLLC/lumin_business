@@ -197,7 +197,7 @@ class _MenuState extends State<Menu> {
                                       appState.user!.name == "" ||
                                       appState.user!.access == null
                                   ? ""
-                                  : "${appState.user!.access}",
+                                  : "${appState.user!.access == "admin" ? "Admin Account" : "Storefront"}",
                               style:
                                   textTheme.textTheme(screenWidth).labelSmall!)
                         ],
@@ -240,16 +240,16 @@ class _MenuState extends State<Menu> {
                 },
               ),
             ),
-            appState.user != null && appState.user!.access == "admin"
-                ? menuItemDesktop(
-                    title: "Order History",
-                    context: context,
-                    appState: appState,
-                    icon: Icon(Icons.list),
-                    hasTrailing: false,
-                    press: () {},
-                  )
-                : SizedBox(),
+            // appState.user != null && appState.user!.access == "admin"
+            //     ? menuItemDesktop(
+            //         title: "Order History",
+            //         context: context,
+            //         appState: appState,
+            //         icon: Icon(Icons.list),
+            //         hasTrailing: false,
+            //         press: () {},
+            //       )
+            //     : SizedBox(),
           ],
         ),
       );

@@ -5,8 +5,7 @@ import 'package:lumin_business/common/app_colors.dart';
 import 'package:lumin_business/common/app_text_theme.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/accounting/accounting_provider.dart';
-import 'package:lumin_business/modules/accounting/widgets/selected_transaction.dart';
-import 'package:lumin_business/modules/accounting/transaction_model.dart';
+import 'package:lumin_business/modules/accounting/accounting_model.dart';
 import 'package:lumin_business/modules/customers/customer_model.dart';
 import 'package:lumin_business/modules/customers/customer_provider.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
@@ -15,8 +14,8 @@ import 'package:lumin_business/modules/inventory/product_model.dart';
 import 'package:lumin_business/modules/suppliers/supplier_model.dart';
 import 'package:lumin_business/modules/suppliers/supplier_provider.dart';
 import 'package:lumin_business/modules/inventory/set_order_quantity.dart';
-import 'package:lumin_business/modules/inventory/selected_product.dart';
 import 'package:lumin_business/modules/user_and_busness/business_model.dart';
+import 'package:lumin_business/widgets/view_record.dart';
 
 // ignore: must_be_immutable
 class GeneralListTile extends StatelessWidget {
@@ -29,7 +28,7 @@ class GeneralListTile extends StatelessWidget {
   int? index;
   List<String>? itemLabels;
 
-  TransactionModel? transaction;
+  AccountingModel? transaction;
   dynamic provider;
   final AppState appState;
 
@@ -173,16 +172,18 @@ class GeneralListTile extends StatelessWidget {
                     .bodySmall!
                     .copyWith(color: Colors.black),
               ),
-           if (sp.isDesktop(screenWidth))   SizedBox(
-                height: sp.getHeight(20, screenHeight, screenWidth),
-                child: VerticalDivider()),
-         if (sp.isDesktop(screenWidth))     Text(
-              "Contact: ${supplier.contactNumber}",
-              style: textTheme
-                  .textTheme(screenWidth)
-                  .bodySmall!
-                  .copyWith(color: Colors.black),
-            ),
+            if (sp.isDesktop(screenWidth))
+              SizedBox(
+                  height: sp.getHeight(20, screenHeight, screenWidth),
+                  child: VerticalDivider()),
+            if (sp.isDesktop(screenWidth))
+              Text(
+                "Contact: ${supplier.contactNumber}",
+                style: textTheme
+                    .textTheme(screenWidth)
+                    .bodySmall!
+                    .copyWith(color: Colors.black),
+              ),
           ],
         ),
         trailing: IconButton(
@@ -192,16 +193,13 @@ class GeneralListTile extends StatelessWidget {
             color: AppColor.bgSideMenu.withOpacity(0.8),
           ),
           onPressed: () {
-            // showDialog(
-            //     // barrierDismissible: false,
-            //     context: context,
-            //     builder: (context) {
-            //       return SelectedProduct(
-            //         product: product,
-            //         appState: appState,
-            //         inventoryProvider: provider,
-            //       );
-            //     });
+            showDialog(
+                // barrierDismissible: false,
+                context: context,
+                builder: (context) {
+                  return ViewRecord<SupplierProvider>(
+                      record: supplier, recordType: RecordType.supplier);
+                });
           },
         ),
       ),
@@ -259,16 +257,18 @@ class GeneralListTile extends StatelessWidget {
                     .bodySmall!
                     .copyWith(color: Colors.black),
               ),
-            if (sp.isDesktop(screenWidth)) SizedBox(
-                height: sp.getHeight(20, screenHeight, screenWidth),
-                child: VerticalDivider()),
-           if (sp.isDesktop(screenWidth))  Text(
-              "Contact: ${customer.phoneNumber}",
-              style: textTheme
-                  .textTheme(screenWidth)
-                  .bodySmall!
-                  .copyWith(color: Colors.black),
-            ),
+            if (sp.isDesktop(screenWidth))
+              SizedBox(
+                  height: sp.getHeight(20, screenHeight, screenWidth),
+                  child: VerticalDivider()),
+            if (sp.isDesktop(screenWidth))
+              Text(
+                "Contact: ${customer.phoneNumber}",
+                style: textTheme
+                    .textTheme(screenWidth)
+                    .bodySmall!
+                    .copyWith(color: Colors.black),
+              ),
           ],
         ),
         trailing: IconButton(
@@ -278,16 +278,13 @@ class GeneralListTile extends StatelessWidget {
             color: AppColor.bgSideMenu.withOpacity(0.8),
           ),
           onPressed: () {
-            // showDialog(
-            //     // barrierDismissible: false,
-            //     context: context,
-            //     builder: (context) {
-            //       return SelectedProduct(
-            //         product: product,
-            //         appState: appState,
-            //         inventoryProvider: provider,
-            //       );
-            //     });
+            showDialog(
+                // barrierDismissible: false,
+                context: context,
+                builder: (context) {
+                  return ViewRecord<CustomerProvider>(
+                      record: customer, recordType: RecordType.customer);
+                });
           },
         ),
       ),
@@ -297,7 +294,7 @@ class GeneralListTile extends StatelessWidget {
   Widget transactionTile({
     required double screenWidth,
     required double screenHeight,
-    required TransactionModel transaction,
+    required AccountingModel transaction,
     required dynamic provider,
     required BuildContext context,
   }) {
@@ -369,11 +366,8 @@ class GeneralListTile extends StatelessWidget {
                 // barrierDismissible: false,
                 context: context,
                 builder: (context) {
-                  return SelectedTransaction(
-                    transaction: transaction,
-                    appState: appState,
-                    accountingProvider: provider,
-                  );
+                  return ViewRecord<AccountingProvider>(
+                      record: transaction, recordType: RecordType.transaction);
                 });
           },
         ),
@@ -491,11 +485,8 @@ class GeneralListTile extends StatelessWidget {
                       // barrierDismissible: false,
                       context: context,
                       builder: (context) {
-                        return SelectedProduct(
-                          product: product,
-                          appState: appState,
-                          inventoryProvider: provider,
-                        );
+                        return ViewRecord<InventoryProvider>(
+                            record: product, recordType: RecordType.product);
                       });
                 },
               ),

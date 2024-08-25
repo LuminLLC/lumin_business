@@ -83,6 +83,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           ),
                       itemCount: appState.businessInfo!.toList().length),
             ),
+            TextButton.icon(
+                onPressed: () {},
+                label: Text(
+                  "Delete Account",
+                  style: TextStyle(color: Colors.black),
+                ),
+                icon: Icon(
+                  Icons.delete,
+                  color: Colors.red,
+                ))
           ],
         ),
       );

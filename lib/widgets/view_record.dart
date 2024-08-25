@@ -1,5 +1,8 @@
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:lumin_business/common/app_text_theme.dart';
 import 'package:lumin_business/common/lumin_utll.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/accounting/accounting_provider.dart';
@@ -12,6 +15,7 @@ import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
 import 'package:lumin_business/modules/inventory/product_model.dart';
 import 'package:lumin_business/modules/suppliers/supplier_model.dart';
 import 'package:lumin_business/modules/suppliers/supplier_provider.dart';
+import 'package:lumin_business/modules/suppliers/supply_order_model.dart';
 import 'package:lumin_business/widgets/lumin_texticon_button.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
@@ -23,25 +27,27 @@ enum RecordType {
   supplier,
 }
 
-class AddRecord<T extends ChangeNotifier> extends StatefulWidget {
+class ViewRecord<T extends ChangeNotifier> extends StatefulWidget {
   final RecordType recordType;
-  const AddRecord({
-    Key? key,
-    required this.recordType,
-  }) : super(key: key);
+  final dynamic record;
+  const ViewRecord({Key? key, required this.recordType, required this.record})
+      : super(key: key);
 
   @override
-  State<AddRecord<T>> createState() => _AddRecordState<T>();
+  State<ViewRecord<T>> createState() => _ViewRecordState<T>();
 }
 
-class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
+class _ViewRecordState<T extends ChangeNotifier> extends State<ViewRecord<T>> {
   bool isUpdating = false;
+  bool hasChanges = false;
   var uuid = Uuid();
   final SizeAndSpacing sp = SizeAndSpacing();
   List<DateTime> date = [];
   String? selectedTransactionType;
   ProductCategory? selectedProductCategory;
+  List<ProductCategory>? categories;
   String? amountError;
+  String? newCategory;
   String? nameError;
   String? transactionTypeError;
   final List<String> items = ["Income", 'Expense'];
@@ -66,52 +72,55 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
   @override
   void initState() {
     super.initState();
-    nameController = TextEditingController();
-    categoryController = TextEditingController();
-    quantityController = TextEditingController();
-    priceController = TextEditingController();
-    amountController = TextEditingController();
-    customerController = TextEditingController();
-    supplierController = TextEditingController();
-    descriptionController = TextEditingController();
-    addressController = TextEditingController();
-    dateController = TextEditingController()
-      ..text = LuminUtll.formatDate(DateTime.now());
-    emailController = TextEditingController();
-    phoneNumberController = TextEditingController();
+    switch (widget.recordType) {
+      case RecordType.product:
+        final p = widget.record as ProductModel;
+        nameController = TextEditingController(text: p.name);
+        amountController = TextEditingController(text: p.quantity.toString());
+        priceController =
+            TextEditingController(text: LuminUtll.formatCurrency(p.unitPrice));
+        break;
+      case RecordType.supplier:
+        final s = widget.record as SupplierModel;
+        customerController = TextEditingController(text: s.name);
+        addressController = TextEditingController(text: s.address);
+        emailController = TextEditingController(text: s.email);
+        phoneNumberController = TextEditingController(text: s.contactNumber);
+        break;
+      case RecordType.customer:
+        final c = widget.record as CustomerModel;
+        customerController = TextEditingController(text: c.name);
+        addressController = TextEditingController(text: c.address);
+        emailController = TextEditingController(text: c.email);
+        phoneNumberController = TextEditingController(text: c.phoneNumber);
+        break;
+      default:
+    }
   }
 
   @override
   void dispose() {
-    nameController.dispose();
-    categoryController.dispose();
-    quantityController.dispose();
-    priceController.dispose();
-    amountController.dispose();
-    customerController.dispose();
-    supplierController.dispose();
-    descriptionController.dispose();
-    addressController.dispose();
-    dateController.dispose();
-    emailController.dispose();
-    phoneNumberController.dispose();
+    switch (widget.recordType) {
+      case RecordType.product:
+        nameController.dispose();
+        amountController.dispose();
+        priceController.dispose();
+        break;
+      case RecordType.supplier:
+        customerController.dispose();
+        addressController.dispose();
+        emailController.dispose();
+        phoneNumberController.dispose();
+        break;
+      case RecordType.customer:
+        customerController.dispose();
+        addressController.dispose();
+        emailController.dispose();
+        phoneNumberController.dispose();
+        break;
+      default:
+    }
     super.dispose();
-  }
-
-  void resetControllers() {
-    nameController.clear();
-    categoryController.clear();
-    quantityController.clear();
-    priceController.clear();
-    amountController.clear();
-    customerController.clear();
-    supplierController.clear();
-    descriptionController.clear();
-    addressController.clear();
-    dateController = TextEditingController()
-      ..text = LuminUtll.formatDate(DateTime.now());
-    emailController.clear();
-    phoneNumberController.clear();
   }
 
   bool validateTransaction() {
@@ -254,6 +263,43 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
     return namePass && addressPass && emailPass && phonePass;
   }
 
+  // void isChanged() {
+  //   switch (widget.recordType) {
+  //     case RecordType.customer:
+  //       final c = widget.record as CustomerModel;
+  //       setState(() {
+  //         // isUpdating = p.name == nameController.text &&
+  //         //     p.quantity.toString() == amountController.text &&
+  //         //     p.category == selectedProductCategory?.name &&
+  //         //     p.unitPrice ==
+  //         //         CurrencyInputFormatter().getAmount(priceController.text);
+  //       });
+  //       break;
+  //     case RecordType.supplier:
+  //       final s = widget.record as SupplierModel;
+  //       setState(() {
+  //         // isUpdating = p.name == nameController.text &&
+  //         //     p.quantity.toString() == amountController.text &&
+  //         //     p.category == selectedProductCategory?.name &&
+  //         //     p.unitPrice ==
+  //         //         CurrencyInputFormatter().getAmount(priceController.text);
+  //       });
+  //       break;
+  //     case RecordType.product:
+  //       final p = widget.record as ProductModel;
+  //       setState(() {
+  //         isUpdating = p.name == nameController.text &&
+  //             p.quantity.toString() == amountController.text &&
+  //             p.category == selectedProductCategory?.name &&
+  //             p.unitPrice ==
+  //                 CurrencyInputFormatter().getAmount(priceController.text);
+  //       });
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  // }
+
   @override
   Widget build(BuildContext context) {
     final double width = MediaQuery.of(context).size.width;
@@ -263,7 +309,31 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
     return Consumer<T>(
       builder: (context, provider, _) {
         return AlertDialog(
-          title: Text(_getDialogTitle(widget.recordType)),
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Text(_getDialogTitle(widget.recordType),
+                      style: AppTextTheme().textTheme(width).headlineLarge),
+                  Text(
+                    widget.record.id,
+                    style: AppTextTheme().textTheme(width).headlineMedium,
+                  ),
+                ],
+              ),
+              if (widget.recordType != RecordType.transaction)
+                Padding(
+                  padding: EdgeInsets.only(
+                      top: sp.getHeight(5, height, width),
+                      bottom: sp.getHeight(20, height, width)),
+                  child: Text(
+                    "Type in any of the fields to start editing",
+                    style: AppTextTheme().textTheme(width).bodySmall,
+                  ),
+                )
+            ],
+          ),
           content: SizedBox(
             width: sp.getWidth(600, width),
             height: isUpdating ? sp.getHeight(400, height, width) : null,
@@ -286,14 +356,23 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
                   ),
           ),
           actions: [
-            isUpdating
-                ? SizedBox()
-                : LuminTextIconButton(
-                    text: "Add ${widget.recordType.name}",
-                    icon: Icons.add,
-                    onPressed: () => _handleSave(
-                        provider, appState.businessInfo!.businessId),
-                  ),
+            if (widget.recordType == RecordType.customer ||
+                widget.recordType == RecordType.supplier)
+              LuminTextIconButton(
+                  text: widget.recordType == RecordType.supplier
+                      ? "Order Products"
+                      : "Create Custom Order",
+                  icon: FontAwesomeIcons.firstOrder,
+                  onPressed: () {}),
+            if (widget.recordType != RecordType.transaction)
+              isUpdating || !hasChanges
+                  ? SizedBox()
+                  : LuminTextIconButton(
+                      text: "Update ${widget.recordType.name}",
+                      icon: FontAwesomeIcons.floppyDisk,
+                      onPressed: () => _handleSave(
+                          provider, appState.businessInfo!.businessId),
+                    ),
           ],
         );
       },
@@ -303,15 +382,15 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
   String _getDialogTitle(RecordType recordType) {
     switch (recordType) {
       case RecordType.transaction:
-        return "Add Transaction";
+        return "Transaction ID: ";
       case RecordType.product:
-        return "Add Product";
+        return "Product ID: ";
       case RecordType.customer:
-        return "Add Customer";
+        return "Customer ID: ";
       case RecordType.supplier:
-        return "Add Supplier";
+        return "Supplier ID: ";
       default:
-        return "Add Record";
+        return "View Record";
     }
   }
 
@@ -332,166 +411,42 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
   }
 
   List<Widget> _getTransactionFields(double width, double height) {
+    final t = widget.record as AccountingModel;
     return [
-      TextField(
-        controller: amountController,
-        inputFormatters: [CurrencyInputFormatter(currencySymbol: "GHS ")],
-        onChanged: (value) {
-          if (amountError != null) {
-            setState(() {
-              amountError = null;
-            });
-          }
-        },
-        keyboardType: TextInputType.number,
-        style: TextStyle(fontSize: sp.getFontSize(16, width)),
-        decoration: InputDecoration(
-          errorText: amountError,
-          labelText: "Transaction Amount",
-          border: OutlineInputBorder(),
-          hintText: "Enter the transaction amount",
-        ),
-      ),
+      Text("Amount: ${LuminUtll.formatCurrency(t.amount)}"),
       SizedBox(
         height: sp.getHeight(30, height, width),
       ),
-      DropdownButtonFormField<String>(
-        hint: Text(
-          "Select a transaction type",
-          style: TextStyle(
-            color: Colors.grey[300], // Adjust this color to match your style
-          ),
-        ),
-        value: selectedTransactionType,
-        decoration: InputDecoration(
-          errorText: transactionTypeError,
-          // hintText: "Select a transaction type",
-          // labelText: "Transaction Type",
-          hintStyle: TextStyle(
-            color: Colors.grey[300], // Adjust this color to match your style
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(5), // Rounded corners
-            borderSide: BorderSide(
-              color: Colors.grey, // Border color
-              width: 1.0,
-            ),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8.0), // Rounded corners
-            borderSide: BorderSide(
-              color: Colors.blue, // Border color when focused
-              width: 2.0,
-            ),
-          ),
-          contentPadding: EdgeInsets.only(
-            left: 12.0, // Horizontal padding inside the dropdown
-          ),
-        ),
-        icon: Padding(
-          padding: const EdgeInsets.only(right: 8.0),
-          child: Icon(
-            Icons.arrow_drop_down, // Icon for the dropdown
-            color: Colors.grey[700], // Adjust this color to match your style
-          ),
-        ),
-        style: TextStyle(
-          color: Colors.white, // Text color inside the dropdown
-          fontSize: 16.0, // Text size inside the dropdown
-        ),
-        onChanged: (value) {
-          if (transactionTypeError != null) {
-            setState(() {
-              transactionTypeError = null;
-            });
-          }
-          print(value);
-          setState(() {
-            selectedTransactionType = value;
-          });
-        },
-        items: items.map<DropdownMenuItem<String>>((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Text(value),
-          );
-        }).toList(),
-      ),
+      Text("Type: ${t.type.name}"),
       SizedBox(
         height: sp.getHeight(30, height, width),
       ),
-      InkWell(
-        onTap: () async {
-          await showCalendarDatePicker2Dialog(
-            context: context,
-            config: CalendarDatePicker2WithActionButtonsConfig(),
-            dialogSize: const Size(325, 400),
-            value: date,
-            borderRadius: BorderRadius.circular(15),
-          ).then((result) {
-            if (result != null && result[0] != null) {
-              setState(() {
-                dateController.text = LuminUtll.formatDate(result[0]!);
-              });
-            }
-          });
-        },
-        child: Container(
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: Colors.grey, // Adjust the border color to match your theme
-              width: 1.0,
-            ),
-            borderRadius:
-                BorderRadius.circular(5.0), // Adjust the radius as needed
-            color:
-                Colors.transparent, // Match the background color to your theme
-          ),
-          padding: EdgeInsets.symmetric(
-            horizontal: 12.0,
-          ), //Add padding inside the container
-          width: double.infinity,
-          height: 50,
-          child: Row(
-            children: [
-              Text(
-                dateController.text,
-                style: TextStyle(
-                  color:
-                      Colors.grey, // Adjust the text color to match your theme
-                  fontSize: 16.0,
-                ),
-              ),
-              Spacer(),
-              Text(
-                "Tap to change date",
-                style: TextStyle(fontSize: 12, color: Colors.white30),
-              )
-            ],
-          ),
-        ),
-      ),
+      Text("Date: ${t.date}"),
       SizedBox(
         height: sp.getHeight(30, height, width),
       ),
-      TextField(
-        controller: descriptionController,
-        maxLines: 3,
-        maxLength: 50,
-        style: TextStyle(fontSize: sp.getFontSize(16, width)),
-        decoration: InputDecoration(
-          labelText: "Desctiption",
-          border: OutlineInputBorder(),
-          hintText: "Enter the transaction description",
-        ),
-      ),
+      if (t.description.isNotEmpty) Text("Description: ${t.description}"),
+      if (t.purchaseOrderID != null)
+        Text("Purchase Order ID: ${t.purchaseOrderID}"),
+      if (t.saleID != null) Text("Sale ID: ${t.saleID}")
     ];
   }
 
   List<Widget> _getProductFields(double width, double height) {
+    final p = widget.record as ProductModel;
     return [
       TextField(
         controller: nameController,
+        onChanged: (value) {
+          if (nameError != null) {
+            setState(() {
+              nameError = null;
+            });
+          }
+          setState(() {
+            hasChanges = !(value == p.name);
+          });
+        },
         style: TextStyle(fontSize: sp.getFontSize(16, width)),
         decoration: InputDecoration(
           labelText: "Product Name",
@@ -505,6 +460,9 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
       ),
       Consumer<InventoryProvider>(builder: (context, inventoryProvider, _) {
         List<ProductCategory> categories = inventoryProvider.categories;
+        selectedProductCategory = categories
+            .toList()
+            .singleWhere((category) => category.name == p.category);
         return DropdownButtonFormField<ProductCategory>(
           hint: Text(
             "Select product category",
@@ -557,6 +515,8 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
             }
             setState(() {
               selectedProductCategory = value;
+              newCategory = value!.name;
+              hasChanges = !(value!.name == p.category);
             });
           },
           items: categories
@@ -580,6 +540,9 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
               amountError = null;
             });
           }
+          setState(() {
+            hasChanges = !(value == p.quantity.toString());
+          });
         },
         keyboardType: TextInputType.number,
         decoration: InputDecoration(
@@ -601,6 +564,10 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
               priceError = null;
             });
           }
+          setState(() {
+            hasChanges =
+                !(CurrencyInputFormatter().getAmount(value) == p.unitPrice);
+          });
         },
         keyboardType: TextInputType.number,
         style: TextStyle(fontSize: sp.getFontSize(16, width)),
@@ -615,6 +582,7 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
   }
 
   List<Widget> _getCustomerFields(double width, double height) {
+    final c = widget.record as CustomerModel;
     return [
       TextField(
         controller: customerController,
@@ -624,6 +592,9 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
               nameError = null;
             });
           }
+          setState(() {
+            hasChanges = !(value == c.name);
+          });
         },
         style: TextStyle(fontSize: sp.getFontSize(16, width)),
         decoration: InputDecoration(
@@ -644,6 +615,9 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
               addressError = null;
             });
           }
+          setState(() {
+            hasChanges = !(value == c.address);
+          });
         },
         style: TextStyle(fontSize: sp.getFontSize(16, width)),
         decoration: InputDecoration(
@@ -664,6 +638,9 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
               emailError = null;
             });
           }
+          setState(() {
+            hasChanges = !(value == c.email);
+          });
         },
         inputFormatters: [EmailInputFormatter()],
         keyboardType: TextInputType.emailAddress,
@@ -686,6 +663,11 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
               phoneError = null;
             });
           }
+          print(c.phoneNumber);
+          print(value);
+          setState(() {
+            hasChanges = !(value == c.phoneNumber);
+          });
         },
         inputFormatters: [PhoneNumberInputFormatter()],
         keyboardType: TextInputType.phone,
@@ -701,6 +683,7 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
   }
 
   List<Widget> _getSupplierFields(double width, double height) {
+    final s = widget.record as SupplierModel;
     return [
       TextField(
         controller: customerController,
@@ -710,6 +693,9 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
               nameError = null;
             });
           }
+          setState(() {
+            hasChanges = !(value == s.name);
+          });
         },
         style: TextStyle(fontSize: sp.getFontSize(16, width)),
         decoration: InputDecoration(
@@ -730,6 +716,9 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
               addressError = null;
             });
           }
+          setState(() {
+            hasChanges = !(value == s.address);
+          });
         },
         style: TextStyle(fontSize: sp.getFontSize(16, width)),
         decoration: InputDecoration(
@@ -743,13 +732,16 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
         height: sp.getHeight(30, height, width),
       ),
       TextField(
-        controller: emailController,
+        controller: emailController..text = s.email,
         onChanged: (value) {
           if (emailError != null) {
             setState(() {
               emailError = null;
             });
           }
+          setState(() {
+            hasChanges = !(value == s.email);
+          });
         },
         inputFormatters: [EmailInputFormatter()],
         keyboardType: TextInputType.emailAddress,
@@ -772,6 +764,9 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
               phoneError = null;
             });
           }
+          setState(() {
+            hasChanges = !(value == s.contactNumber);
+          });
         },
         inputFormatters: [PhoneNumberInputFormatter()],
         keyboardType: TextInputType.phone,
@@ -783,37 +778,92 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
           hintText: "Enter the supplier's phone number",
         ),
       ),
+      SizedBox(
+        height: sp.getHeight(30, height, width),
+      ),
+      if (s.orders.isNotEmpty) Text("Orders"),
+      if (s.orders.isNotEmpty)
+        Padding(
+          padding: EdgeInsets.only(right: width * 0.25),
+          child: Divider(),
+        ),
+      if (s.orders.isNotEmpty)
+        for (SupplyOrder order in s.orders)
+          ExpansionTile(
+            title: Text(
+              "${order.orderId}",
+            ),
+            leading: Text(
+              "${s.orders.indexOf(order) + 1}",
+            ),
+            trailing: Text(
+              "${order.status.name}",
+            ),
+            expandedAlignment: Alignment.centerLeft,
+            expandedCrossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(
+                    left: sp.getWidth(25, width),
+                    bottom: sp.getHeight(10, height, width)),
+                child: Text(
+                  "Order Date: ${order.orderDate}",
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(
+                    left: sp.getWidth(25, width),
+                    bottom: sp.getHeight(10, height, width)),
+                child: Text(
+                  "Delivery Date: ${order.deliveryDate}",
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(
+                    left: sp.getWidth(25, width),
+                    bottom: sp.getHeight(10, height, width)),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Ordered Products:",
+                    ),
+                    for (String key in order.orderedProducts.keys)
+                      ListTile(
+                        leading: Text(
+                            "${order.orderedProducts.keys.toList().indexOf(key) + 1}"),
+                        title: Text("Product ID: $key"),
+                        subtitle:
+                            Text("Quantity: ${order.orderedProducts[key]![0]}"),
+                        trailing: Text(
+                            "Price: ${LuminUtll.formatCurrency(order.orderedProducts[key]![1])}"),
+                      )
+                  ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(
+                    left: sp.getWidth(25, width),
+                    bottom: sp.getHeight(10, height, width)),
+                child: Text(
+                  "Total Cost: ${LuminUtll.formatCurrency(order.totalCost)}",
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(
+                    left: sp.getWidth(25, width),
+                    bottom: sp.getHeight(10, height, width)),
+                child: Text(
+                  "Notes: ${order.notes}",
+                ),
+              ),
+            ],
+          )
     ];
   }
 
   Future<void> _handleSave(provider, String businessId) async {
     switch (widget.recordType) {
-      case RecordType.transaction:
-        bool isValid = validateTransaction();
-        if (isValid) {
-          setState(() {
-            isUpdating = true;
-          });
-          final accountingProvider = provider as AccountingProvider;
-          await accountingProvider.addTransaction(
-            AccountingModel(
-              id: uuid.v1(),
-              description: descriptionController.text,
-              amount: CurrencyInputFormatter().getAmount(amountController.text),
-              date: dateController.text,
-              type: selectedTransactionType == "Income"
-                  ? TransactionType.income
-                  : TransactionType.expense,
-            ),
-            businessId,
-          );
-          resetControllers();
-          setState(() {
-            isUpdating = false;
-          });
-        }
-
-        break;
       case RecordType.product:
         bool isValid = validateProduct();
         if (isValid) {
@@ -821,22 +871,25 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
             isUpdating = true;
           });
           final inventoryProvider = provider as InventoryProvider;
-          await inventoryProvider.addProduct(
-              ProductModel(
-                id: "id",
-                name: nameController.text,
-                quantity: int.tryParse(amountController.text) ?? 0,
-                category: selectedProductCategory!.name,
-                unitPrice:
-                    CurrencyInputFormatter().getAmount(priceController.text),
-              ),
-              businessId,
-              selectedProductCategory!.code);
-          resetControllers();
+          final p = widget.record as ProductModel;
+          ProductModel updatedProduct = ProductModel(
+            id: p.id,
+            name: nameController.text,
+            quantity: int.tryParse(amountController.text) ?? 0,
+            category: newCategory ?? selectedProductCategory!.name,
+            unitPrice: CurrencyInputFormatter().getAmount(priceController.text),
+          );
+
+          await inventoryProvider.updateProduct(
+            updatedProduct,
+            businessId,
+          );
           setState(() {
             isUpdating = false;
           });
+          Navigator.pop(context);
         }
+
         break;
       case RecordType.customer:
         bool isValid = validateCustomer();
@@ -845,9 +898,10 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
             isUpdating = true;
           });
           final customerProvider = provider as CustomerProvider;
-          await customerProvider.addCustomer(
+          final c = widget.record as CustomerModel;
+          await customerProvider.updateCustomer(
             CustomerModel(
-                id: uuid.v1(),
+                id: c.id,
                 name: customerController.text,
                 address: addressController.text,
                 email: emailController.text,
@@ -855,11 +909,13 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
                 orders: []),
             businessId,
           );
-          resetControllers();
+
           setState(() {
             isUpdating = false;
           });
+          Navigator.pop(context);
         }
+
         break;
       case RecordType.supplier:
         bool isValid = validateSupplier();
@@ -868,22 +924,25 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
             isUpdating = true;
           });
           final supplierProvider = provider as SupplierProvider;
-          await supplierProvider.addSupplier(
+          final s = widget.record as SupplierModel;
+          await supplierProvider.updateSupplier(
             SupplierModel(
-                id: uuid.v1(),
+                id: s.id,
                 name: customerController.text,
                 address: addressController.text,
                 email: emailController.text,
                 contactNumber: phoneNumberController.text,
-                orders: [],
-                products: []),
+                orders: s.orders,
+                products: s.products),
             businessId,
           );
-          resetControllers();
           setState(() {
             isUpdating = false;
           });
+          Navigator.pop(context);
         }
+        break;
+      default:
         break;
     }
   }

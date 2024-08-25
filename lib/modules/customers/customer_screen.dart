@@ -36,10 +36,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
 
     return Consumer2<CustomerProvider, AppState>(
         builder: (context, customerProvider, appState, _) {
-      if (appState.businessInfo != null) {
-        Provider.of<CustomerProvider>(context, listen: false)
-            .fetchCustomers(appState.businessInfo!.businessId);
-      }
+     
       return Container(
         margin: EdgeInsets.all(
             sp.getWidth(sp.isDesktop(screenWidth) ? 10 : 0, screenWidth)),
@@ -82,21 +79,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                             color: AppColor.black,
                           ),
                           onPressed: () async {
-                            // List<String> products = [];
-                            // for (CustomerModel c
-                            //     in customerProvider.allCustomers) {
-                            //   // products.add(p.toFormattedString());
-                            // }
-                            // if (!generatingPDF &&
-                            //     customerProvider.allCustomers.isNotEmpty) {
-                            //   setState(() {
-                            //     generatingPDF = true;
-                            //   });
-                            //   appState.createPdfAndDownload(products);
-                            //   setState(() {
-                            //     generatingPDF = false;
-                            //   });
-                            // }
+                            customerProvider.downloadCustomersToCSV();
                           },
                         )
                       : SizedBox(),

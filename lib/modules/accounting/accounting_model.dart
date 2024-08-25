@@ -1,19 +1,24 @@
 enum TransactionType { income, expense }
 
-class TransactionModel {
+class AccountingModel {
   final String id;
   final String description;
   final double amount;
   final String date;
   final TransactionType type;
+  String? saleID;
+  String? purchaseOrderID;
 
-  TransactionModel({
-    required this.id,
-    required this.description,
-    required this.amount,
-    required this.date,
-    required this.type,
-  });
+  AccountingModel(
+      {required this.id,
+      required this.description,
+      required this.amount,
+      required this.date,
+      required this.type,
+      this.saleID,
+      this.purchaseOrderID})
+      : assert(!(saleID != null && purchaseOrderID != null),
+            'A transaction cannot have both saleID and purchaseOrderID at the same time');
 
   // Convert the TransactionModel to a Map
   Map<String, dynamic> toMap() {
@@ -27,8 +32,8 @@ class TransactionModel {
   }
 
   // Create a TransactionModel from a Map
-  factory TransactionModel.fromMap(Map<String, dynamic> map) {
-    return TransactionModel(
+  factory AccountingModel.fromMap(Map<String, dynamic> map) {
+    return AccountingModel(
       id: map['id'],
       description: map['description'],
       amount: map['amount'],

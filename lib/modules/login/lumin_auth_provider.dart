@@ -22,12 +22,14 @@ class LuminAuthProvider with ChangeNotifier {
   }
 
   Future<dynamic> createUserWithEmail(
-      String emailAddress, String password) async {
+      String name, String emailAddress, String password) async {
     try {
       final UserCredential credential =
           await _auth.createUserWithEmailAndPassword(
               email: emailAddress, password: password);
-      _createNewBusiness(credential.user!);
+      String businessID = await _createNewBusiness(credential.user!);
+      await _createNewUser(name, credential.user!, businessID);
+
       return credential;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {
@@ -41,7 +43,20 @@ class LuminAuthProvider with ChangeNotifier {
     }
   }
 
-  Future<void> _createNewBusiness(User user) async {
+  Future<void> _createNewUser(String name, User user, String businessID) async {
+    try {
+      // Create a new business document with an empty structure
+      await _firestore.collection('users').doc(user.uid).set({
+        'email': user.email,
+        'name': name,
+        'business_id': businessID,
+      });
+    } catch (e) {
+      print("Error creating business: $e");
+    }
+  }
+
+  Future<String> _createNewBusiness(User user) async {
     try {
       // Create a new business document with an empty structure
       DocumentReference businessRef =
@@ -51,15 +66,15 @@ class LuminAuthProvider with ChangeNotifier {
         'business_type': '',
         'contact_number': '',
         'description': '',
+        'ref':'',
         'email': user.email,
         'location': '',
       });
 
-      // You can add any additional initial setup for the business here
-
-      print("Business created with ID: ${businessRef.id}");
+      return businessRef.id;
     } catch (e) {
       print("Error creating business: $e");
+      return "";
     }
   }
 }
