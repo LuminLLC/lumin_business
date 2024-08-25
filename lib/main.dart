@@ -14,6 +14,7 @@ import 'package:lumin_business/modules/login/login_screen.dart';
 import 'package:lumin_business/modules/login/signup_screen.dart';
 import 'package:lumin_business/modules/login/uplaod_data.dart';
 import 'package:lumin_business/modules/suppliers/supplier_provider.dart';
+import 'package:lumin_business/temp.dart';
 import 'package:provider/provider.dart';
 import 'modules/general_platform/home_page.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -69,14 +70,15 @@ class LuminBusiness extends StatelessWidget {
                   titleSmall: TextStyle(color: Colors.white),
                   bodySmall: TextStyle(color: Colors.white),
                   labelSmall: TextStyle(color: Colors.white)))),
-      routes: {
-        "/platform": (context) => HomePage(),
-        "/sign-in": (context) => LoginScreen(),
-        "/sign-up": (context) => SignupScreen(),
+      // routes: {
+      //   "/platform": (context) => HomePage(),
+      //   "/sign-in": (context) => LoginScreen(),
+      //   "/sign-up": (context) => SignupScreen(),
         
-        "/uploadData": (context) => UploadData()
-      },
-      initialRoute: '/sign-in',
+      //   "/uploadData": (context) => UploadData()
+      // },
+      // initialRoute: '/sign-in',
+      home: CreateBusinessScreen(userID: "userID")
     );
   }
 }

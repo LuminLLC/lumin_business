@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:html';
 import 'package:csv/csv.dart';
@@ -29,5 +30,62 @@ class CSVModule {
       ..click();
 
     Url.revokeObjectUrl(url); // Clean up the URL after download
+  }
+
+  // Dynamic CSV Upload for Any Module
+  static Future<List<T>> uploadFromCSV<T>(List<String> expectedHeaders,
+      T Function(Map<String, dynamic>) mapToModel) async {
+    // Create a file input element
+    FileUploadInputElement uploadInput = FileUploadInputElement();
+    uploadInput.accept = '.csv';
+    uploadInput.click();
+
+    Completer<List<T>> completer = Completer();
+    uploadInput.onChange.listen((event) async {
+      final file = uploadInput.files?.first;
+      if (file != null) {
+        final reader = FileReader();
+        reader.readAsText(file);
+        reader.onLoadEnd.listen((event) {
+          final content = reader.result as String;
+          List<List<dynamic>> csvData =
+              const CsvToListConverter().convert(content);
+
+          if (csvData.isNotEmpty) {
+            List<dynamic> fileHeaders = csvData.first;
+
+            // Create a map of header positions
+            Map<String, int> headerPositions = {};
+            for (int i = 0; i < fileHeaders.length; i++) {
+              headerPositions[fileHeaders[i].toString()] = i;
+            }
+
+            // Validate that the expected headers exist in the CSV
+            for (String expectedHeader in expectedHeaders) {
+              if (!headerPositions.containsKey(expectedHeader)) {
+                print("Missing expected header: $expectedHeader");
+                completer.completeError("Missing header: $expectedHeader");
+                return;
+              }
+            }
+
+            csvData.removeAt(0); // Remove headers from data
+
+            // Map each row using dynamic header mapping
+            List<T> dataList = csvData.map((row) {
+              Map<String, dynamic> rowMap = {};
+              for (String header in expectedHeaders) {
+                rowMap[header] = row[headerPositions[header]!];
+              }
+              return mapToModel(rowMap);
+            }).toList();
+
+            completer.complete(dataList);
+          }
+        });
+      }
+    });
+
+    return completer.future;
   }
 }

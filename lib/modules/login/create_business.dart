@@ -1,12 +1,15 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:lumin_business/common/app_text_theme.dart';
 import 'package:lumin_business/common/lumin_utll.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
+import 'package:lumin_business/modules/accounting/accounting_provider.dart';
+import 'package:lumin_business/modules/customers/customer_provider.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
 import 'package:lumin_business/modules/inventory/app_styles.dart';
+import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
 import 'package:lumin_business/modules/login/app_colors.dart';
-import 'package:lumin_business/modules/login/app_icons.dart';
-import 'package:lumin_business/modules/user_and_busness/lumin_user.dart';
+import 'package:lumin_business/modules/suppliers/supplier_provider.dart';
 import 'package:provider/provider.dart';
 
 class CreateBusinessScreen extends StatefulWidget {
@@ -22,6 +25,7 @@ class _CreateBusinessScreenState extends State<CreateBusinessScreen> {
   final SizeAndSpacing sp = SizeAndSpacing();
   late TextEditingController businessName;
   String? selectedBusinessType;
+  String? selectedRef;
   late TextEditingController phoneNumber;
   late TextEditingController address;
   late TextEditingController hearAboutUs;
@@ -38,6 +42,19 @@ class _CreateBusinessScreenState extends State<CreateBusinessScreen> {
     'Service',
     'Manufacturing',
     'Other'
+  ];
+
+  final List<String> ref = [
+    "Social Media (Facebook, Instagram, Li,nkedIn, etc.)",
+    "Google Search",
+    "Friend or Colleague",
+    "Online Advertisement",
+    "Email Campaign",
+    "Blog or Article",
+    "Referral",
+    "Attended a Webinar/Event",
+    "YouTube",
+    "Other",
   ];
 
   @override
@@ -117,7 +134,7 @@ class _CreateBusinessScreenState extends State<CreateBusinessScreen> {
       body: Container(
         width: width,
         height: height,
-        margin: EdgeInsets.symmetric(horizontal: height * 0.5),
+        margin: EdgeInsets.symmetric(horizontal: height * 0.3),
         color: AppColors.backColor,
         child: SingleChildScrollView(
           primary: false,
@@ -127,7 +144,7 @@ class _CreateBusinessScreenState extends State<CreateBusinessScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                SizedBox(height: height * 0.125),
+                SizedBox(height: height * 0.05),
                 Text(
                   "Tell us about your business 📦",
                   style: ralewayStyle.copyWith(
@@ -136,7 +153,7 @@ class _CreateBusinessScreenState extends State<CreateBusinessScreen> {
                     fontSize: 25.0,
                   ),
                 ),
-                SizedBox(height: height * 0.05),
+                SizedBox(height: height * 0.03),
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0),
                   child: Text(
@@ -173,10 +190,7 @@ class _CreateBusinessScreenState extends State<CreateBusinessScreen> {
                     decoration: InputDecoration(
                       errorText: _businessNameError,
                       border: InputBorder.none,
-                      prefixIcon: IconButton(
-                        onPressed: () {},
-                        icon: Image.asset(AppIcons.emailIcon),
-                      ),
+                      prefixIcon: Icon(Icons.business),
                       contentPadding: const EdgeInsets.only(top: 16.0),
                       hintText: 'Enter Business Name',
                       hintStyle: ralewayStyle.copyWith(
@@ -208,6 +222,7 @@ class _CreateBusinessScreenState extends State<CreateBusinessScreen> {
                     color: AppColors.whiteColor,
                   ),
                   child: DropdownButtonFormField<String>(
+                    dropdownColor: Colors.grey,
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       contentPadding:
@@ -286,10 +301,7 @@ class _CreateBusinessScreenState extends State<CreateBusinessScreen> {
                     decoration: InputDecoration(
                       errorText: _phoneNumberError,
                       border: InputBorder.none,
-                      prefixIcon: IconButton(
-                        onPressed: () {},
-                        icon: Image.asset(AppIcons.lockIcon),
-                      ),
+                      prefixIcon: Icon(Icons.phone),
                       contentPadding: const EdgeInsets.only(top: 16.0),
                       hintText: 'Enter Business Phone Number',
                       hintStyle: ralewayStyle.copyWith(
@@ -337,10 +349,7 @@ class _CreateBusinessScreenState extends State<CreateBusinessScreen> {
                     decoration: InputDecoration(
                       errorText: _addressError,
                       border: InputBorder.none,
-                      prefixIcon: IconButton(
-                        onPressed: () {},
-                        icon: Image.asset(AppIcons.lockIcon),
-                      ),
+                      prefixIcon: Icon(Icons.location_pin),
                       contentPadding: const EdgeInsets.only(top: 16.0),
                       hintText: 'Enter Business Address',
                       hintStyle: ralewayStyle.copyWith(
@@ -372,24 +381,19 @@ class _CreateBusinessScreenState extends State<CreateBusinessScreen> {
                     color: AppColors.whiteColor,
                   ),
                   child: DropdownButtonFormField<String>(
+                    dropdownColor: Colors.grey,
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       contentPadding:
                           const EdgeInsets.symmetric(horizontal: 16.0),
                     ),
-                    value: selectedBusinessType,
+                    value: selectedRef,
                     onChanged: (newValue) {
-                      if (_selectedBusinessTypeError != null) {
-                        setState(() {
-                          _selectedBusinessTypeError = null;
-                        });
-                      }
                       setState(() {
-                        selectedBusinessType = newValue;
+                        selectedRef = newValue;
                       });
                     },
-                    items: businessTypes
-                        .map<DropdownMenuItem<String>>((String type) {
+                    items: ref.map<DropdownMenuItem<String>>((String type) {
                       return DropdownMenuItem<String>(
                         value: type,
                         child: Text(
@@ -403,7 +407,7 @@ class _CreateBusinessScreenState extends State<CreateBusinessScreen> {
                       );
                     }).toList(),
                     hint: Text(
-                      'Select Business Type',
+                      'Select a ref type',
                       style: ralewayStyle.copyWith(
                         fontWeight: FontWeight.w400,
                         color: AppColors.blueDarkColor.withOpacity(0.5),
@@ -412,6 +416,80 @@ class _CreateBusinessScreenState extends State<CreateBusinessScreen> {
                     ),
                   ),
                 ),
+                SizedBox(height: height * 0.014),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: Text(
+                    'Would you like to import your existing business data? (Optional)',
+                    style: ralewayStyle.copyWith(
+                      fontSize: 12.0,
+                      color: AppColors.blueDarkColor,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 6.0),
+                Consumer4<AccountingProvider, InventoryProvider,
+                        CustomerProvider, SupplierProvider>(
+                    builder: (context, accountingProvider, inventoryProvider,
+                        customerProvider, supplierProvidder, _) {
+                  return Container(
+                    padding: EdgeInsets.all(sp.getHeight(50, height, width)),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(16)),
+                        border:
+                            Border.all(color: Colors.black.withOpacity(0.3))),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        uploadTrigger(
+                            onTap: () {
+                              accountingProvider.uploadTransactionsFromCSV();
+                            },
+                            isUploaded:
+                                accountingProvider.allTransactions.isNotEmpty,
+                            headers: accountingProvider.transactionHeaders,
+                            icon: FontAwesomeIcons.calculator,
+                            label: "Uplaod Accounts",
+                            height: height,
+                            width: width),
+                        uploadTrigger(
+                            onTap: () {
+                              inventoryProvider.uploadProductsFromCSV();
+                            },
+                            isUploaded:
+                                inventoryProvider.allProdcuts.isNotEmpty,
+                            headers: inventoryProvider.productHeaders,
+                            icon: FontAwesomeIcons.store,
+                            label: "Uplaod Inventory",
+                            height: height,
+                            width: width),
+                        uploadTrigger(
+                            onTap: () {
+                              customerProvider.uploadCustomersFromCSV();
+                            },
+                            isUploaded:
+                                customerProvider.allCustomers.isNotEmpty,
+                            headers: customerProvider.customerHeaders,
+                            icon: FontAwesomeIcons.person,
+                            label: "Uplaod Customers",
+                            height: height,
+                            width: width),
+                        uploadTrigger(
+                            onTap: () {
+                              supplierProvidder.uploadSuppliersFromCSV();
+                            },
+                            isUploaded:
+                                supplierProvidder.allSuppliers.isNotEmpty,
+                            headers: supplierProvidder.supplierHeaders,
+                            icon: FontAwesomeIcons.peopleCarryBox,
+                            label: "Uplaod Suppliers",
+                            height: height,
+                            width: width),
+                      ],
+                    ),
+                  );
+                }),
                 SizedBox(height: height * 0.05),
                 Material(
                   color: Colors.transparent,
@@ -485,7 +563,7 @@ class _CreateBusinessScreenState extends State<CreateBusinessScreen> {
                   ),
                 ),
                 SizedBox(
-                  height: sp.getHeight(75, height, width),
+                  height: sp.getHeight(10, height, width),
                 ),
                 signInError == null
                     ? SizedBox()
@@ -499,6 +577,82 @@ class _CreateBusinessScreenState extends State<CreateBusinessScreen> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget uploadTrigger(
+      {required VoidCallback onTap,
+      required List<String> headers,
+      required IconData icon,
+      required String label,
+      required double height,
+      required bool isUploaded,
+      required double width}) {
+    return InkWell(
+      onTap: () async {
+        await showDialog(
+            context: context,
+            builder: (builder) {
+              return AlertDialog(
+                title: SizedBox(
+                  width: width * 0.4,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "CSV Guidelines",
+                        style: AppTextTheme().textTheme(width).displayMedium,
+                      ),
+                      Text(
+                        "Ensure that your CSV has the following headers",
+                        style: AppTextTheme().textTheme(width).bodyMedium,
+                      )
+                    ],
+                  ),
+                ),
+                content: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      for (String s in headers)
+                        ListTile(
+                          leading: Text("${headers.indexOf(s) + 1}"),
+                          title: Text(s),
+                        )
+                    ],
+                  ),
+                ),
+                actions: [
+                  TextButton.icon(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      onTap();
+                    },
+                    label: Icon(Icons.east),
+                    icon: Text("Continue"),
+                  )
+                ],
+              );
+            });
+      },
+      //onTap,
+      child: Column(
+        children: [
+          Icon(
+            icon,
+            color: Colors.black.withOpacity(isUploaded ? 1 : 0.3),
+          ),
+          SizedBox(
+            height: sp.getHeight(10, height, width),
+          ),
+          Text(
+            label,
+            style: AppTextTheme()
+                .textTheme(width)
+                .bodySmall!
+                .copyWith(color: Colors.black),
+          )
+        ],
       ),
     );
   }

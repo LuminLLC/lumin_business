@@ -94,6 +94,25 @@ class InventoryProvider with ChangeNotifier {
   List<ProductModel> allProdcuts = []; //dummyProductData;
   List<ProductCategory> categories = []; //dummyCategories;
   Map<String, List<ProductModel>> productMap = {};
+  List<String> productHeaders = [
+    "ID",
+    "Name",
+    "Category",
+    "Quantity",
+    "Unit Price",
+  ];
+
+  void uploadProductsFromCSV() async {
+    try {
+      List<ProductModel> products = await CSVModule.uploadFromCSV<ProductModel>(
+        productHeaders,
+        (rowMap) => ProductModel.fromMap(rowMap),
+      );
+      print("Products uploaded: ${products.length}");
+    } catch (e) {
+      print("Error uploading products: $e");
+    }
+  }
 
   void downloadProductsToCSV() {
     CSVModule.downloadToCSV<ProductModel>(

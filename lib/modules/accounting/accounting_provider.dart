@@ -72,6 +72,30 @@ class AccountingProvider with ChangeNotifier {
   bool isAccountingFetched = false;
   String? newTransactionType;
   List<AccountingModel> allTransactions = []; //dummyTransactionData;
+  List<String> transactionHeaders = [
+    "ID",
+    "Description",
+    "Amount",
+    "Date",
+    "Type",
+    "Sale ID",
+    "Purchase Order ID"
+  ];
+
+  void uploadTransactionsFromCSV() async {
+    try {
+      List<AccountingModel> transactions =
+          await CSVModule.uploadFromCSV<AccountingModel>(
+        transactionHeaders,
+        (rowMap) => AccountingModel.fromMap(rowMap),
+      );
+      print(transactions.length);
+      // allTransactions = transactions;
+      // notifyListeners();
+    } catch (e) {
+      print("Error uploading transactions: $e");
+    }
+  }
 
   double get netIncome {
     double netIncome = 0;

@@ -80,6 +80,26 @@ class CustomerProvider with ChangeNotifier {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   List<CustomerModel> allCustomers = []; //dummyCustomerData;
   bool isCustomersFetched = false;
+  List<String> customerHeaders = [
+    "id",
+    "name",
+    "email",
+    "phoneNumber",
+    "address"
+  ];
+
+  void uploadCustomersFromCSV() async {
+    try {
+      List<CustomerModel> customers =
+          await CSVModule.uploadFromCSV<CustomerModel>(
+        customerHeaders,
+        (rowMap) => CustomerModel.fromMap(rowMap),
+      );
+      print("Customers uploaded: ${customers.length}");
+    } catch (e) {
+      print("Error uploading customers: $e");
+    }
+  }
 
   Future<void> updateCustomer(
       CustomerModel updatedCustomer, String businessID) async {

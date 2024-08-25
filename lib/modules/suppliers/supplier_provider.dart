@@ -110,8 +110,28 @@ List<SupplierModel> dummySupplierData = [
 
 class SupplierProvider with ChangeNotifier {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  List<SupplierModel> allSuppliers = [];//dummySupplierData;
+  List<SupplierModel> allSuppliers = []; //dummySupplierData;
   bool isSuppliersFetched = false;
+  List<String> supplierHeaders = [
+    "ID",
+    "Name",
+    "Contact Number",
+    "Email",
+    "Address"
+  ];
+
+  void uploadSuppliersFromCSV() async {
+    try {
+      List<SupplierModel> suppliers =
+          await CSVModule.uploadFromCSV<SupplierModel>(
+        supplierHeaders,
+        (rowMap) => SupplierModel.fromMap(rowMap),
+      );
+      print("Suppliers uploaded: ${suppliers.length}");
+    } catch (e) {
+      print("Error uploading suppliers: $e");
+    }
+  }
 
   Future<void> updateSupplier(
       SupplierModel updatedSupplier, String businessID) async {
