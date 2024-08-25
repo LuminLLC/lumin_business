@@ -78,8 +78,30 @@ List<CustomerModel> dummyCustomerData = [
 
 class CustomerProvider with ChangeNotifier {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  List<CustomerModel> allCustomers = dummyCustomerData; //[];
-  bool isCustomersFetched = true;
+  List<CustomerModel> allCustomers = []; //dummyCustomerData;
+  bool isCustomersFetched = false;
+
+  Future<void> updateCustomer(
+      CustomerModel updatedCustomer, String businessID) async {
+    try {
+      await _firestore
+          .collection('businesses')
+          .doc(businessID)
+          .collection("customers")
+          .doc(updatedCustomer.id)
+          .set(updatedCustomer.toMap());
+
+      for (CustomerModel c in allCustomers) {
+        if (c.id == updatedCustomer.id) {
+          int index = allCustomers.indexOf(c);
+          allCustomers[index] = updatedCustomer;
+        }
+      }
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+  }
 
   void downloadCustomersToCSV() {
     CSVModule.downloadToCSV<CustomerModel>(

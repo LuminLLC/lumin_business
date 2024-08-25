@@ -179,10 +179,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             decoration: InputDecoration(
                               errorText: _emailError,
                               border: InputBorder.none,
-                              prefixIcon: IconButton(
-                                onPressed: () {},
-                                icon: Image.asset(AppIcons.emailIcon),
-                              ),
+                              prefixIcon: Icon(Icons.email),
                               contentPadding: const EdgeInsets.only(top: 16.0),
                               hintText: 'Enter Email',
                               hintStyle: ralewayStyle.copyWith(

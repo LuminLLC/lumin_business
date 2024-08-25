@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:lumin_business/config.dart'; 
+import 'package:lumin_business/config.dart';
 import 'package:lumin_business/modules/user_and_busness/business_model.dart';
 import 'package:lumin_business/modules/user_and_busness/lumin_user.dart';
 import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
@@ -13,6 +13,35 @@ class AppState with ChangeNotifier {
   BusinessModel? businessInfo;
   LuminUser? user;
   int index = 0;
+
+  Future<String> _fetchBusinessID(String userID) async {
+    DocumentSnapshot<Map<String, dynamic>> rawUser =
+        await _firestore.collection("users").doc(userID).get();
+    String businessID = rawUser.data()!["business_id"];
+    return businessID;
+  }
+
+  Future<dynamic> setBusiness(
+      {required String user,
+      required String businessName,
+      required String businessType,
+      required String address,
+      required String contact,
+      required String ref}) async {
+    try {
+      String businessID = await _fetchBusinessID(user);
+      await _firestore.collection("businesses").doc(businessID).update({
+        "business_name": businessName,
+        "business_type": businessType,
+        "contact_number": contact,
+        "location": address,
+        "ref": ref
+      });
+    } catch (e) {
+      print(e);
+      return e.toString();
+    }
+  }
 
   void setSearchText(newText) {
     searchText = newText;

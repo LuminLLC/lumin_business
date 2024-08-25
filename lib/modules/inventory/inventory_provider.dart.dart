@@ -12,6 +12,15 @@ import 'package:lumin_business/modules/inventory/category.dart';
 import 'package:lumin_business/modules/inventory/product_model.dart';
 import 'package:universal_html/html.dart' as html;
 
+List<ProductCategory> dummyCategories = [
+  ProductCategory(name: "Electrocics", code: "code"),
+  ProductCategory(name: "Furniture", code: "code"),
+  ProductCategory(name: "Appliances", code: "code"),
+  ProductCategory(name: "Footwear", code: "code"),
+  ProductCategory(name: "Accessories", code: "code"),
+  ProductCategory(name: "Entertainment", code: "code"),
+];
+
 List<ProductModel> dummyProductData = [
   ProductModel(
       id: "1",
@@ -81,9 +90,9 @@ class InventoryProvider with ChangeNotifier {
   File? photo;
   Map<ProductModel, int> openOrder = {};
   String? quantityError;
-  bool isProductFetched = true;
-  List<ProductModel> allProdcuts = dummyProductData; //[];
-  List<ProductCategory> categories = [];
+  bool isProductFetched = false;
+  List<ProductModel> allProdcuts = []; //dummyProductData;
+  List<ProductCategory> categories = []; //dummyCategories;
   Map<String, List<ProductModel>> productMap = {};
 
   void downloadProductsToCSV() {
@@ -456,25 +465,55 @@ class InventoryProvider with ChangeNotifier {
 //   }
 // }
 
+  void cleanDB(String businessID) async {
+    QuerySnapshot<Map<String, dynamic>> tempList = await _firestore
+        .collection("businesses")
+        .doc(businessID)
+        .collection("products")
+        .get();
+    int count = 0;
+    for (QueryDocumentSnapshot<Map<String, dynamic>> element in tempList.docs) {
+      if (element.data()["name"] == null ||
+          element.data()["quantity"] == null ||
+          element.data()["category"] == null ||
+          element.data()["unitPrice"] == null) {
+        count++;
+        await _firestore
+            .collection("businesses")
+            .doc(businessID)
+            .collection("products")
+            .doc(element.id)
+            .delete();
+      }
+    }
+    print("${count} items deleted");
+  }
+
   Future<void> fetchProducts(String businessID) async {
+    // cleanDB(businessID);
     if (!isProductFetched) {
       allProdcuts = [];
-      QuerySnapshot<Map<String, dynamic>> tempList = await _firestore
-          .collection('businesses')
-          .doc(businessID)
-          .collection("products")
-          .get();
+      try {
+        QuerySnapshot<Map<String, dynamic>> tempList = await _firestore
+            .collection('businesses')
+            .doc(businessID)
+            .collection("products")
+            .get();
 
-      for (QueryDocumentSnapshot<Map<String, dynamic>> element
-          in tempList.docs) {
-        allProdcuts.add(ProductModel(
-            id: element.id,
-            image: element.data()["image"],
-            name: element.data()["name"],
-            quantity: element.data()["quantity"],
-            category: element.data()["category"],
-            unitPrice: element.data()["unitPrice"]));
+        for (QueryDocumentSnapshot<Map<String, dynamic>> element
+            in tempList.docs) {
+          allProdcuts.add(ProductModel(
+              id: element.id,
+              image: element.data()["image"],
+              name: element.data()["name"],
+              quantity: element.data()["quantity"],
+              category: element.data()["category"],
+              unitPrice: element.data()["unitPrice"]));
+        }
+      } catch (e) {
+        print(e);
       }
+
       isProductFetched = true;
       notifyListeners();
       await getCategories(businessID);
@@ -483,6 +522,7 @@ class InventoryProvider with ChangeNotifier {
 
   Future<void> updateProduct(
       ProductModel updatedProduct, String businessID) async {
+    print(updatedProduct);
     try {
       await _firestore
           .collection('businesses')

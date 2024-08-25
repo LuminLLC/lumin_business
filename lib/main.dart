@@ -73,7 +73,7 @@ class LuminBusiness extends StatelessWidget {
         "/platform": (context) => HomePage(),
         "/sign-in": (context) => LoginScreen(),
         "/sign-up": (context) => SignupScreen(),
-        "/createBusiness": (context) => CreateBusinessScreen(),
+        
         "/uploadData": (context) => UploadData()
       },
       initialRoute: '/sign-in',

@@ -1,13 +1,18 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:lumin_business/common/lumin_utll.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
+import 'package:lumin_business/modules/general_platform/app_state.dart';
 import 'package:lumin_business/modules/inventory/app_styles.dart';
 import 'package:lumin_business/modules/login/app_colors.dart';
 import 'package:lumin_business/modules/login/app_icons.dart';
-import 'package:lumin_business/modules/login/lumin_auth_provider.dart';
+import 'package:lumin_business/modules/user_and_busness/lumin_user.dart';
 import 'package:provider/provider.dart';
 
 class CreateBusinessScreen extends StatefulWidget {
-  const CreateBusinessScreen({Key? key}) : super(key: key);
+  final String userID;
+  const CreateBusinessScreen({Key? key, required this.userID})
+      : super(key: key);
 
   @override
   State<CreateBusinessScreen> createState() => _CreateBusinessScreenState();
@@ -15,17 +20,18 @@ class CreateBusinessScreen extends StatefulWidget {
 
 class _CreateBusinessScreenState extends State<CreateBusinessScreen> {
   final SizeAndSpacing sp = SizeAndSpacing();
-
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
-  bool obscureText = true;
-  String? _emailError;
-  String? _passwordError;
-  String? _confirmPasswordError;
+  late TextEditingController businessName;
+  String? selectedBusinessType;
+  late TextEditingController phoneNumber;
+  late TextEditingController address;
+  late TextEditingController hearAboutUs;
+  String? _businessNameError;
+  String? _selectedBusinessTypeError;
+  String? _phoneNumberError;
+  String? _addressError;
   String? signInError;
   bool formSubmitted = false;
+
   final List<String> businessTypes = [
     'Retail',
     'Wholesale',
@@ -33,26 +39,30 @@ class _CreateBusinessScreenState extends State<CreateBusinessScreen> {
     'Manufacturing',
     'Other'
   ];
-  String? selectedBusinessType;
+
+  @override
+  void initState() {
+    super.initState();
+    businessName = TextEditingController();
+    phoneNumber = TextEditingController();
+    address = TextEditingController();
+    hearAboutUs = TextEditingController();
+  }
 
   @override
   void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
+    businessName.dispose();
+    phoneNumber.dispose();
+    address.dispose();
+    selectedBusinessType = null;
+    hearAboutUs.dispose();
     super.dispose();
   }
 
-  bool _validateEmail() {
-    if (_emailController.text.isEmpty) {
+  bool _validateBusinessName() {
+    if (businessName.text.isEmpty) {
       setState(() {
-        _emailError = 'Please enter your email';
-      });
-      return false;
-    }
-    final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
-    if (!emailRegex.hasMatch(_emailController.text)) {
-      setState(() {
-        _emailError = 'Please enter a valid email';
+        _businessNameError = 'Please enter your business name';
       });
       return false;
     }
@@ -60,35 +70,41 @@ class _CreateBusinessScreenState extends State<CreateBusinessScreen> {
   }
 
   // Password validation
-  bool _validatePassword() {
-    if (_passwordController.text.isEmpty) {
+  bool _validateBusinessType() {
+    if (selectedBusinessType == null) {
       setState(() {
-        _passwordError = 'Please enter your password';
-      });
-      return false;
-    }
-    if (_passwordController.text.length < 6) {
-      setState(() {
-        _passwordError = 'Password must be at least 6 characters long';
+        _selectedBusinessTypeError = 'Please select a business type';
       });
       return false;
     }
     return true;
   }
 
-  bool _validateConfirmPassword() {
-    if (_confirmPasswordController.text.isEmpty) {
+  bool validatePhoneNumber() {
+    String phoneNumberText = phoneNumber.text;
+
+    // Updated regex to handle the format with dashes
+    final RegExp phoneRegex = RegExp(r'^\d{3}-\d{3}-\d{4}$');
+
+    print(phoneNumberText);
+    if (phoneRegex.hasMatch(phoneNumberText)) {
+      return true;
+    } else {
       setState(() {
-        _confirmPasswordError = 'Please confirm your password';
+        _phoneNumberError = "Enter a valid number";
       });
       return false;
     }
-    if (_confirmPasswordController.text != _passwordController.text) {
+  }
+
+  bool _validateAddress() {
+    if (address.text.isEmpty) {
       setState(() {
-        _confirmPasswordError = 'Passwords do not match';
+        _addressError = 'Please enter your address';
       });
       return false;
     }
+
     return true;
   }
 
@@ -142,20 +158,20 @@ class _CreateBusinessScreenState extends State<CreateBusinessScreen> {
                   ),
                   child: TextFormField(
                     onChanged: (value) {
-                      if (_emailError != null) {
+                      if (_businessNameError != null) {
                         setState(() {
-                          _emailError = null;
+                          _businessNameError = null;
                         });
                       }
                     },
-                    controller: _emailController,
+                    controller: businessName,
                     style: ralewayStyle.copyWith(
                       fontWeight: FontWeight.w400,
                       color: AppColors.blueDarkColor,
                       fontSize: 12.0,
                     ),
                     decoration: InputDecoration(
-                      errorText: _emailError,
+                      errorText: _businessNameError,
                       border: InputBorder.none,
                       prefixIcon: IconButton(
                         onPressed: () {},
@@ -199,6 +215,11 @@ class _CreateBusinessScreenState extends State<CreateBusinessScreen> {
                     ),
                     value: selectedBusinessType,
                     onChanged: (newValue) {
+                      if (_selectedBusinessTypeError != null) {
+                        setState(() {
+                          _selectedBusinessTypeError = null;
+                        });
+                      }
                       setState(() {
                         selectedBusinessType = newValue;
                       });
@@ -231,66 +252,6 @@ class _CreateBusinessScreenState extends State<CreateBusinessScreen> {
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0),
                   child: Text(
-                    'Business Emal',
-                    style: ralewayStyle.copyWith(
-                      fontSize: 12.0,
-                      color: AppColors.blueDarkColor,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 6.0),
-                Container(
-                  height: 50.0,
-                  width: width,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16.0),
-                    color: AppColors.whiteColor,
-                  ),
-                  child: TextFormField(
-                    controller: _confirmPasswordController,
-                    onChanged: (value) {
-                      if (_confirmPasswordError != null) {
-                        setState(() {
-                          _confirmPasswordError = null;
-                        });
-                      }
-                    },
-                    style: ralewayStyle.copyWith(
-                      fontWeight: FontWeight.w400,
-                      color: AppColors.blueDarkColor,
-                      fontSize: 12.0,
-                    ),
-                    obscureText: obscureText,
-                    decoration: InputDecoration(
-                      errorText: _confirmPasswordError,
-                      border: InputBorder.none,
-                      suffixIcon: IconButton(
-                        onPressed: () {
-                          setState(() {
-                            obscureText = !obscureText;
-                          });
-                        },
-                        icon: Image.asset(AppIcons.eyeIcon),
-                      ),
-                      prefixIcon: IconButton(
-                        onPressed: () {},
-                        icon: Image.asset(AppIcons.lockIcon),
-                      ),
-                      contentPadding: const EdgeInsets.only(top: 16.0),
-                      hintText: 'Enter Business Email',
-                      hintStyle: ralewayStyle.copyWith(
-                        fontWeight: FontWeight.w400,
-                        color: AppColors.blueDarkColor.withOpacity(0.5),
-                        fontSize: 12.0,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: height * 0.014),
-                Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
-                  child: Text(
                     'Phone Number',
                     style: ralewayStyle.copyWith(
                       fontSize: 12.0,
@@ -308,11 +269,12 @@ class _CreateBusinessScreenState extends State<CreateBusinessScreen> {
                     color: AppColors.whiteColor,
                   ),
                   child: TextFormField(
-                    controller: _confirmPasswordController,
+                    controller: phoneNumber,
+                    inputFormatters: [PhoneNumberInputFormatter()],
                     onChanged: (value) {
-                      if (_confirmPasswordError != null) {
+                      if (_phoneNumberError != null) {
                         setState(() {
-                          _confirmPasswordError = null;
+                          _phoneNumberError = null;
                         });
                       }
                     },
@@ -321,24 +283,15 @@ class _CreateBusinessScreenState extends State<CreateBusinessScreen> {
                       color: AppColors.blueDarkColor,
                       fontSize: 12.0,
                     ),
-                    obscureText: obscureText,
                     decoration: InputDecoration(
-                      errorText: _confirmPasswordError,
+                      errorText: _phoneNumberError,
                       border: InputBorder.none,
-                      suffixIcon: IconButton(
-                        onPressed: () {
-                          setState(() {
-                            obscureText = !obscureText;
-                          });
-                        },
-                        icon: Image.asset(AppIcons.eyeIcon),
-                      ),
                       prefixIcon: IconButton(
                         onPressed: () {},
                         icon: Image.asset(AppIcons.lockIcon),
                       ),
                       contentPadding: const EdgeInsets.only(top: 16.0),
-                      hintText: 'Enter Phone Number',
+                      hintText: 'Enter Business Phone Number',
                       hintStyle: ralewayStyle.copyWith(
                         fontWeight: FontWeight.w400,
                         color: AppColors.blueDarkColor.withOpacity(0.5),
@@ -351,7 +304,7 @@ class _CreateBusinessScreenState extends State<CreateBusinessScreen> {
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0),
                   child: Text(
-                    'Business Address',
+                    'Address',
                     style: ralewayStyle.copyWith(
                       fontSize: 12.0,
                       color: AppColors.blueDarkColor,
@@ -368,11 +321,11 @@ class _CreateBusinessScreenState extends State<CreateBusinessScreen> {
                     color: AppColors.whiteColor,
                   ),
                   child: TextFormField(
-                    controller: _confirmPasswordController,
+                    controller: address,
                     onChanged: (value) {
-                      if (_confirmPasswordError != null) {
+                      if (_addressError != null) {
                         setState(() {
-                          _confirmPasswordError = null;
+                          _addressError = null;
                         });
                       }
                     },
@@ -381,18 +334,9 @@ class _CreateBusinessScreenState extends State<CreateBusinessScreen> {
                       color: AppColors.blueDarkColor,
                       fontSize: 12.0,
                     ),
-                    obscureText: obscureText,
                     decoration: InputDecoration(
-                      errorText: _confirmPasswordError,
+                      errorText: _addressError,
                       border: InputBorder.none,
-                      suffixIcon: IconButton(
-                        onPressed: () {
-                          setState(() {
-                            obscureText = !obscureText;
-                          });
-                        },
-                        icon: Image.asset(AppIcons.eyeIcon),
-                      ),
                       prefixIcon: IconButton(
                         onPressed: () {},
                         icon: Image.asset(AppIcons.lockIcon),
@@ -407,42 +351,110 @@ class _CreateBusinessScreenState extends State<CreateBusinessScreen> {
                     ),
                   ),
                 ),
+                SizedBox(height: height * 0.014),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: Text(
+                    'How did you hear about Lumin Business?',
+                    style: ralewayStyle.copyWith(
+                      fontSize: 12.0,
+                      color: AppColors.blueDarkColor,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 6.0),
+                Container(
+                  height: 50.0,
+                  width: width,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16.0),
+                    color: AppColors.whiteColor,
+                  ),
+                  child: DropdownButtonFormField<String>(
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      contentPadding:
+                          const EdgeInsets.symmetric(horizontal: 16.0),
+                    ),
+                    value: selectedBusinessType,
+                    onChanged: (newValue) {
+                      if (_selectedBusinessTypeError != null) {
+                        setState(() {
+                          _selectedBusinessTypeError = null;
+                        });
+                      }
+                      setState(() {
+                        selectedBusinessType = newValue;
+                      });
+                    },
+                    items: businessTypes
+                        .map<DropdownMenuItem<String>>((String type) {
+                      return DropdownMenuItem<String>(
+                        value: type,
+                        child: Text(
+                          type,
+                          style: ralewayStyle.copyWith(
+                            fontWeight: FontWeight.w400,
+                            color: AppColors.blueDarkColor,
+                            fontSize: 12.0,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                    hint: Text(
+                      'Select Business Type',
+                      style: ralewayStyle.copyWith(
+                        fontWeight: FontWeight.w400,
+                        color: AppColors.blueDarkColor.withOpacity(0.5),
+                        fontSize: 12.0,
+                      ),
+                    ),
+                  ),
+                ),
                 SizedBox(height: height * 0.05),
                 Material(
                   color: Colors.transparent,
-                  child: Consumer<LuminAuthProvider>(
-                    builder: (context, luminAuth, _) => InkWell(
+                  child: Consumer<AppState>(
+                    builder: (context, appState, _) => InkWell(
                       onTap: () async {
-                        Navigator.pushNamed(context, "/uploadData");
-                        // bool isEmailValid = _validateEmail();
-                        // bool isPasswordValid = _validatePassword();
-                        // bool isConfirmPasswordValid =
-                        //     _validateConfirmPassword();
-                        // if (isPasswordValid &&
-                        //     isEmailValid &&
-                        //     isConfirmPasswordValid) {
-                        //   setState(() {
-                        //     formSubmitted = true;
-                        //   });
-                        //   await luminAuth
-                        //       .createUserWithEmail(_emailController.text,
-                        //           _passwordController.text)
-                        //       .then((response) {
-                        //     setState(() {
-                        //       formSubmitted = false;
-                        //     });
-                        //     bool isError = response.runtimeType == String;
-                        //     if (isError) {
-                        //       setState(() {
-                        //         signInError = response;
-                        //       });
-                        //     } else {
-                        //       print(response.user!.uid);
-                        //       // Navigator.pushReplacementNamed(
-                        //       //     context, "/platform");
-                        //     }
-                        //   });
-                        // }
+                        print("called");
+                        // Navigator.pushNamed(context, "/uploadData");
+                        bool isBusinessNameValid = _validateBusinessName();
+                        bool isBusinessTypeValid = _validateBusinessType();
+                        bool isAddressValid = _validateAddress();
+                        bool isPhoneNumberValid = validatePhoneNumber();
+                        if (isBusinessTypeValid &&
+                            isBusinessNameValid &&
+                            isAddressValid &&
+                            isPhoneNumberValid) {
+                          print("here");
+                          setState(() {
+                            formSubmitted = true;
+                          });
+                          await appState
+                              .setBusiness(
+                                  user: widget.userID,
+                                  businessName: businessName.text,
+                                  contact: phoneNumber.text,
+                                  businessType: selectedBusinessType!,
+                                  address: address.text,
+                                  ref: hearAboutUs.text)
+                              .then((response) {
+                            setState(() {
+                              formSubmitted = false;
+                            });
+                            bool isError = response.runtimeType == String;
+                            if (isError) {
+                              setState(() {
+                                signInError = response;
+                              });
+                            } else {
+                              Navigator.pushReplacementNamed(
+                                  context, "/platform");
+                            }
+                          });
+                        }
                       },
                       borderRadius: BorderRadius.circular(16.0),
                       child: Ink(
@@ -473,20 +485,7 @@ class _CreateBusinessScreenState extends State<CreateBusinessScreen> {
                   ),
                 ),
                 SizedBox(
-                  height: sp.getHeight(25, height, width),
-                ),
-                Center(
-                  child: InkWell(
-                    onTap: () {},
-                    child: Text("I'll do this later",
-                        style: ralewayStyle.copyWith(
-                          color: AppColors.blueDarkColor,
-                          fontWeight: FontWeight.normal,
-                        )),
-                  ),
-                ),
-                SizedBox(
-                  height: sp.getHeight(50, height, width),
+                  height: sp.getHeight(75, height, width),
                 ),
                 signInError == null
                     ? SizedBox()

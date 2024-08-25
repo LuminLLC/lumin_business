@@ -7,7 +7,7 @@ class CustomerModel {
   String email;
   String phoneNumber;
   String address;
-  List<LuminOrder> orders;
+  List<LuminOrder>? orders;
 
   // Constructor
   CustomerModel(
@@ -16,7 +16,7 @@ class CustomerModel {
       required this.address,
       required this.email,
       required this.phoneNumber,
-      required this.orders});
+      this.orders});
 
   // Method to convert a Customer object into a map
   Map<String, dynamic> toMap() {
@@ -25,9 +25,8 @@ class CustomerModel {
       'name': name,
       'email': email,
       'phoneNumber': phoneNumber,
-      'address': address
-      // Assuming 'orders' is a List<Order> and Order has a toMap method
-      // 'orders': orders.map((order) => order.toMap()).toList(),
+      'address': address, 
+      'orders': orders?.map((order) => order.toMap()).toList(),
     };
   }
 
