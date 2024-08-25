@@ -120,6 +120,12 @@ class SupplierProvider with ChangeNotifier {
     "Address"
   ];
 
+  void clearData() {
+    isSuppliersFetched = false;
+    allSuppliers = [];
+    notifyListeners();
+  }
+
   void uploadSuppliersFromCSV() async {
     try {
       List<SupplierModel> suppliers =

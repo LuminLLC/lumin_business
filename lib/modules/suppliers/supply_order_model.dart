@@ -1,4 +1,3 @@
-import 'package:lumin_business/modules/inventory/product_model.dart';
 
 enum OrderStatus { Pending, Delivered, Cancelled }
 

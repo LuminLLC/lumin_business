@@ -88,6 +88,12 @@ class CustomerProvider with ChangeNotifier {
     "address"
   ];
 
+  void clearData() {
+    isCustomersFetched = false;
+    allCustomers = [];
+    notifyListeners();
+  }
+
   void uploadCustomersFromCSV() async {
     try {
       List<CustomerModel> customers =

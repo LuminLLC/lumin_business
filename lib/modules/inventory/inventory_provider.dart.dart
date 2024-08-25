@@ -102,6 +102,14 @@ class InventoryProvider with ChangeNotifier {
     "Unit Price",
   ];
 
+  void clearData() {
+    isProductFetched = false;
+    openOrder.clear();
+    allProdcuts.clear();
+    categories.clear();
+    notifyListeners();
+  }
+
   void uploadProductsFromCSV() async {
     try {
       List<ProductModel> products = await CSVModule.uploadFromCSV<ProductModel>(
