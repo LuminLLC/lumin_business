@@ -36,10 +36,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
 
     return Consumer2<CustomerProvider, AppState>(
         builder: (context, customerProvider, appState, _) {
-      if (appState.businessInfo != null) {
-        Provider.of<CustomerProvider>(context, listen: false)
-            .fetchCustomers(appState.businessInfo!.businessId);
-      }
+     
       return Container(
         margin: EdgeInsets.all(
             sp.getWidth(sp.isDesktop(screenWidth) ? 10 : 0, screenWidth)),

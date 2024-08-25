@@ -276,7 +276,7 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
                     ),
                   )
                 : SingleChildScrollView(
-                  primary: false,
+                    primary: false,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -405,6 +405,7 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
               transactionTypeError = null;
             });
           }
+          print(value);
           setState(() {
             selectedTransactionType = value;
           });
@@ -800,7 +801,9 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
               description: descriptionController.text,
               amount: CurrencyInputFormatter().getAmount(amountController.text),
               date: dateController.text,
-              type: TransactionType.income,
+              type: selectedTransactionType == "Income"
+                  ? TransactionType.income
+                  : TransactionType.expense,
             ),
             businessId,
           );
@@ -867,14 +870,13 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
           final supplierProvider = provider as SupplierProvider;
           await supplierProvider.addSupplier(
             SupplierModel(
-              id: uuid.v1(),
-              name: customerController.text,
-              address: addressController.text,
-              email: emailController.text,
-              contactNumber: phoneNumberController.text,
-              orders: [],
-              products: []
-            ),
+                id: uuid.v1(),
+                name: customerController.text,
+                address: addressController.text,
+                email: emailController.text,
+                contactNumber: phoneNumberController.text,
+                orders: [],
+                products: []),
             businessId,
           );
           resetControllers();

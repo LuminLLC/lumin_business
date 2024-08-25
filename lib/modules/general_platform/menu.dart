@@ -197,7 +197,7 @@ class _MenuState extends State<Menu> {
                                       appState.user!.name == "" ||
                                       appState.user!.access == null
                                   ? ""
-                                  : "${appState.user!.access}",
+                                  : "${appState.user!.access == "admin" ? "Admin Account" : "Storefront"}",
                               style:
                                   textTheme.textTheme(screenWidth).labelSmall!)
                         ],

@@ -73,6 +73,22 @@ class AccountingProvider with ChangeNotifier {
   String? newTransactionType;
   List<AccountingModel> allTransactions = []; //dummyTransactionData;
 
+  double get netIncome {
+    double netIncome = 0;
+    if (allTransactions.isEmpty) {
+      return netIncome;
+    } else {
+      for (AccountingModel transaction in allTransactions) {
+        if (transaction.type == TransactionType.income) {
+          netIncome += transaction.amount;
+        } else {
+          netIncome -= transaction.amount;
+        }
+      }
+    }
+    return netIncome;
+  }
+
   void downloadAccountingToCSV() {
     CSVModule.downloadToCSV<AccountingModel>(
         allTransactions,

@@ -38,10 +38,6 @@ class _AccountingScreenState extends State<AccountingScreen> {
 
     return Consumer2<AccountingProvider, AppState>(
         builder: (context, accountingProvider, appState, _) {
-      if (appState.businessInfo != null) {
-        Provider.of<AccountingProvider>(context, listen: false)
-            .fetchTransactions(appState.businessInfo!.businessId);
-      }
       return Container(
         margin: EdgeInsets.all(
             sp.getWidth(sp.isDesktop(screenWidth) ? 10 : 0, screenWidth)),
@@ -91,7 +87,7 @@ class _AccountingScreenState extends State<AccountingScreen> {
                             color: AppColor.black,
                           ),
                           onPressed: () async {
-                           accountingProvider.downloadAccountingToCSV();
+                            accountingProvider.downloadAccountingToCSV();
                             // List<String> products = [];
                             // for (AccountingModel a
                             //     in accountingProvider.allTransactions) {
