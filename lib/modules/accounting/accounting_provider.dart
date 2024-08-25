@@ -82,6 +82,12 @@ class AccountingProvider with ChangeNotifier {
     "Purchase Order ID"
   ];
 
+  void clearData() {
+    isAccountingFetched = false;
+    allTransactions = [];
+    notifyListeners();
+  }
+
   void uploadTransactionsFromCSV() async {
     try {
       List<AccountingModel> transactions =

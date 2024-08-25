@@ -1,11 +1,8 @@
-import 'package:calendar_date_picker2/calendar_date_picker2.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lumin_business/common/app_text_theme.dart';
 import 'package:lumin_business/common/lumin_utll.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
-import 'package:lumin_business/modules/accounting/accounting_provider.dart';
 import 'package:lumin_business/modules/accounting/accounting_model.dart';
 import 'package:lumin_business/modules/customers/customer_model.dart';
 import 'package:lumin_business/modules/customers/customer_provider.dart';
@@ -516,7 +513,7 @@ class _ViewRecordState<T extends ChangeNotifier> extends State<ViewRecord<T>> {
             setState(() {
               selectedProductCategory = value;
               newCategory = value!.name;
-              hasChanges = !(value!.name == p.category);
+              hasChanges = !(value.name == p.category);
             });
           },
           items: categories

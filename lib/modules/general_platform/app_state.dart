@@ -17,6 +17,18 @@ class AppState with ChangeNotifier {
   LuminUser? user;
   int index = 0;
 
+  void masterClearData(BuildContext context) {
+    searchText = "";
+    businessInfo = null;
+    user = null;
+    index = 0;
+    Provider.of<AccountingProvider>(context, listen: false).clearData();
+    Provider.of<InventoryProvider>(context, listen: false).clearData();
+    Provider.of<CustomerProvider>(context, listen: false).clearData();
+    Provider.of<SupplierProvider>(context, listen: false).clearData();
+    notifyListeners();
+  }
+
   Future<String> _fetchBusinessID(String userID) async {
     DocumentSnapshot<Map<String, dynamic>> rawUser =
         await _firestore.collection("users").doc(userID).get();

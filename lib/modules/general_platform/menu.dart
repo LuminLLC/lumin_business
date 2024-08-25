@@ -5,7 +5,6 @@ import 'package:lumin_business/common/app_text_theme.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
 import 'package:lumin_business/modules/general_platform/menu_controller.dart';
-import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
 
 import 'package:provider/provider.dart';
 
@@ -228,12 +227,7 @@ class _MenuState extends State<Menu> {
                       setState(() {
                         isSigningOut = false;
                       });
-                      Provider.of<InventoryProvider>(context, listen: false)
-                          .openOrder
-                          .clear();
-                      Provider.of<InventoryProvider>(context, listen: false)
-                          .allProdcuts
-                          .clear();
+                      appState.masterClearData(context);
                       Navigator.pushReplacementNamed(context, "/sign-in");
                     });
                   }
