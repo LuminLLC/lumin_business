@@ -70,15 +70,15 @@ class LuminBusiness extends StatelessWidget {
                   titleSmall: TextStyle(color: Colors.white),
                   bodySmall: TextStyle(color: Colors.white),
                   labelSmall: TextStyle(color: Colors.white)))),
-      // routes: {
-      //   "/platform": (context) => HomePage(),
-      //   "/sign-in": (context) => LoginScreen(),
-      //   "/sign-up": (context) => SignupScreen(),
+      routes: {
+        "/platform": (context) => HomePage(),
+        "/sign-in": (context) => LoginScreen(),
+        "/sign-up": (context) => SignupScreen(),
         
-      //   "/uploadData": (context) => UploadData()
-      // },
-      // initialRoute: '/sign-in',
-      home: CreateBusinessScreen(userID: "userID")
+        "/uploadData": (context) => UploadData()
+      },
+      initialRoute: '/sign-in',
+   
     );
   }
 }
