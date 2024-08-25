@@ -420,7 +420,7 @@ class _CreateBusinessScreenState extends State<CreateBusinessScreen> {
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0),
                   child: Text(
-                    'Would you like to import your existing business data? (Optional)',
+                    'Would you like to import your existing business data? (Optional)  - Coming Soon!',
                     style: ralewayStyle.copyWith(
                       fontSize: 12.0,
                       color: AppColors.blueDarkColor,
@@ -591,49 +591,49 @@ class _CreateBusinessScreenState extends State<CreateBusinessScreen> {
       required double width}) {
     return InkWell(
       onTap: () async {
-        await showDialog(
-            context: context,
-            builder: (builder) {
-              return AlertDialog(
-                title: SizedBox(
-                  width: width * 0.4,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "CSV Guidelines",
-                        style: AppTextTheme().textTheme(width).displayMedium,
-                      ),
-                      Text(
-                        "Ensure that your CSV has the following headers",
-                        style: AppTextTheme().textTheme(width).bodyMedium,
-                      )
-                    ],
-                  ),
-                ),
-                content: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      for (String s in headers)
-                        ListTile(
-                          leading: Text("${headers.indexOf(s) + 1}"),
-                          title: Text(s),
-                        )
-                    ],
-                  ),
-                ),
-                actions: [
-                  TextButton.icon(
-                    onPressed: () {
-                      Navigator.pop(context);
-                      onTap();
-                    },
-                    label: Icon(Icons.east),
-                    icon: Text("Continue"),
-                  )
-                ],
-              );
-            });
+        // await showDialog(
+        //     context: context,
+        //     builder: (builder) {
+        //       return AlertDialog(
+        //         title: SizedBox(
+        //           width: width * 0.4,
+        //           child: Column(
+        //             crossAxisAlignment: CrossAxisAlignment.start,
+        //             children: [
+        //               Text(
+        //                 "CSV Guidelines",
+        //                 style: AppTextTheme().textTheme(width).displayMedium,
+        //               ),
+        //               Text(
+        //                 "Ensure that your CSV has the following headers",
+        //                 style: AppTextTheme().textTheme(width).bodyMedium,
+        //               )
+        //             ],
+        //           ),
+        //         ),
+        //         content: SingleChildScrollView(
+        //           child: Column(
+        //             children: [
+        //               for (String s in headers)
+        //                 ListTile(
+        //                   leading: Text("${headers.indexOf(s) + 1}"),
+        //                   title: Text(s),
+        //                 )
+        //             ],
+        //           ),
+        //         ),
+        //         actions: [
+        //           TextButton.icon(
+        //             onPressed: () {
+        //               Navigator.pop(context);
+        //               onTap();
+        //             },
+        //             label: Icon(Icons.east),
+        //             icon: Text("Continue"),
+        //           )
+        //         ],
+        //       );
+        //     });
       },
       //onTap,
       child: Column(
