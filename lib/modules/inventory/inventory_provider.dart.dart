@@ -81,14 +81,14 @@ List<ProductModel> dummyProductData = [
   ProductModel(
       id: "9",
       name: "Gaming Console",
-      quantity: 10,
+      quantity: 0,
       category: "Entertainment",
       unitCost: 10,
       unitPrice: 500.0),
   ProductModel(
       id: "10",
       name: "Water Bottle",
-      quantity: 200,
+      quantity: 5,
       category: "Accessories",
       unitCost: 10,
       unitPrice: 12.0),
