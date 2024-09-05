@@ -27,60 +27,70 @@ List<ProductModel> dummyProductData = [
       name: "Laptop",
       quantity: 15,
       category: "Electronics",
-      unitPrice: 1200.0),
+      unitPrice: 1200.0,
+      unitCost: 10),
   ProductModel(
       id: "2",
       name: "Smartphone",
       quantity: 30,
       category: "Electronics",
+      unitCost: 10,
       unitPrice: 800.0),
   ProductModel(
       id: "3",
       name: "Office Chair",
       quantity: 25,
       category: "Furniture",
+      unitCost: 10,
       unitPrice: 150.0),
   ProductModel(
       id: "4",
       name: "Coffee Maker",
       quantity: 40,
       category: "Appliances",
+      unitCost: 10,
       unitPrice: 60.0),
   ProductModel(
       id: "5",
       name: "Running Shoes",
       quantity: 50,
       category: "Footwear",
+      unitCost: 10,
       unitPrice: 85.0),
   ProductModel(
       id: "6",
       name: "Blender",
       quantity: 20,
       category: "Appliances",
+      unitCost: 10,
       unitPrice: 45.0),
   ProductModel(
       id: "7",
       name: "Wireless Mouse",
       quantity: 100,
       category: "Accessories",
+      unitCost: 10,
       unitPrice: 25.0),
   ProductModel(
       id: "8",
       name: "Desk Lamp",
       quantity: 70,
       category: "Furniture",
+      unitCost: 10,
       unitPrice: 35.0),
   ProductModel(
       id: "9",
       name: "Gaming Console",
       quantity: 10,
       category: "Entertainment",
+      unitCost: 10,
       unitPrice: 500.0),
   ProductModel(
       id: "10",
       name: "Water Bottle",
       quantity: 200,
       category: "Accessories",
+      unitCost: 10,
       unitPrice: 12.0),
 ];
 
@@ -90,9 +100,9 @@ class InventoryProvider with ChangeNotifier {
   File? photo;
   Map<ProductModel, int> openOrder = {};
   String? quantityError;
-  bool isProductFetched = false;
-  List<ProductModel> allProdcuts = []; //dummyProductData;
-  List<ProductCategory> categories = []; //dummyCategories;
+  bool isProductFetched = true;
+  List<ProductModel> allProdcuts = dummyProductData;
+  List<ProductCategory> categories = dummyCategories;
   Map<String, List<ProductModel>> productMap = {};
   List<String> productHeaders = [
     "ID",
@@ -122,15 +132,28 @@ class InventoryProvider with ChangeNotifier {
     }
   }
 
+  double get totalProuctCost {
+    double total = 0;
+    if (allProdcuts.isEmpty) {
+      return total;
+    } else {
+      for (ProductModel p in allProdcuts) {
+        total += p.unitCost;
+      }
+      return total;
+    }
+  }
+
   void downloadProductsToCSV() {
     CSVModule.downloadToCSV<ProductModel>(
         allProdcuts,
-        ["ID", "Name", "Quantity", "Category", "Unit Price"],
+        ["ID", "Name", "Quantity", "Category", "Unit Cost", "Unit Price"],
         (product) => [
               product.id,
               product.name,
               product.quantity,
               product.category,
+              product.unitCost,
               product.unitPrice
             ],
         "Products");
@@ -534,6 +557,7 @@ class InventoryProvider with ChangeNotifier {
               image: element.data()["image"],
               name: element.data()["name"],
               quantity: element.data()["quantity"],
+              unitCost: element.data()["unitCost"] ?? 0,
               category: element.data()["category"],
               unitPrice: element.data()["unitPrice"]));
         }
