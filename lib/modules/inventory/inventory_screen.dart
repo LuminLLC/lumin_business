@@ -6,6 +6,7 @@ import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
 import 'package:lumin_business/modules/general_platform/header_widget.dart';
 import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
+import 'package:lumin_business/modules/order_management/order_controller.dart';
 import 'package:lumin_business/widgets/add_record.dart';
 
 import 'package:lumin_business/widgets/general_list_tile.dart';
@@ -36,8 +37,8 @@ class _InventoryScreenState extends State<InventoryScreen> {
     final double screenHeight = MediaQuery.of(context).size.height;
     final double screenWidth = MediaQuery.of(context).size.width;
 
-    return Consumer2<InventoryProvider, AppState>(
-        builder: (context, inventoryProvider, appState, _) {
+    return Consumer3<InventoryProvider, OrderProvider, AppState>(
+        builder: (context, inventoryProvider, orderProvider, appState, _) {
       return Container(
         margin: EdgeInsets.all(
             sp.getWidth(sp.isDesktop(screenWidth) ? 10 : 0, screenWidth)),
@@ -58,14 +59,14 @@ class _InventoryScreenState extends State<InventoryScreen> {
             if (sp.isDesktop(screenWidth))
               HeaderWidget(
                 actions: [
-                  inventoryProvider.fetchOpenOrder().length != 0
+                  orderProvider.fetchOpenOrder().length != 0
                       ? IconButton(
                           onPressed: () {
                             showDialog(
                                 context: context,
                                 builder: (context) {
                                   return OpenOrder(
-                                      inventoryProvider: inventoryProvider,
+                                      orderProvider: orderProvider,
                                       appState: appState);
                                 });
                           },

@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:lumin_business/common/lumin_utll.dart';
+import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
 import 'package:lumin_business/modules/inventory/product_model.dart';
-import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
+import 'package:lumin_business/modules/order_management/order_controller.dart';
 
 class OpenOrder extends StatefulWidget {
-  final InventoryProvider inventoryProvider;
+  final OrderProvider orderProvider;
   final AppState appState;
   const OpenOrder(
-      {Key? key, required this.inventoryProvider, required this.appState})
+      {Key? key, required this.orderProvider, required this.appState})
       : super(key: key);
 
   @override
@@ -15,10 +17,12 @@ class OpenOrder extends StatefulWidget {
 }
 
 class _OpenOrderState extends State<OpenOrder> {
+  final SizeAndSpacing sp = SizeAndSpacing();
   bool isCompletedOrderClicked = false;
 
   @override
   Widget build(BuildContext context) {
+    final double width = MediaQuery.of(context).size.width;
     return AlertDialog(
       title: Text("Open Order"),
       content: SingleChildScrollView(
@@ -30,27 +34,38 @@ class _OpenOrderState extends State<OpenOrder> {
             : Column(
                 children: [
                   for (ProductModel p
-                      in widget.inventoryProvider.fetchOpenOrder().keys)
-                    ListTile(
-                      title: Text(p.name),
-                      subtitle: Text(
-                          "Quantity: ${widget.inventoryProvider.fetchOpenOrder()[p]}"),
-                      trailing: Text(
-                          "GHS${p.unitPrice * widget.inventoryProvider.fetchOpenOrder()[p]!}"),
+                      in widget.orderProvider.fetchOpenOrder().keys)
+                    SizedBox(
+                      width: width * 0.3,
+                      child: ListTile(
+                        title: Text(p.name),
+                        subtitle: Text(
+                            "Quantity: ${widget.orderProvider.fetchOpenOrder()[p]}"),
+                        trailing: Text(LuminUtll.formatCurrency(p.unitPrice *
+                            widget.orderProvider.fetchOpenOrder()[p]!)),
+                      ),
                     ),
-                  VerticalDivider(),
-                  ListTile(
-                    title: Text("Total"),
-                    trailing: Text(
-                        "GHS${widget.inventoryProvider.fetchOpenOrder().keys.map((e) => e.unitPrice * widget.inventoryProvider.fetchOpenOrder()[e]!).reduce((value, element) => value + element)}"),
+                  Divider(
+                    color: Colors.white,
                   ),
+                  ListTile(
+                      title: Text("Total"),
+                      trailing: Text(
+                        LuminUtll.formatCurrency(widget.orderProvider
+                            .fetchOpenOrder()
+                            .keys
+                            .map((e) =>
+                                e.unitPrice *
+                                widget.orderProvider.fetchOpenOrder()[e]!)
+                            .reduce((value, element) => value + element)),
+                      )),
                 ],
               ),
       ),
       actions: [
         TextButton(
           onPressed: () {
-            widget.inventoryProvider
+            widget.orderProvider
                 .clearOpenOrder(widget.appState.businessInfo!.businessId);
             Navigator.pop(context);
           },
@@ -66,8 +81,9 @@ class _OpenOrderState extends State<OpenOrder> {
                   setState(() {
                     isCompletedOrderClicked = true;
                   });
-                  widget.inventoryProvider
-                      .completeOrder(widget.appState.businessInfo!.businessId)
+                  widget.orderProvider
+                      .completeOrder(
+                          widget.appState.businessInfo!.businessId, context)
                       .whenComplete(() {
                     Navigator.pop(context);
                   });

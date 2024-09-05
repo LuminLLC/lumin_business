@@ -162,11 +162,8 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
       });
     }
 
-    if (costController.text.isEmpty || costController.text == "GHS  0.00") {
-      costPass = false;
-      setState(() {
-        costError = "Cost can't be zero";
-      });
+    if (costController.text.isEmpty) {
+      costController.text = "0";
     }
 
     if (amountController.text.isEmpty || amountController.text == "0") {

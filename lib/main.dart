@@ -8,17 +8,17 @@ import 'package:lumin_business/modules/accounting/accounting_provider.dart';
 import 'package:lumin_business/modules/customers/customer_provider.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
 import 'package:lumin_business/modules/general_platform/menu_controller.dart';
-import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart'; 
+import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
 import 'package:lumin_business/modules/login/lumin_auth_provider.dart';
 import 'package:lumin_business/modules/login/login_screen.dart';
 import 'package:lumin_business/modules/login/signup_screen.dart';
 import 'package:lumin_business/modules/login/uplaod_data.dart';
-import 'package:lumin_business/modules/suppliers/supplier_provider.dart'; 
+import 'package:lumin_business/modules/order_management/order_controller.dart';
+import 'package:lumin_business/modules/suppliers/supplier_provider.dart';
 import 'package:provider/provider.dart';
 import 'modules/general_platform/home_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,6 +42,7 @@ Future<void> main() async {
         create: (context) => PlatformMenuController()),
     ChangeNotifierProvider<InventoryProvider>(
         create: (context) => InventoryProvider()),
+    ChangeNotifierProvider<OrderProvider>(create: (context) => OrderProvider()),
   ], child: BetterFeedback(child: LuminBusiness())));
 }
 
@@ -76,11 +77,9 @@ class LuminBusiness extends StatelessWidget {
         "/platform": (context) => HomePage(),
         "/sign-in": (context) => LoginScreen(),
         "/sign-up": (context) => SignupScreen(),
-        
         "/uploadData": (context) => UploadData()
       },
       initialRoute: '/sign-in',
-   
     );
   }
 }

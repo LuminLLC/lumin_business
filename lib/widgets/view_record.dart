@@ -168,11 +168,11 @@ class _ViewRecordState<T extends ChangeNotifier> extends State<ViewRecord<T>> {
       });
     }
 
-    if (costController.text.isEmpty || costController.text == "GHS  0.00") {
-      costPass = false;
-      setState(() {
-        costError = "Cost can't be zero";
-      });
+  
+    if (costController.text.isEmpty) {
+      
+      print(costController.text);
+      costController.text = "0";
     }
 
     if (amountController.text.isEmpty || amountController.text == "0") {
@@ -908,6 +908,7 @@ class _ViewRecordState<T extends ChangeNotifier> extends State<ViewRecord<T>> {
           });
           final inventoryProvider = provider as InventoryProvider;
           final p = widget.record as ProductModel;
+          print(CurrencyInputFormatter().getAmount(costController.text));
           ProductModel updatedProduct = ProductModel(
             id: p.id,
             name: nameController.text,
