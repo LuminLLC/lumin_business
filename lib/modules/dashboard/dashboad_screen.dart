@@ -66,8 +66,8 @@ class _DashboadScreenState extends State<DashboadScreen> {
                       icon: Icons.point_of_sale),
                   StatCardWidget(
                       statName: "Total Cost of Product",
-                      value:
-                          inventoryProvider.calculateCriticalLevel().toString(),
+                      value: LuminUtll.formatCurrency(
+                          inventoryProvider.totalProuctCost),
                       icon: Icons.warning),
                   StatCardWidget(
                       statName: "Stock Levels",

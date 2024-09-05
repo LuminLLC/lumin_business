@@ -2,6 +2,7 @@ import 'package:feedback/feedback.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/accounting/accounting_provider.dart';
 import 'package:lumin_business/modules/customers/customer_provider.dart';
@@ -18,9 +19,12 @@ import 'modules/general_platform/home_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
+  await Hive.initFlutter();
+  await Hive.openBox('local_storage');
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

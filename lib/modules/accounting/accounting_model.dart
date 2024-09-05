@@ -1,4 +1,6 @@
+
 enum TransactionType { income, expense }
+
 
 class AccountingModel {
   final String id;

@@ -60,11 +60,13 @@ class _ViewRecordState<T extends ChangeNotifier> extends State<ViewRecord<T>> {
   late TextEditingController dateController;
   late TextEditingController emailController;
   late TextEditingController phoneNumberController;
+  late TextEditingController costController;
   String categoryCode = "";
   String? priceError;
   String? addressError;
   String? phoneError;
   String? emailError;
+  String? costError;
 
   @override
   void initState() {
@@ -76,6 +78,8 @@ class _ViewRecordState<T extends ChangeNotifier> extends State<ViewRecord<T>> {
         amountController = TextEditingController(text: p.quantity.toString());
         priceController =
             TextEditingController(text: LuminUtll.formatCurrency(p.unitPrice));
+        costController =
+            TextEditingController(text: LuminUtll.formatCurrency(p.unitCost));
         break;
       case RecordType.supplier:
         final s = widget.record as SupplierModel;
@@ -102,6 +106,7 @@ class _ViewRecordState<T extends ChangeNotifier> extends State<ViewRecord<T>> {
         nameController.dispose();
         amountController.dispose();
         priceController.dispose();
+        costController.dispose();
         break;
       case RecordType.supplier:
         customerController.dispose();
@@ -154,11 +159,19 @@ class _ViewRecordState<T extends ChangeNotifier> extends State<ViewRecord<T>> {
     bool categoryPass = true;
     bool quantityPass = true;
     bool pricePass = true;
+    bool costPass = true;
 
     if (priceController.text.isEmpty || priceController.text == "GHS  0.00") {
       pricePass = false;
       setState(() {
         priceError = "Price can't be zero";
+      });
+    }
+
+    if (costController.text.isEmpty || costController.text == "GHS  0.00") {
+      costPass = false;
+      setState(() {
+        costError = "Cost can't be zero";
       });
     }
 
@@ -183,7 +196,7 @@ class _ViewRecordState<T extends ChangeNotifier> extends State<ViewRecord<T>> {
       categoryPass = false;
     }
 
-    return namePass && categoryPass && quantityPass && pricePass;
+    return namePass && categoryPass && quantityPass && pricePass && costPass;
   }
 
   bool validateCustomer() {
@@ -553,6 +566,32 @@ class _ViewRecordState<T extends ChangeNotifier> extends State<ViewRecord<T>> {
         height: sp.getHeight(30, height, width),
       ),
       TextField(
+        controller: costController,
+        inputFormatters: [CurrencyInputFormatter(currencySymbol: "GHS ")],
+        onChanged: (value) {
+          if (costError != null) {
+            setState(() {
+              costError = null;
+            });
+          }
+          setState(() {
+            hasChanges =
+                !(CurrencyInputFormatter().getAmount(value) == p.unitCost);
+          });
+        },
+        keyboardType: TextInputType.number,
+        style: TextStyle(fontSize: sp.getFontSize(16, width)),
+        decoration: InputDecoration(
+          errorText: costError,
+          labelText: "Unit Cost",
+          border: OutlineInputBorder(),
+          hintText: "Enter the unit cost",
+        ),
+      ),
+      SizedBox(
+        height: sp.getHeight(30, height, width),
+      ),
+      TextField(
         controller: priceController,
         inputFormatters: [CurrencyInputFormatter(currencySymbol: "GHS ")],
         onChanged: (value) {
@@ -872,6 +911,7 @@ class _ViewRecordState<T extends ChangeNotifier> extends State<ViewRecord<T>> {
           ProductModel updatedProduct = ProductModel(
             id: p.id,
             name: nameController.text,
+            unitCost: CurrencyInputFormatter().getAmount(costController.text),
             quantity: int.tryParse(amountController.text) ?? 0,
             category: newCategory ?? selectedProductCategory!.name,
             unitPrice: CurrencyInputFormatter().getAmount(priceController.text),
