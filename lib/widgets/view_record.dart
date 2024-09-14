@@ -168,9 +168,7 @@ class _ViewRecordState<T extends ChangeNotifier> extends State<ViewRecord<T>> {
       });
     }
 
-  
     if (costController.text.isEmpty) {
-      
       print(costController.text);
       costController.text = "0";
     }
@@ -324,6 +322,11 @@ class _ViewRecordState<T extends ChangeNotifier> extends State<ViewRecord<T>> {
             children: [
               Row(
                 children: [
+                  _getImageWidget(widget.recordType),
+                  if (widget.recordType == RecordType.product)
+                    SizedBox(
+                      width: sp.getWidth(10, width),
+                    ),
                   Text(_getDialogTitle(widget.recordType),
                       style: AppTextTheme().textTheme(width).headlineLarge),
                   Text(
@@ -387,6 +390,22 @@ class _ViewRecordState<T extends ChangeNotifier> extends State<ViewRecord<T>> {
         );
       },
     );
+  }
+
+  Widget _getImageWidget(RecordType recordType) {
+    switch (recordType) {
+      case RecordType.transaction:
+        return SizedBox();
+      case RecordType.product:
+        final p = widget.record as ProductModel;
+        return p.image == null ? SizedBox() : Image.memory(p.image);
+      case RecordType.customer:
+        return SizedBox();
+      case RecordType.supplier:
+        return SizedBox();
+      default:
+        return SizedBox();
+    }
   }
 
   String _getDialogTitle(RecordType recordType) {
@@ -912,6 +931,7 @@ class _ViewRecordState<T extends ChangeNotifier> extends State<ViewRecord<T>> {
           ProductModel updatedProduct = ProductModel(
             id: p.id,
             name: nameController.text,
+            description: p.description,
             unitCost: CurrencyInputFormatter().getAmount(costController.text),
             quantity: int.tryParse(amountController.text) ?? 0,
             category: newCategory ?? selectedProductCategory!.name,

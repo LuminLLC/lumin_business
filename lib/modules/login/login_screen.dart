@@ -1,12 +1,13 @@
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; 
 import 'package:lumin_business/common/size_and_spacing.dart';
-import 'package:lumin_business/modules/inventory/app_styles.dart';
+import 'package:lumin_business/modules/inventory/app_styles.dart'; 
 import 'package:lumin_business/modules/login/app_colors.dart';
 import 'package:lumin_business/modules/login/app_icons.dart';
 import 'package:lumin_business/modules/login/lumin_auth_provider.dart';
 import 'package:lumin_business/modules/login/responsive_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -17,7 +18,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final SizeAndSpacing sp = SizeAndSpacing();
-
+  final Uuid uuid = Uuid();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool obscureText = true;

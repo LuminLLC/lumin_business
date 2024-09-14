@@ -171,7 +171,7 @@ class _MenuState extends State<Menu> {
                       title: Text(
                           appState.user == null || appState.user!.name == ""
                               ? ""
-                              : "Hello, ${appState.user!.name}",
+                              : "Hello, ${appState.user!.name.split(" ").toList()[0]}",
                           style: textTheme.textTheme(screenWidth).bodyLarge!),
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -181,26 +181,30 @@ class _MenuState extends State<Menu> {
                             color: AppColor.bgSideMenu,
                             thickness: .25,
                           ),
-                          Text(
-                              appState.businessInfo == null ||
-                                      appState.businessInfo!.businessName == ""
-                                  ? "Lumin Business"
-                                  : appState.businessInfo!.businessName,
-                              style:
-                                  textTheme.textTheme(screenWidth).labelSmall!),
-                          SizedBox(
-                            height: sp.getHeight(2, screenHeight, screenWidth),
-                          ),
-                          Text(
-                              appState.user == null ||
-                                      appState.user!.name == "" ||
-                                      appState.user!.access == null
-                                  ? ""
-                                  : "${appState.user!.access == "admin" ? "Admin Account" : "Storefront"}",
-                              style:
-                                  textTheme.textTheme(screenWidth).labelSmall!)
+                          Row(children: [
+                            Icon(
+                              appState.user!.access == "admin"
+                                  ? FontAwesomeIcons.person
+                                  : FontAwesomeIcons.store,
+                              size: sp.getWidth(15, screenWidth),
+                            ),
+                            SizedBox(width: sp.getWidth(10, screenWidth)),
+                            Text(
+                                appState.businessInfo == null ||
+                                        appState.businessInfo!.businessName ==
+                                            ""
+                                    ? "Lumin Business"
+                                    : appState.businessInfo!.businessName,
+                                style: textTheme
+                                    .textTheme(screenWidth)
+                                    .labelSmall!),
+                          ]),
                         ],
                       ),
+                      trailing: Icon(
+                        Icons.sync,
+                        color: Colors.green,
+                      ), //Icons.sync_disabled
                     )),
             SizedBox(
               height: screenHeight * 0.1,

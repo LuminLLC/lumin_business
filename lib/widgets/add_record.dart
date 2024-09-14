@@ -857,6 +857,7 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
               ProductModel(
                 id: "id",
                 name: nameController.text,
+                description: "",
                 quantity: int.tryParse(amountController.text) ?? 0,
                 category: selectedProductCategory!.name,
                 unitPrice:

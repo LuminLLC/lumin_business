@@ -88,38 +88,43 @@ class AppState with ChangeNotifier {
           businessDescription: temp.data()!['description'],
           accounts: temp.data()!['accounts'],
         );
-
-        print({businessInfo!.accounts});
         user!.access = businessInfo!.accounts[user!.email];
         notifyListeners();
-      } catch (e) {}
+      } catch (e) {
+        print("Error: $e");
+      }
     }
   }
 
   fetchUser(BuildContext context) async {
     if (user == null) {
-      print("fetch user");
-      DocumentSnapshot<Map<String, dynamic>> temp = await _firestore
-          .collection('users')
-          .doc(FirebaseAuth.instance.currentUser!.uid)
-          .get();
-      Provider.of<AccountingProvider>(context, listen: false)
-          .fetchTransactions(temp.data()!['business_id']);
+      try {
+        DocumentSnapshot<Map<String, dynamic>> temp = await _firestore
+            .collection('users')
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .get();
+        print(temp.data());
+        Provider.of<AccountingProvider>(context, listen: false)
+            .fetchTransactions(temp.data()!['business_id']);
 
-      Provider.of<InventoryProvider>(context, listen: false)
-          .fetchProducts(temp.data()!['business_id']);
-      Provider.of<CustomerProvider>(context, listen: false)
-          .fetchCustomers(temp.data()!['business_id']);
-      Provider.of<SupplierProvider>(context, listen: false)
-          .fetchSuppliers(temp.data()!['business_id']);
-      user = LuminUser(
-        id: temp.id,
-        email: temp.data()!['email'],
-        name: temp.data()!['name'],
-        businessId: temp.data()!['business_id'],
-      );
+        Provider.of<InventoryProvider>(context, listen: false)
+            .fetchProducts(temp.data()!['business_id']);
+        Provider.of<CustomerProvider>(context, listen: false)
+            .fetchCustomers(temp.data()!['business_id']);
+        Provider.of<SupplierProvider>(context, listen: false)
+            .fetchSuppliers(temp.data()!['business_id']);
+        user = LuminUser(
+          id: temp.id,
+          email: temp.data()!['email'],
+          name: temp.data()!['name'],
+          businessId: temp.data()!['business_id'],
+        );
 
-      fetchBusiness(user!.businessId);
+        fetchBusiness(user!.businessId);
+      } on Exception catch (e) {
+        print(e);
+      }
+
       notifyListeners();
     }
   }

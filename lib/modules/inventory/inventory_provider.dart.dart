@@ -5,7 +5,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 import 'package:lumin_business/common/csv_module.dart';
 import 'package:lumin_business/config.dart';
 import 'package:lumin_business/modules/inventory/category.dart';
@@ -28,12 +27,14 @@ List<ProductModel> dummyProductData = [
       quantity: 15,
       category: "Electronics",
       unitPrice: 1200.0,
+      description: "",
       unitCost: 10),
   ProductModel(
       id: "2",
       name: "Smartphone",
       quantity: 30,
       category: "Electronics",
+      description: "",
       unitCost: 10,
       unitPrice: 800.0),
   ProductModel(
@@ -41,6 +42,7 @@ List<ProductModel> dummyProductData = [
       name: "Office Chair",
       quantity: 25,
       category: "Furniture",
+      description: "",
       unitCost: 10,
       unitPrice: 150.0),
   ProductModel(
@@ -48,11 +50,13 @@ List<ProductModel> dummyProductData = [
       name: "Coffee Maker",
       quantity: 40,
       category: "Appliances",
+      description: "",
       unitCost: 10,
       unitPrice: 60.0),
   ProductModel(
       id: "5",
       name: "Running Shoes",
+      description: "",
       quantity: 50,
       category: "Footwear",
       unitCost: 10,
@@ -62,11 +66,13 @@ List<ProductModel> dummyProductData = [
       name: "Blender",
       quantity: 20,
       category: "Appliances",
+      description: "",
       unitCost: 10,
       unitPrice: 45.0),
   ProductModel(
       id: "7",
       name: "Wireless Mouse",
+      description: "",
       quantity: 100,
       category: "Accessories",
       unitCost: 10,
@@ -76,11 +82,13 @@ List<ProductModel> dummyProductData = [
       name: "Desk Lamp",
       quantity: 70,
       category: "Furniture",
+      description: "",
       unitCost: 10,
       unitPrice: 35.0),
   ProductModel(
       id: "9",
       name: "Gaming Console",
+      description: "",
       quantity: 0,
       category: "Entertainment",
       unitCost: 10,
@@ -88,6 +96,7 @@ List<ProductModel> dummyProductData = [
   ProductModel(
       id: "10",
       name: "Water Bottle",
+      description: "",
       quantity: 5,
       category: "Accessories",
       unitCost: 10,
@@ -111,6 +120,8 @@ class InventoryProvider with ChangeNotifier {
     "Quantity",
     "Unit Price",
   ];
+
+
 
   void clearData() {
     isProductFetched = false;
@@ -425,6 +436,7 @@ class InventoryProvider with ChangeNotifier {
               id: element.id,
               image: element.data()["image"],
               name: element.data()["name"],
+              description: element.data()["description"] ?? "",
               quantity: element.data()["quantity"],
               unitCost: element.data()["unitCost"] ?? 0,
               category: element.data()["category"],

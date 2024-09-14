@@ -6,6 +6,7 @@ class ProductModel {
   int quantity;
   double unitPrice;
   double unitCost;
+  String description;
   bool isPerishable;
   DateTime? expiryDate;
   Map<DateTime, int> dailySales = {};
@@ -16,6 +17,7 @@ class ProductModel {
     required this.quantity,
     required this.category,
     required this.unitCost,
+    required this.description,
     this.image,
     this.isPerishable = false,
     this.expiryDate,
@@ -33,6 +35,7 @@ class ProductModel {
       'unitCost': unitCost,
       "isPerishable": isPerishable,
       "expiryDate": expiryDate?.toIso8601String(),
+      "description": description,
       // Convert dailySales map to a more serializable format (e.g., Map<String, int>)
       "dailySales": dailySales
           .map((key, value) => MapEntry(key.toIso8601String(), value)),
@@ -48,6 +51,7 @@ class ProductModel {
       quantity: map['quantity'],
       unitPrice: map['unitPrice'],
       unitCost: map['unitCost'] ?? 0,
+      description: map['description'] ?? '',
       isPerishable: map['isPerishable'] ?? false,
       expiryDate:
           map['expiryDate'] != null ? DateTime.parse(map['expiryDate']) : null,

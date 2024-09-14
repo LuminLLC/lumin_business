@@ -51,6 +51,7 @@ dependencies:
   flutter_login: ^5.0.0
   feedback: ^3.1.0
   calendar_date_picker2: ^1.1.5
+  internet_connection_checker: ^2.0.0
 
   http: any
   csv: ^6.0.0
@@ -81,7 +82,7 @@ flutter:
     - assets/icons/
     - .env
     - assets/fonts/DMSans-Italic-VariableFont_opsz,wght.ttf
-    - assets/fonts/DMSans-VariableFont_opsz,wght.ttf
+    - assets/fonts/DMSans-VariableFont_opsz,wght.ttf 
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
