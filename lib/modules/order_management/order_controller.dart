@@ -1,14 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:lumin_business/common/lumin_utll.dart';
 import 'package:lumin_business/config.dart';
+import 'package:lumin_business/modules/accounting/accounting_model.dart';
+import 'package:lumin_business/modules/accounting/accounting_provider.dart';
 import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
 import 'package:lumin_business/modules/inventory/product_model.dart';
+import 'package:lumin_business/modules/order_management/lumin_order.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 class OrderProvider with ChangeNotifier {
   final FirebaseFirestore _firestore = Config().firestoreEnv;
-  Map<ProductModel, int> openOrder = {};
+  var uuid = Uuid();
+  LuminOrder? openOrder;
   String? quantityError;
 
   Stream<DocumentSnapshot<Map<String, dynamic>>> getTodaysOrders(
@@ -47,17 +53,35 @@ class OrderProvider with ChangeNotifier {
 
   Future<void> completeOrder(String businessID, BuildContext context) async {
     notifyListeners();
-    for (ProductModel p in openOrder.keys) {
+    for (ProductModel p in openOrder!.orderDetails.keys) {
       await Provider.of<InventoryProvider>(context, listen: false)
-          .decreaseProductQuantity(p, openOrder[p]!, businessID);
+          .decreaseProductQuantity(p, openOrder!.orderDetails[p]!, businessID);
     }
     await addOrderToHistory(businessID, "fulfilled");
-    openOrder.clear();
+    await addOrdertoAccounts(businessID);
+    openOrder = null;
     notifyListeners();
   }
 
   Map<ProductModel, int> fetchOpenOrder() {
-    return openOrder;
+    if (openOrder == null) {
+      return {};
+    }
+    return openOrder!.orderDetails;
+  }
+
+  Future<void> addOrdertoAccounts(
+    String businessID,
+  ) async {
+    await AccountingProvider().addTransaction(
+        AccountingModel(
+            id: uuid.v1(),
+            saleID: openOrder!.orderId,
+            description: "Sale Order ID: ${openOrder!.orderId}",
+            amount: openOrder!.orderTotal,
+            date: LuminUtll.formatDate(DateTime.now()),
+            type: TransactionType.income),
+        businessID);
   }
 
   Future<void> addOrderToHistory(String businessID, String status) async {
@@ -74,15 +98,16 @@ class OrderProvider with ChangeNotifier {
 
     if (documentSnapshot.exists) {
       position = (documentSnapshot.data()!.length + 1).toString();
-      for (ProductModel p in openOrder.keys) {
+      for (ProductModel p in openOrder!.orderDetails.keys) {
         if (!order.containsKey(position)) {
           order[position] = [];
         }
         order[position]!.add({
           "product": p.name,
-          "quantity": openOrder[p],
+          "salesID": openOrder!.orderId,  
+          "quantity": openOrder!.orderDetails[p],
           "unitPrice": p.unitPrice,
-          "totalPrice": p.unitPrice * openOrder[p]!,
+          "totalPrice": p.unitPrice * openOrder!.orderDetails[p]!,
           "status": status
         });
         // position = (int.parse(position) + 1).toString();
@@ -95,15 +120,16 @@ class OrderProvider with ChangeNotifier {
           .doc(todayDateString)
           .update(order);
     } else {
-      for (ProductModel p in openOrder.keys) {
+      for (ProductModel p in openOrder!.orderDetails.keys) {
         if (!order.containsKey(position)) {
           order[position] = [];
         }
         order[position]!.add({
           "product": p.name,
-          "quantity": openOrder[p],
+          "quantity": openOrder!.orderDetails[p],
           "unitPrice": p.unitPrice,
-          "totalPrice": p.unitPrice * openOrder[p]!,
+          "salesID": openOrder!.orderId,
+          "totalPrice": p.unitPrice * openOrder!.orderDetails[p]!,
           "status": status
         });
         // position = (int.parse(position) + 1).toString();
@@ -119,7 +145,7 @@ class OrderProvider with ChangeNotifier {
 
   Future<void> clearOpenOrder(String businessID) async {
     await addOrderToHistory(businessID, "canceled");
-    openOrder.clear();
+    openOrder = null;
     notifyListeners();
   }
 
@@ -129,10 +155,12 @@ class OrderProvider with ChangeNotifier {
   }
 
   addToOrder(ProductModel p, int quantity) {
-    if (openOrder.containsKey(p)) {
-      openOrder[p] = openOrder[p]! + quantity;
+    if (openOrder == null) {
+      openOrder = LuminOrder(orderId: uuid.v1(), orderDetails: {p: quantity});
+    } else if (openOrder!.orderDetails.containsKey(p)) {
+      openOrder!.orderDetails[p] = openOrder!.orderDetails[p]! + quantity;
     } else {
-      openOrder[p] = quantity;
+      openOrder!.orderDetails[p] = quantity;
     }
     notifyListeners();
   }
