@@ -109,9 +109,9 @@ class InventoryProvider with ChangeNotifier {
   File? photo;
   Map<ProductModel, int> openOrder = {};
   String? quantityError;
-  bool isProductFetched = true;
-  List<ProductModel> allProdcuts = dummyProductData;
-  List<ProductCategory> categories = dummyCategories;
+  bool isProductFetched = false;
+  List<ProductModel> allProdcuts = [];//dummyProductData;
+  List<ProductCategory> categories = [];//dummyCategories;
   Map<String, List<ProductModel>> productMap = {};
   List<String> productHeaders = [
     "ID",

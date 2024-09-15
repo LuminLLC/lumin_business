@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter/material.dart'; 
 import 'package:lumin_business/common/csv_module.dart';
 import 'package:lumin_business/modules/accounting/accounting_model.dart';
 
@@ -70,9 +69,9 @@ List<AccountingModel> dummyTransactionData = [
 class AccountingProvider with ChangeNotifier {
   String? photo;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  bool isAccountingFetched = true;
+  bool isAccountingFetched = false;
   String? newTransactionType;
-  List<AccountingModel> allTransactions = dummyTransactionData;
+  List<AccountingModel> allTransactions = [];//dummyTransactionData;
   List<String> transactionHeaders = [
     "ID",
     "Description",
