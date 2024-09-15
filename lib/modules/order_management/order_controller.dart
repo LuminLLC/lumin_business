@@ -58,7 +58,7 @@ class OrderProvider with ChangeNotifier {
           .decreaseProductQuantity(p, openOrder!.orderDetails[p]!, businessID);
     }
     await addOrderToHistory(businessID, "fulfilled");
-    await addOrdertoAccounts(businessID);
+    await addOrdertoAccounts(businessID, context);
     openOrder = null;
     notifyListeners();
   }
@@ -71,17 +71,17 @@ class OrderProvider with ChangeNotifier {
   }
 
   Future<void> addOrdertoAccounts(
-    String businessID,
-  ) async {
-    await AccountingProvider().addTransaction(
-        AccountingModel(
-            id: uuid.v1(),
-            saleID: openOrder!.orderId,
-            description: "Sale Order ID: ${openOrder!.orderId}",
-            amount: openOrder!.orderTotal,
-            date: LuminUtll.formatDate(DateTime.now()),
-            type: TransactionType.income),
-        businessID);
+      String businessID, BuildContext context) async {
+    await Provider.of<AccountingProvider>(context, listen: false)
+        .addTransaction(
+            AccountingModel(
+                id: uuid.v1(),
+                saleID: openOrder!.orderId,
+                description: "Sale Order ID: ${openOrder!.orderId}",
+                amount: openOrder!.orderTotal,
+                date: LuminUtll.formatDate(DateTime.now()),
+                type: TransactionType.income),
+            businessID);
   }
 
   Future<void> addOrderToHistory(String businessID, String status) async {
@@ -104,7 +104,7 @@ class OrderProvider with ChangeNotifier {
         }
         order[position]!.add({
           "product": p.name,
-          "salesID": openOrder!.orderId,  
+          "salesID": openOrder!.orderId,
           "quantity": openOrder!.orderDetails[p],
           "unitPrice": p.unitPrice,
           "totalPrice": p.unitPrice * openOrder!.orderDetails[p]!,

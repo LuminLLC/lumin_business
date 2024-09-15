@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart'; 
+import 'package:flutter/material.dart';
 import 'package:lumin_business/common/csv_module.dart';
+import 'package:lumin_business/common/lumin_utll.dart';
 import 'package:lumin_business/modules/accounting/accounting_model.dart';
 
 List<AccountingModel> dummyTransactionData = [
@@ -8,61 +9,37 @@ List<AccountingModel> dummyTransactionData = [
       id: "1",
       description: "Sale of laptop",
       amount: 1200.0,
-      date: "2024-08-01",
+      date: "5th August 2024",
       type: TransactionType.income),
   AccountingModel(
       id: "2",
       description: "Purchase of 50 office chairs",
       amount: 3750.0,
-      date: "2024-07-29",
+      date: "23rd July 2024",
       type: TransactionType.expense),
   AccountingModel(
       id: "3",
       description: "Sale of smartphone",
       amount: 800.0,
-      date: "2024-07-25",
+      date: "1st August 2024",
       type: TransactionType.income),
   AccountingModel(
       id: "4",
       description: "Purchase of 100 units of coffee makers",
       amount: 5000.0,
-      date: "2024-08-05",
+      date: "15th July 2024",
       type: TransactionType.expense),
   AccountingModel(
       id: "5",
       description: "Sale of running shoes",
       amount: 2500.0,
-      date: "2024-07-30",
+      date: "10th August 2024",
       type: TransactionType.income),
   AccountingModel(
       id: "6",
       description: "Purchase of 25 blenders",
       amount: 1125.0,
-      date: "2024-07-27",
-      type: TransactionType.expense),
-  AccountingModel(
-      id: "7",
-      description: "Sale of wireless mouse",
-      amount: 2500.0,
-      date: "2024-08-03",
-      type: TransactionType.income),
-  AccountingModel(
-      id: "8",
-      description: "Purchase of 200 desk lamps",
-      amount: 7000.0,
-      date: "2024-08-06",
-      type: TransactionType.expense),
-  AccountingModel(
-      id: "9",
-      description: "Sale of gaming console",
-      amount: 5000.0,
-      date: "2024-08-02",
-      type: TransactionType.income),
-  AccountingModel(
-      id: "10",
-      description: "Purchase of 500 water bottles",
-      amount: 6000.0,
-      date: "2024-07-28",
+      date: "1st September 2024",
       type: TransactionType.expense),
 ];
 
@@ -71,7 +48,7 @@ class AccountingProvider with ChangeNotifier {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   bool isAccountingFetched = false;
   String? newTransactionType;
-  List<AccountingModel> allTransactions = [];//dummyTransactionData;
+  List<AccountingModel> allTransactions = []; //dummyTransactionData;
   List<String> transactionHeaders = [
     "ID",
     "Description",

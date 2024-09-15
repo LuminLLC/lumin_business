@@ -110,8 +110,8 @@ class InventoryProvider with ChangeNotifier {
   Map<ProductModel, int> openOrder = {};
   String? quantityError;
   bool isProductFetched = false;
-  List<ProductModel> allProdcuts = [];//dummyProductData;
-  List<ProductCategory> categories = [];//dummyCategories;
+  List<ProductModel> allProdcuts = [];// dummyProductData;
+  List<ProductCategory> categories = [];// dummyCategories;
   Map<String, List<ProductModel>> productMap = {};
   List<String> productHeaders = [
     "ID",
@@ -120,8 +120,6 @@ class InventoryProvider with ChangeNotifier {
     "Quantity",
     "Unit Price",
   ];
-
-
 
   void clearData() {
     isProductFetched = false;
