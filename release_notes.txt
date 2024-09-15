@@ -1,27 +1,9 @@
-Lumin Business - Version 1.2.6
+Lumin Business - Version 1.2.8
 
-Welcome to our latest release! Here's what's new in Version 1.2.6:
+Welcome to our latest release! Here's what's new in Version 1.2.8:
 
 
-New Features:
-- Automatic Income Recording: Product sales are now automatically recorded as income.
-- Offline Mode: Users can now perform regular operations with limited or no internet connection. An internet connection is only required for the initial sign-in and routine cloud syncs.
-
-Known Issues:
-- Unsorted Transactions: The transaction list is currently unsorted.
-
-Work in Progress:
-- Module Interoperability: We're enhancing communication between different modules for a more seamless experience.
-
-Upcoming Features:
-- Real-Time Summaries: Get instant summaries from all modules.
-- Customer Auto-Addition: Automatically add customers to sales.
-- Product-Supplier Linking: Link products to suppliers for easy management.
-- Expense Recording for Purchases: Automatically record purchase orders as expenses.
-
-Upcoming Enhancements:
-- Inventory Management: Improved product model for more efficient inventory control.
-- UI Optimizations: Enhancing the user interface for mobile and tablet devices.
+Security Update
 
 Thank you for your continued support and feedback!
 
