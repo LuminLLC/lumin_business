@@ -5,7 +5,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 import 'package:lumin_business/common/csv_module.dart';
 import 'package:lumin_business/config.dart';
 import 'package:lumin_business/modules/inventory/category.dart';
@@ -27,60 +26,80 @@ List<ProductModel> dummyProductData = [
       name: "Laptop",
       quantity: 15,
       category: "Electronics",
-      unitPrice: 1200.0),
+      unitPrice: 1200.0,
+      description: "",
+      unitCost: 10),
   ProductModel(
       id: "2",
       name: "Smartphone",
       quantity: 30,
       category: "Electronics",
+      description: "",
+      unitCost: 10,
       unitPrice: 800.0),
   ProductModel(
       id: "3",
       name: "Office Chair",
       quantity: 25,
       category: "Furniture",
+      description: "",
+      unitCost: 10,
       unitPrice: 150.0),
   ProductModel(
       id: "4",
       name: "Coffee Maker",
       quantity: 40,
       category: "Appliances",
+      description: "",
+      unitCost: 10,
       unitPrice: 60.0),
   ProductModel(
       id: "5",
       name: "Running Shoes",
+      description: "",
       quantity: 50,
       category: "Footwear",
+      unitCost: 10,
       unitPrice: 85.0),
   ProductModel(
       id: "6",
       name: "Blender",
       quantity: 20,
       category: "Appliances",
+      description: "",
+      unitCost: 10,
       unitPrice: 45.0),
   ProductModel(
       id: "7",
       name: "Wireless Mouse",
+      description: "",
       quantity: 100,
       category: "Accessories",
+      unitCost: 10,
       unitPrice: 25.0),
   ProductModel(
       id: "8",
       name: "Desk Lamp",
       quantity: 70,
       category: "Furniture",
+      description: "",
+      unitCost: 10,
       unitPrice: 35.0),
   ProductModel(
       id: "9",
       name: "Gaming Console",
-      quantity: 10,
+      description: "",
+      quantity: 0,
       category: "Entertainment",
+      unitCost: 10,
       unitPrice: 500.0),
   ProductModel(
       id: "10",
       name: "Water Bottle",
-      quantity: 200,
+      description: "",
+      quantity: 5,
       category: "Accessories",
+      unitCost: 10,
       unitPrice: 12.0),
 ];
 
@@ -91,8 +110,8 @@ class InventoryProvider with ChangeNotifier {
   Map<ProductModel, int> openOrder = {};
   String? quantityError;
   bool isProductFetched = false;
-  List<ProductModel> allProdcuts = []; //dummyProductData;
-  List<ProductCategory> categories = []; //dummyCategories;
+  List<ProductModel> allProdcuts = [];// dummyProductData;
+  List<ProductCategory> categories = [];// dummyCategories;
   Map<String, List<ProductModel>> productMap = {};
   List<String> productHeaders = [
     "ID",
@@ -122,15 +141,28 @@ class InventoryProvider with ChangeNotifier {
     }
   }
 
+  double get totalProuctCost {
+    double total = 0;
+    if (allProdcuts.isEmpty) {
+      return total;
+    } else {
+      for (ProductModel p in allProdcuts) {
+        total += p.unitCost;
+      }
+      return total;
+    }
+  }
+
   void downloadProductsToCSV() {
     CSVModule.downloadToCSV<ProductModel>(
         allProdcuts,
-        ["ID", "Name", "Quantity", "Category", "Unit Price"],
+        ["ID", "Name", "Quantity", "Category", "Unit Cost", "Unit Price"],
         (product) => [
               product.id,
               product.name,
               product.quantity,
               product.category,
+              product.unitCost,
               product.unitPrice
             ],
         "Products");
@@ -139,40 +171,6 @@ class InventoryProvider with ChangeNotifier {
   void clearSelectedCategory() {
     selectedCategory = null;
     notifyListeners();
-  }
-
-  Stream<DocumentSnapshot<Map<String, dynamic>>> getTodaysOrders(
-      String businessID) {
-    String todayDateString = DateFormat('yyyy-MM-dd').format(DateTime.now());
-    try {
-      return _firestore
-          .collection('businesses')
-          .doc(businessID)
-          .collection('orders')
-          .doc(todayDateString)
-          .snapshots();
-    } catch (e) {
-      return Stream.empty();
-    }
-  }
-
-  double getOrderTotal(List<dynamic> items) {
-    print(items);
-    double total = 0;
-    for (Map<String, dynamic> item in items) {
-      if (item['status'] != 'canceled') {
-        total += item['unitPrice'] * item['quantity'];
-      }
-    }
-    return total;
-  }
-
-  Widget getOrderStatus(List<dynamic> items) {
-    String status = items.first['status'];
-    return Text(
-      status,
-      style: TextStyle(color: status == "canceled" ? Colors.red : Colors.green),
-    );
   }
 
   void setSelectedCategory(String category) {
@@ -276,103 +274,6 @@ class InventoryProvider with ChangeNotifier {
   }
 
 //orders
-  Future<void> completeOrder(String businessID) async {
-    notifyListeners();
-    for (ProductModel p in openOrder.keys) {
-      await decreaseProductQuantity(p, openOrder[p]!, businessID);
-    }
-    await addOrderToHistory(businessID, "fulfilled");
-    openOrder.clear();
-    notifyListeners();
-  }
-
-  Map<ProductModel, int> fetchOpenOrder() {
-    return openOrder;
-  }
-
-  Future<void> addOrderToHistory(String businessID, String status) async {
-    String todayDateString = DateFormat('yyyy-MM-dd').format(DateTime.now());
-    String position = "1";
-    Map<String, List<Map<String, dynamic>>> order = {};
-    final DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
-        await _firestore
-            .collection("businesses")
-            .doc(businessID)
-            .collection("orders")
-            .doc(todayDateString)
-            .get();
-
-    if (documentSnapshot.exists) {
-      position = (documentSnapshot.data()!.length + 1).toString();
-      for (ProductModel p in openOrder.keys) {
-        if (!order.containsKey(position)) {
-          order[position] = [];
-        }
-        order[position]!.add({
-          "product": p.name,
-          "quantity": openOrder[p],
-          "unitPrice": p.unitPrice,
-          "totalPrice": p.unitPrice * openOrder[p]!,
-          "status": status
-        });
-        // position = (int.parse(position) + 1).toString();
-      }
-      print(order);
-      _firestore
-          .collection("businesses")
-          .doc(businessID)
-          .collection("orders")
-          .doc(todayDateString)
-          .update(order);
-    } else {
-      for (ProductModel p in openOrder.keys) {
-        if (!order.containsKey(position)) {
-          order[position] = [];
-        }
-        order[position]!.add({
-          "product": p.name,
-          "quantity": openOrder[p],
-          "unitPrice": p.unitPrice,
-          "totalPrice": p.unitPrice * openOrder[p]!,
-          "status": status
-        });
-        // position = (int.parse(position) + 1).toString();
-      }
-      _firestore
-          .collection("businesses")
-          .doc(businessID)
-          .collection("orders")
-          .doc(todayDateString)
-          .set(order);
-    }
-  }
-
-  Future<void> clearOpenOrder(String businessID) async {
-    await addOrderToHistory(businessID, "canceled");
-    openOrder.clear();
-    notifyListeners();
-  }
-
-  setQuantityError(String? error) {
-    quantityError = error;
-    notifyListeners();
-  }
-
-  addToOrder(ProductModel p, int quantity) {
-    if (openOrder.containsKey(p)) {
-      openOrder[p] = openOrder[p]! + quantity;
-    } else {
-      openOrder[p] = quantity;
-    }
-    notifyListeners();
-  }
-
-  bool verifyQuantity(ProductModel p, int quantity) {
-    if (p.quantity >= quantity) {
-      return true;
-    }
-    return false;
-  }
 
   int calculateAboveCriticalLevel() {
     int aboveCriticalLevel = 0;
@@ -517,7 +418,7 @@ class InventoryProvider with ChangeNotifier {
   }
 
   Future<void> fetchProducts(String businessID) async {
-    // cleanDB(businessID);
+    print(isProductFetched);
     if (!isProductFetched) {
       allProdcuts = [];
       try {
@@ -533,7 +434,9 @@ class InventoryProvider with ChangeNotifier {
               id: element.id,
               image: element.data()["image"],
               name: element.data()["name"],
+              description: element.data()["description"] ?? "",
               quantity: element.data()["quantity"],
+              unitCost: element.data()["unitCost"] ?? 0,
               category: element.data()["category"],
               unitPrice: element.data()["unitPrice"]));
         }

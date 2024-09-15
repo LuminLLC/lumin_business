@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:lumin_business/common/app_colors.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 
-
 class StatCardWidget extends StatelessWidget {
   final String statName;
   final IconData icon;
@@ -25,36 +24,48 @@ class StatCardWidget extends StatelessWidget {
       decoration: BoxDecoration(
           color: AppColor.blue, borderRadius: BorderRadius.circular(20)),
       padding: EdgeInsets.all(20),
-      child: Row(
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(statName,
-                  style: TextStyle(fontSize: sp.getFontSize(18, screenWidth))),
-              SizedBox(
-                height: sp.getHeight(10, screenHeight, screenWidth),
-              ),
-              Text(
-                value,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: AppColor.black,
-                  height: 1.5,
+      child: InkWell(
+        onTap: () {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: Text(statName),
+                );
+              });
+        },
+        child: Row(
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(statName,
+                    style:
+                        TextStyle(fontSize: sp.getFontSize(18, screenWidth))),
+                SizedBox(
+                  height: sp.getHeight(10, screenHeight, screenWidth),
                 ),
-              ),
-            ],
-          ),
-          if (MediaQuery.of(context).size.width >= 620) ...{
-            Spacer(),
-            Icon(
-              icon,
-              size: sp.getWidth(50, screenWidth),
-              color: Colors.yellow,
-            )
-          }
-        ],
+                Text(
+                  value,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: AppColor.black,
+                    height: 1.5,
+                  ),
+                ),
+              ],
+            ),
+            if (MediaQuery.of(context).size.width >= 620) ...{
+              Spacer(),
+              Icon(
+                icon,
+                size: sp.getWidth(50, screenWidth),
+                color: Colors.yellow,
+              )
+            }
+          ],
+        ),
       ),
     );
   }

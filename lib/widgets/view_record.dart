@@ -60,11 +60,13 @@ class _ViewRecordState<T extends ChangeNotifier> extends State<ViewRecord<T>> {
   late TextEditingController dateController;
   late TextEditingController emailController;
   late TextEditingController phoneNumberController;
+  late TextEditingController costController;
   String categoryCode = "";
   String? priceError;
   String? addressError;
   String? phoneError;
   String? emailError;
+  String? costError;
 
   @override
   void initState() {
@@ -76,6 +78,8 @@ class _ViewRecordState<T extends ChangeNotifier> extends State<ViewRecord<T>> {
         amountController = TextEditingController(text: p.quantity.toString());
         priceController =
             TextEditingController(text: LuminUtll.formatCurrency(p.unitPrice));
+        costController =
+            TextEditingController(text: LuminUtll.formatCurrency(p.unitCost));
         break;
       case RecordType.supplier:
         final s = widget.record as SupplierModel;
@@ -102,6 +106,7 @@ class _ViewRecordState<T extends ChangeNotifier> extends State<ViewRecord<T>> {
         nameController.dispose();
         amountController.dispose();
         priceController.dispose();
+        costController.dispose();
         break;
       case RecordType.supplier:
         customerController.dispose();
@@ -154,12 +159,18 @@ class _ViewRecordState<T extends ChangeNotifier> extends State<ViewRecord<T>> {
     bool categoryPass = true;
     bool quantityPass = true;
     bool pricePass = true;
+    bool costPass = true;
 
     if (priceController.text.isEmpty || priceController.text == "GHS  0.00") {
       pricePass = false;
       setState(() {
         priceError = "Price can't be zero";
       });
+    }
+
+    if (costController.text.isEmpty) {
+      print(costController.text);
+      costController.text = "0";
     }
 
     if (amountController.text.isEmpty || amountController.text == "0") {
@@ -183,7 +194,7 @@ class _ViewRecordState<T extends ChangeNotifier> extends State<ViewRecord<T>> {
       categoryPass = false;
     }
 
-    return namePass && categoryPass && quantityPass && pricePass;
+    return namePass && categoryPass && quantityPass && pricePass && costPass;
   }
 
   bool validateCustomer() {
@@ -311,6 +322,11 @@ class _ViewRecordState<T extends ChangeNotifier> extends State<ViewRecord<T>> {
             children: [
               Row(
                 children: [
+                  _getImageWidget(widget.recordType),
+                  if (widget.recordType == RecordType.product)
+                    SizedBox(
+                      width: sp.getWidth(10, width),
+                    ),
                   Text(_getDialogTitle(widget.recordType),
                       style: AppTextTheme().textTheme(width).headlineLarge),
                   Text(
@@ -374,6 +390,22 @@ class _ViewRecordState<T extends ChangeNotifier> extends State<ViewRecord<T>> {
         );
       },
     );
+  }
+
+  Widget _getImageWidget(RecordType recordType) {
+    switch (recordType) {
+      case RecordType.transaction:
+        return SizedBox();
+      case RecordType.product:
+        final p = widget.record as ProductModel;
+        return p.image == null ? SizedBox() : Image.memory(p.image);
+      case RecordType.customer:
+        return SizedBox();
+      case RecordType.supplier:
+        return SizedBox();
+      default:
+        return SizedBox();
+    }
   }
 
   String _getDialogTitle(RecordType recordType) {
@@ -547,6 +579,32 @@ class _ViewRecordState<T extends ChangeNotifier> extends State<ViewRecord<T>> {
           errorText: amountError,
           border: OutlineInputBorder(),
           hintText: "Enter the product quantity",
+        ),
+      ),
+      SizedBox(
+        height: sp.getHeight(30, height, width),
+      ),
+      TextField(
+        controller: costController,
+        inputFormatters: [CurrencyInputFormatter(currencySymbol: "GHS ")],
+        onChanged: (value) {
+          if (costError != null) {
+            setState(() {
+              costError = null;
+            });
+          }
+          setState(() {
+            hasChanges =
+                !(CurrencyInputFormatter().getAmount(value) == p.unitCost);
+          });
+        },
+        keyboardType: TextInputType.number,
+        style: TextStyle(fontSize: sp.getFontSize(16, width)),
+        decoration: InputDecoration(
+          errorText: costError,
+          labelText: "Unit Cost",
+          border: OutlineInputBorder(),
+          hintText: "Enter the unit cost",
         ),
       ),
       SizedBox(
@@ -869,9 +927,12 @@ class _ViewRecordState<T extends ChangeNotifier> extends State<ViewRecord<T>> {
           });
           final inventoryProvider = provider as InventoryProvider;
           final p = widget.record as ProductModel;
+          print(CurrencyInputFormatter().getAmount(costController.text));
           ProductModel updatedProduct = ProductModel(
             id: p.id,
             name: nameController.text,
+            description: p.description,
+            unitCost: CurrencyInputFormatter().getAmount(costController.text),
             quantity: int.tryParse(amountController.text) ?? 0,
             category: newCategory ?? selectedProductCategory!.name,
             unitPrice: CurrencyInputFormatter().getAmount(priceController.text),

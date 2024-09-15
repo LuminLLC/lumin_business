@@ -49,6 +49,7 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
   late TextEditingController categoryController;
   late TextEditingController quantityController;
   late TextEditingController priceController;
+  late TextEditingController costController;
   late TextEditingController amountController;
   late TextEditingController descriptionController;
   late TextEditingController customerController;
@@ -59,6 +60,7 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
   late TextEditingController phoneNumberController;
   String categoryCode = "";
   String? priceError;
+  String? costError;
   String? addressError;
   String? phoneError;
   String? emailError;
@@ -70,6 +72,7 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
     categoryController = TextEditingController();
     quantityController = TextEditingController();
     priceController = TextEditingController();
+    costController = TextEditingController();
     amountController = TextEditingController();
     customerController = TextEditingController();
     supplierController = TextEditingController();
@@ -88,6 +91,7 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
     quantityController.dispose();
     priceController.dispose();
     amountController.dispose();
+    costController.dispose();
     customerController.dispose();
     supplierController.dispose();
     descriptionController.dispose();
@@ -103,6 +107,7 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
     categoryController.clear();
     quantityController.clear();
     priceController.clear();
+    costController.clear();
     amountController.clear();
     customerController.clear();
     supplierController.clear();
@@ -148,12 +153,17 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
     bool categoryPass = true;
     bool quantityPass = true;
     bool pricePass = true;
+    bool costPass = true;
 
     if (priceController.text.isEmpty || priceController.text == "GHS  0.00") {
       pricePass = false;
       setState(() {
         priceError = "Price can't be zero";
       });
+    }
+
+    if (costController.text.isEmpty) {
+      costController.text = "0";
     }
 
     if (amountController.text.isEmpty || amountController.text == "0") {
@@ -177,7 +187,7 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
       categoryPass = false;
     }
 
-    return namePass && categoryPass && quantityPass && pricePass;
+    return namePass && categoryPass && quantityPass && pricePass && costPass;
   }
 
   bool validateCustomer() {
@@ -593,6 +603,28 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
         height: sp.getHeight(30, height, width),
       ),
       TextField(
+        controller: costController,
+        inputFormatters: [CurrencyInputFormatter(currencySymbol: "GHS ")],
+        onChanged: (value) {
+          if (costError != null) {
+            setState(() {
+              costError = null;
+            });
+          }
+        },
+        keyboardType: TextInputType.number,
+        style: TextStyle(fontSize: sp.getFontSize(16, width)),
+        decoration: InputDecoration(
+          errorText: costError,
+          labelText: "Unit Cost",
+          border: OutlineInputBorder(),
+          hintText: "Enter the unit cost",
+        ),
+      ),
+      SizedBox(
+        height: sp.getHeight(30, height, width),
+      ),
+      TextField(
         controller: priceController,
         inputFormatters: [CurrencyInputFormatter(currencySymbol: "GHS ")],
         onChanged: (value) {
@@ -825,10 +857,13 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
               ProductModel(
                 id: "id",
                 name: nameController.text,
+                description: "",
                 quantity: int.tryParse(amountController.text) ?? 0,
                 category: selectedProductCategory!.name,
                 unitPrice:
                     CurrencyInputFormatter().getAmount(priceController.text),
+                unitCost:
+                    CurrencyInputFormatter().getAmount(costController.text),
               ),
               businessId,
               selectedProductCategory!.code);

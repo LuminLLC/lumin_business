@@ -125,7 +125,7 @@ class _SupplierScreenState extends State<SupplierScreen> {
                           shrinkWrap: true,
                           padding: EdgeInsets.zero,
                           itemBuilder: (context, index) {
-                            //TODO: move this function out of widget tree and factor in different filter options
+                           
                             supplierProvider.allSuppliers.sort((a, b) => a.name
                                 .toLowerCase()
                                 .compareTo(b.name.toLowerCase())); //

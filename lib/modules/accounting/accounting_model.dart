@@ -1,4 +1,6 @@
+
 enum TransactionType { income, expense }
+
 
 class AccountingModel {
   final String id;
@@ -26,6 +28,8 @@ class AccountingModel {
       'id': id,
       'description': description,
       'amount': amount,
+      'saleID': saleID,
+      'purchaseOrderID': purchaseOrderID,
       'date': date, // Store date as a string in ISO 8601 format
       'type': type.toString().split('.').last, // Store the enum as a string
     };
@@ -38,6 +42,8 @@ class AccountingModel {
       description: map['description'],
       amount: map['amount'],
       date: map['date'],
+      saleID: map['saleID'],
+      purchaseOrderID: map['purchaseOrderID'],
       type: TransactionType.values
           .firstWhere((e) => e.toString().split('.').last == map['type']),
     );

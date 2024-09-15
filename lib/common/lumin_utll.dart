@@ -30,6 +30,39 @@ class LuminUtll {
     return output;
   }
 
+  static DateTime parseCustomDate(String dateString) {
+    // Define the month mapping
+    Map<String, int> months = {
+      'January': 1,
+      'February': 2,
+      'March': 3,
+      'April': 4,
+      'May': 5,
+      'June': 6,
+      'July': 7,
+      'August': 8,
+      'September': 9,
+      'October': 10,
+      'November': 11,
+      'December': 12,
+    };
+
+    // Split the input string by spaces
+    List<String> parts = dateString.split(' ');
+
+    // Extract the day, month, and year
+    int day = int.parse(
+        parts[0].replaceAll(RegExp(r'\D'), '')); // Remove "th", "st", etc.
+    String monthString = parts[1];
+    int year = int.parse(parts[2]);
+
+    // Get the month number
+    int month = months[monthString]!;
+
+    print(DateTime(year, month, day).toString());
+    return DateTime(year, month, day);
+  }
+
   static String formatCurrency(double amount, {String currencyCode = "GHS"}) {
     final formatCurrency = NumberFormat.currency(
       symbol: currencyCode,

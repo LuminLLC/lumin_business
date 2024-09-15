@@ -11,11 +11,13 @@ import 'package:lumin_business/modules/customers/customer_provider.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
 import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
 import 'package:lumin_business/modules/inventory/product_model.dart';
+import 'package:lumin_business/modules/order_management/order_controller.dart';
 import 'package:lumin_business/modules/suppliers/supplier_model.dart';
 import 'package:lumin_business/modules/suppliers/supplier_provider.dart';
 import 'package:lumin_business/modules/inventory/set_order_quantity.dart';
 import 'package:lumin_business/modules/user_and_busness/business_model.dart';
 import 'package:lumin_business/widgets/view_record.dart';
+import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class GeneralListTile extends StatelessWidget {
@@ -380,141 +382,141 @@ class GeneralListTile extends StatelessWidget {
       required double screenHeight,
       required ProductModel product,
       required BuildContext context}) {
-    InventoryProvider inventoryProvider = provider;
-    int index = inventoryProvider.allProdcuts.indexOf(product) + 1;
-    Uint8List? image;
-    if (product.image != null && product.image!.runtimeType != String) {
-      image = Uint8List.fromList(product.image.cast<int>());
-    }
-    return Container(
-      width: double.infinity,
-      child: ListTile(
-        leading: product.image == null
-            ? Container(
-                height: sp.getWidth(50, screenWidth),
-                width: sp.getWidth(50, screenWidth),
-                decoration: BoxDecoration(
-                    color: Colors.blueGrey,
-                    borderRadius: BorderRadius.circular(10)),
-                alignment: Alignment.center,
-                child: Text(
-                  index.toString(),
+    return Consumer2<InventoryProvider, OrderProvider>(
+        builder: (context, inventoryProvider, orderProvider, _) {
+      int index = inventoryProvider.allProdcuts.indexOf(product) + 1;
+      Uint8List? image;
+      return Container(
+        width: double.infinity,
+        child: ListTile(
+          leading: product.image == null
+              ? Container(
+                  height: sp.getWidth(50, screenWidth),
+                  width: sp.getWidth(50, screenWidth),
+                  decoration: BoxDecoration(
+                      color: Colors.blueGrey,
+                      borderRadius: BorderRadius.circular(10)),
+                  alignment: Alignment.center,
+                  child: Text(
+                    index.toString(),
+                    style: textTheme
+                        .textTheme(screenWidth)
+                        .bodyLarge!
+                        .copyWith(color: Colors.white),
+                  ),
+                )
+              : Container(
+                  height: sp.getWidth(50, screenWidth),
+                  width: sp.getWidth(50, screenWidth),
+                  decoration: BoxDecoration(
+                      color: Colors.blueGrey,
+                      borderRadius: BorderRadius.circular(10)),
+                  child: Image.memory(
+                    image ?? Uint8List.fromList([]),
+                    height: sp.getWidth(40, screenWidth),
+                    width: sp.getWidth(40, screenWidth),
+                  ),
+                ),
+          title: Row(
+            children: [
+              Text(product.name,
                   style: textTheme
                       .textTheme(screenWidth)
                       .bodyLarge!
-                      .copyWith(color: Colors.white),
-                ),
-              )
-            : Container(
-                height: sp.getWidth(50, screenWidth),
-                width: sp.getWidth(50, screenWidth),
-                decoration: BoxDecoration(
-                    color: Colors.blueGrey,
-                    borderRadius: BorderRadius.circular(10)),
-                child: Image.memory(
-                  image ?? Uint8List.fromList([]),
-                  height: sp.getWidth(40, screenWidth),
-                  width: sp.getWidth(40, screenWidth),
-                ),
+                      .copyWith(color: Colors.black)),
+              SizedBox(
+                width: 20,
               ),
-        title: Row(
-          children: [
-            Text(product.name,
-                style: textTheme
-                    .textTheme(screenWidth)
-                    .bodyLarge!
-                    .copyWith(color: Colors.black)),
-            SizedBox(
-              width: 20,
-            ),
-            Container(
-              height: sp.getWidth(10, screenWidth),
-              width: sp.getWidth(10, screenWidth),
-              color: getTileColor(product.quantity),
-            ),
-          ],
-        ),
-        subtitle: Row(
-          children: [
-            if (sp.isDesktop(screenWidth))
+              Container(
+                height: sp.getWidth(10, screenWidth),
+                width: sp.getWidth(10, screenWidth),
+                color: getTileColor(product.quantity),
+              ),
+            ],
+          ),
+          subtitle: Row(
+            children: [
+              if (sp.isDesktop(screenWidth))
+                Text(
+                  "Category: ${product.category}",
+                  style: textTheme
+                      .textTheme(screenWidth)
+                      .bodySmall!
+                      .copyWith(color: Colors.black),
+                ),
+              if (sp.isDesktop(screenWidth))
+                SizedBox(
+                    height: sp.getHeight(20, screenHeight, screenWidth),
+                    child: VerticalDivider()),
               Text(
-                "Category: ${product.category}",
+                "Quantity: ${product.quantity}",
                 style: textTheme
                     .textTheme(screenWidth)
                     .bodySmall!
                     .copyWith(color: Colors.black),
               ),
-            if (sp.isDesktop(screenWidth))
               SizedBox(
                   height: sp.getHeight(20, screenHeight, screenWidth),
                   child: VerticalDivider()),
-            Text(
-              "Quantity: ${product.quantity}",
-              style: textTheme
-                  .textTheme(screenWidth)
-                  .bodySmall!
-                  .copyWith(color: Colors.black),
-            ),
-            SizedBox(
-                height: sp.getHeight(20, screenHeight, screenWidth),
-                child: VerticalDivider()),
-            Text(
-              "Price: GHS${product.unitPrice}",
-              style: textTheme
-                  .textTheme(screenWidth)
-                  .bodySmall!
-                  .copyWith(color: Colors.black),
-            ),
-          ],
-        ),
-        trailing: Container(
-          width: sp.getWidth(sp.isDesktop(screenWidth) ? 200 : 75, screenWidth),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              IconButton(
-                icon: Icon(
-                  Icons.edit,
-                  size: sp.getWidth(
-                      sp.isDesktop(screenWidth) ? 25 : 15, screenWidth),
-                  color: AppColor.bgSideMenu.withOpacity(0.8),
-                ),
-                onPressed: () {
-                  // print(product.image.toString());
-                  showDialog(
-                      // barrierDismissible: false,
-                      context: context,
-                      builder: (context) {
-                        return ViewRecord<InventoryProvider>(
-                            record: product, recordType: RecordType.product);
-                      });
-                },
-              ),
-              IconButton(
-                icon: Icon(
-                  Icons.add_shopping_cart,
-                  size: sp.getWidth(
-                      sp.isDesktop(screenWidth) ? 25 : 15, screenWidth),
-                  color: getTileColor(product.quantity),
-                ),
-                onPressed: () {
-                  if (product.quantity > 0) {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          return SetOrderQuantity(
-                            product: product,
-                            inventoryProvider: provider,
-                          );
-                        });
-                  }
-                },
+              Text(
+                "Price: GHS${product.unitPrice}",
+                style: textTheme
+                    .textTheme(screenWidth)
+                    .bodySmall!
+                    .copyWith(color: Colors.black),
               ),
             ],
           ),
+          trailing: Container(
+            width:
+                sp.getWidth(sp.isDesktop(screenWidth) ? 200 : 75, screenWidth),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                IconButton(
+                  icon: Icon(
+                    Icons.edit,
+                    size: sp.getWidth(
+                        sp.isDesktop(screenWidth) ? 25 : 15, screenWidth),
+                    color: AppColor.bgSideMenu.withOpacity(0.8),
+                  ),
+                  onPressed: () {
+                    // print(product.image.toString());
+                    showDialog(
+                        // barrierDismissible: false,
+                        context: context,
+                        builder: (context) {
+                          return ViewRecord<InventoryProvider>(
+                              record: product, recordType: RecordType.product);
+                        });
+                  },
+                ),
+                IconButton(
+                  icon: Icon(
+                    Icons.add_shopping_cart,
+                    size: sp.getWidth(
+                        sp.isDesktop(screenWidth) ? 25 : 15, screenWidth),
+                    color: getTileColor(product.quantity),
+                  ),
+                  onPressed: () {
+                    if (product.quantity > 0) {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return SetOrderQuantity(
+                              product: product,
+                              orderProvider: orderProvider,
+                            );
+                          });
+                    }
+                  },
+                ),
+              ],
+            ),
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 
   Widget settingsTile({

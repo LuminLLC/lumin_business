@@ -1,4 +1,4 @@
-import 'package:lumin_business/modules/inventory/lumin_order.dart';
+import 'package:lumin_business/modules/order_management/lumin_order.dart';
 
 class CustomerModel {
   // Properties

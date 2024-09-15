@@ -18,7 +18,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.15.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -51,12 +51,19 @@ dependencies:
   flutter_login: ^5.0.0
   feedback: ^3.1.0
   calendar_date_picker2: ^1.1.5
+  internet_connection_checker: ^2.0.0
 
   http: any
   csv: ^6.0.0
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  hive_generator: ^2.0.1
+  build_runner: ^2.4.11
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -75,7 +82,7 @@ flutter:
     - assets/icons/
     - .env
     - assets/fonts/DMSans-Italic-VariableFont_opsz,wght.ttf
-    - assets/fonts/DMSans-VariableFont_opsz,wght.ttf
+    - assets/fonts/DMSans-VariableFont_opsz,wght.ttf 
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
