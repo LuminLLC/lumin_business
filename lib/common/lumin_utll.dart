@@ -71,6 +71,45 @@ class LuminUtll {
     );
     return formatCurrency.format(amount);
   }
+
+  static String? validateName(String name) {
+    if (name.isEmpty) {
+      return "Please enter your name";
+    }
+    return null;
+  }
+
+  static String? validateEmail(String email) {
+    if (email.isEmpty) {
+      return 'Please enter your email';
+    }
+    final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+    if (!emailRegex.hasMatch(email)) {
+      return 'Please enter a valid email';
+    }
+    return null;
+  }
+
+  static String? validatePassword(String password) {
+    if (password.isEmpty) {
+      return 'Please enter your password';
+    }
+    if (password.length < 6) {
+      return 'Password must be at least 6 characters long';
+    }
+    return null;
+  }
+
+  static String? validateConfirmPassword(
+      String password, String confirmPassword) {
+    if (confirmPassword.isEmpty) {
+      return 'Please confirm your password';
+    }
+    if (confirmPassword != password) {
+      return 'Passwords do not match';
+    }
+    return null;
+  }
 }
 
 class CurrencyInputFormatter extends TextInputFormatter {

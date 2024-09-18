@@ -1,11 +1,13 @@
-Lumin Business - Version 1.2.6
+Lumin Business - Version 1.2.7
 
-Welcome to our latest release! Here's what's new in Version 1.2.6:
+Welcome to our latest release! Here's what's new in Version 1.2.7:
 
 
 New Features:
-- Automatic Income Recording: Product sales are now automatically recorded as income.
-- Offline Mode: Users can now perform regular operations with limited or no internet connection. An internet connection is only required for the initial sign-in and routine cloud syncs.
+- Access control: user rights
+- Minor UI improvements
+- Performance Improvements
+- Platform Stability Improvements
 
 Known Issues:
 - Unsorted Transactions: The transaction list is currently unsorted.

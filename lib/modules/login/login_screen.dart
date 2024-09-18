@@ -1,11 +1,13 @@
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart'; 
+import 'package:flutter/material.dart';
+import 'package:lumin_business/common/lumin_utll.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
-import 'package:lumin_business/modules/inventory/app_styles.dart'; 
+import 'package:lumin_business/modules/inventory/app_styles.dart';
 import 'package:lumin_business/modules/login/app_colors.dart';
 import 'package:lumin_business/modules/login/app_icons.dart';
 import 'package:lumin_business/modules/login/lumin_auth_provider.dart';
 import 'package:lumin_business/modules/login/responsive_widget.dart';
+import 'package:lumin_business/modules/user_and_busness/lumin_user.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
@@ -34,39 +36,45 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  bool _validateEmail() {
-    if (_emailController.text.isEmpty) {
-      setState(() {
-        _emailError = 'Please enter your email';
-      });
-      return false;
-    }
-    final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
-    if (!emailRegex.hasMatch(_emailController.text)) {
-      setState(() {
-        _emailError = 'Please enter a valid email';
-      });
-      return false;
-    }
-    return true;
+  bool _validateForm() {
+    _emailError = LuminUtll.validateEmail(_emailController.text);
+    _passwordError = LuminUtll.validatePassword(_passwordController.text);
+    return _emailError == null && _passwordError == null;
   }
 
+  // bool _validateEmail() {
+  //   if (_emailController.text.isEmpty) {
+  //     setState(() {
+  //       _emailError = 'Please enter your email';
+  //     });
+  //     return false;
+  //   }
+  //   final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+  //   if (!emailRegex.hasMatch(_emailController.text)) {
+  //     setState(() {
+  //       _emailError = 'Please enter a valid email';
+  //     });
+  //     return false;
+  //   }
+  //   return true;
+  // }
+
   // Password validation
-  bool _validatePassword() {
-    if (_passwordController.text.isEmpty) {
-      setState(() {
-        _passwordError = 'Please enter your password';
-      });
-      return false;
-    }
-    if (_passwordController.text.length < 6) {
-      setState(() {
-        _passwordError = 'Password must be at least 6 characters long';
-      });
-      return false;
-    }
-    return true;
-  }
+  // bool _validatePassword() {
+  //   if (_passwordController.text.isEmpty) {
+  //     setState(() {
+  //       _passwordError = 'Please enter your password';
+  //     });
+  //     return false;
+  //   }
+  //   if (_passwordController.text.length < 6) {
+  //     setState(() {
+  //       _passwordError = 'Password must be at least 6 characters long';
+  //     });
+  //     return false;
+  //   }
+  //   return true;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -180,7 +188,10 @@ class _LoginScreenState extends State<LoginScreen> {
                             decoration: InputDecoration(
                               errorText: _emailError,
                               border: InputBorder.none,
-                              prefixIcon: Icon(Icons.email),
+                              prefixIcon: Icon(
+                                Icons.email,
+                                size: sp.getFontSize(25, width),
+                              ),
                               contentPadding: const EdgeInsets.only(top: 16.0),
                               hintText: 'Enter Email',
                               hintStyle: ralewayStyle.copyWith(
@@ -237,9 +248,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                 },
                                 icon: Image.asset(AppIcons.eyeIcon),
                               ),
-                              prefixIcon: IconButton(
-                                onPressed: () {},
-                                icon: Image.asset(AppIcons.lockIcon),
+                              prefixIcon: Icon(
+                                Icons.password,
+                                size: sp.getFontSize(25, width),
                               ),
                               contentPadding: const EdgeInsets.only(top: 16.0),
                               hintText: 'Enter Password',
@@ -272,9 +283,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: Consumer<LuminAuthProvider>(
                             builder: (context, luminAuth, _) => InkWell(
                               onTap: () async {
-                                bool isEmailValid = _validateEmail();
-                                bool isPasswordValid = _validatePassword();
-                                if (isPasswordValid && isEmailValid) {
+                                if (_validateForm()) {
                                   setState(() {
                                     formSubmitted = true;
                                   });
