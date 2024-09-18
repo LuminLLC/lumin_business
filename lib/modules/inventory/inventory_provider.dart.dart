@@ -110,8 +110,8 @@ class InventoryProvider with ChangeNotifier {
   Map<ProductModel, int> openOrder = {};
   String? quantityError;
   bool isProductFetched = false;
-  List<ProductModel> allProdcuts = [];// dummyProductData;
-  List<ProductCategory> categories = [];// dummyCategories;
+  List<ProductModel> allProdcuts = [];
+  List<ProductCategory> categories = [];
   Map<String, List<ProductModel>> productMap = {};
   List<String> productHeaders = [
     "ID",
@@ -139,6 +139,10 @@ class InventoryProvider with ChangeNotifier {
     } catch (e) {
       print("Error uploading products: $e");
     }
+  }
+
+   ProductModel  getProductWithID (String id){
+    return allProdcuts.firstWhere((element) => element.id == id);
   }
 
   double get totalProuctCost {

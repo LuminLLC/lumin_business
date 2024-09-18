@@ -5,6 +5,7 @@ import 'package:lumin_business/common/app_text_theme.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
 import 'package:lumin_business/modules/general_platform/menu_controller.dart';
+import 'package:lumin_business/modules/order_management/order_pane.dart';
 
 import 'package:provider/provider.dart';
 
@@ -209,7 +210,17 @@ class _MenuState extends State<Menu> {
             SizedBox(
               height: screenHeight * 0.1,
             ),
-            for (Widget w in menuItems) w,
+            if (appState.user != null && appState.user!.access == "admin")
+              for (Widget w in menuItems) w,
+
+            if (appState.user != null && appState.user!.access != "admin")
+              Container(
+                  margin: EdgeInsets.only(
+                    left: sp.getWidth(10, screenWidth),
+                  ),    
+                  width: !sp.isDesktop(screenWidth) ? screenWidth / 1.5 : null,
+                  height: screenHeight * 0.6,
+                  child: OrderPane()),
             Spacer(),
             Padding(
               padding: const EdgeInsets.only(bottom: 15),

@@ -1,31 +1,82 @@
-import 'package:lumin_business/modules/inventory/product_model.dart';
+
+
+class OrderItem {
+  String productID;
+  int quantity;
+  double price;
+
+  OrderItem({
+    required this.productID,
+    required this.quantity,
+    required this.price,
+  });
+
+  factory OrderItem.fromMap(Map<String, dynamic> map) {
+    return OrderItem(
+      productID: map['productID'],
+      quantity: map['quantity'],
+      price: map['price'],
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      "productID": this.productID,
+      "quantity": this.quantity,
+      "price": this.price,
+    };
+  }
+
+  double get itemTotal {
+    return this.price * this.quantity;
+  }
+}
 
 class LuminOrder {
-  String orderId;
-  Map<ProductModel, int> orderDetails;
+  dynamic orderId;
+  List<OrderItem> orderItems;
+  String? status;
 
   LuminOrder({
     required this.orderId,
-    required this.orderDetails,
+    required this.orderItems,
+    this.status,
   });
+
+  void setOrderStatus(String status) {
+    this.status = status;
+  }
 
   double get orderTotal {
     double total = 0;
-    for (ProductModel product in orderDetails.keys) {
-      total += product.unitPrice * orderDetails[product]!;
+    for (OrderItem item in orderItems) {
+      total += item.itemTotal;
     }
     return total;
   }
 
-  Map<String, String> toMap() {
-    // Convert orderDetails to a string representation
-    String orderDetailsString = orderDetails.entries
-        .map((entry) => "${entry.key}:${entry.value}")
-        .join(", ");
+  List<String> get productIDs {
+    return orderItems.map((e) => e.productID).toList();
+  }
 
+  factory LuminOrder.fromMap(Map<String, dynamic> map) {
+    return LuminOrder(
+      orderId: map['orderID'],
+      orderItems: [
+        for (Map<String, dynamic> item in map['orderDetails'])
+          OrderItem.fromMap(item),
+      ],
+      status: map['status'],
+    );
+  }
+
+  Map<String, dynamic> toMap() {
     return {
       "orderID": this.orderId,
-      "orderDetails": orderDetailsString,
+      "orderDetails": [
+        for (OrderItem item in this.orderItems) item.toMap(),
+      ],
+      "status": this.status,
     };
   }
 }
