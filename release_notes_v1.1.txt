@@ -1,15 +1,13 @@
-Lumin Business - Version 1.2.7
+Lumin Business - Version 1.2.9
 
-Welcome to our latest release! Here's what's new in Version 1.2.7:
+Welcome to our latest release! Here's what's new in Version 1.2.9:
 
 New Features:
-- Access Control: Added user rights management.
-- Order Management: Users [Non-admin] can now view today's orders on the side panel
+- Users can set a pos location on each sale.
 
 Improvements and Bug Fixes:
 - UI and Performance: Minor improvements for a smoother experience.
-- Fxied a bug that prevents users from viewing a product if it has no category assigned
-
+- Fxied a bug that miscalculates the order total
 
 Known Issues:
 Unsorted Transactions: The transaction list is currently not sorted.

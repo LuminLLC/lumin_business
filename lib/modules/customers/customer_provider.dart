@@ -78,7 +78,7 @@ List<CustomerModel> dummyCustomerData = [
 
 class CustomerProvider with ChangeNotifier {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  List<CustomerModel> allCustomers = [];//dummyCustomerData;
+  List<CustomerModel> allCustomers = [];
   bool isCustomersFetched = false;
   List<String> customerHeaders = [
     "id",

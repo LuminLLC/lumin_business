@@ -36,11 +36,15 @@ class LuminOrder {
   dynamic orderId;
   List<OrderItem> orderItems;
   String? status;
+  String? pos;
+  String? customer;
 
   LuminOrder({
     required this.orderId,
     required this.orderItems,
     this.status,
+    this.customer,
+    this.pos,
   });
 
   void setOrderStatus(String status) {
@@ -67,12 +71,16 @@ class LuminOrder {
           OrderItem.fromMap(item),
       ],
       status: map['status'],
+      pos: map['pos'],
+      customer: map['customer'],
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
       "orderID": this.orderId,
+      "pos": this.pos,
+      "customer": this.customer,
       "orderDetails": [
         for (OrderItem item in this.orderItems) item.toMap(),
       ],

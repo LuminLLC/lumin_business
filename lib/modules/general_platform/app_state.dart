@@ -79,6 +79,7 @@ class AppState with ChangeNotifier {
 
         businessInfo = BusinessModel(
           businessId: temp.id,
+          posLocations: temp.data()!['pos_locations']??[],
           businessName: temp.data()!['business_name'],
           businessLogo: temp.data()!['business_logo'] ?? "",
           adminEmail: temp.data()!['email'],

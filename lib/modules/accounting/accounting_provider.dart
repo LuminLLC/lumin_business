@@ -47,7 +47,7 @@ class AccountingProvider with ChangeNotifier {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   bool isAccountingFetched = false;
   String? newTransactionType;
-  List<AccountingModel> allTransactions = [];//dummyTransactionData;
+  List<AccountingModel> allTransactions = [];
   List<String> transactionHeaders = [
     "ID",
     "Description",
