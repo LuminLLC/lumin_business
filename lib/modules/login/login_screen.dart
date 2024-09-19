@@ -7,7 +7,6 @@ import 'package:lumin_business/modules/login/app_colors.dart';
 import 'package:lumin_business/modules/login/app_icons.dart';
 import 'package:lumin_business/modules/login/lumin_auth_provider.dart';
 import 'package:lumin_business/modules/login/responsive_widget.dart';
-import 'package:lumin_business/modules/user_and_busness/lumin_user.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
