@@ -47,6 +47,7 @@ class _ViewRecordState<T extends ChangeNotifier> extends State<ViewRecord<T>> {
   String? newCategory;
   String? nameError;
   String? transactionTypeError;
+  ProductCategory? hotfix;
   final List<String> items = ["Income", 'Expense'];
   late TextEditingController nameController;
   late TextEditingController categoryController;
@@ -173,7 +174,11 @@ class _ViewRecordState<T extends ChangeNotifier> extends State<ViewRecord<T>> {
       costController.text = "0";
     }
 
-    if (amountController.text.isEmpty || amountController.text == "0") {
+    if (amountController.text.isEmpty
+
+        // || amountController.text == "0"
+
+        ) {
       setState(() {
         amountError = "Quantity can't be zero";
       });
@@ -187,7 +192,7 @@ class _ViewRecordState<T extends ChangeNotifier> extends State<ViewRecord<T>> {
       namePass = false;
     }
 
-    if (selectedProductCategory == null) {
+    if (newCategory == null) {
       setState(() {
         transactionTypeError = "Category can't be empty";
       });
@@ -545,6 +550,7 @@ class _ViewRecordState<T extends ChangeNotifier> extends State<ViewRecord<T>> {
             fontSize: 16.0, // Text size inside the dropdown
           ),
           onChanged: (value) {
+            print(value);
             if (transactionTypeError != null) {
               setState(() {
                 transactionTypeError = null;
@@ -929,6 +935,7 @@ class _ViewRecordState<T extends ChangeNotifier> extends State<ViewRecord<T>> {
     switch (widget.recordType) {
       case RecordType.product:
         bool isValid = validateProduct();
+
         if (isValid) {
           setState(() {
             isUpdating = true;
