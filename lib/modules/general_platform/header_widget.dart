@@ -41,66 +41,72 @@ class _HeaderWidgetState extends State<HeaderWidget> {
     return Consumer<AppState>(builder: (context, appState, _) {
       return Container(
         margin: EdgeInsets.all(10),
-        child: Row(
-          children: [
-            Text(_getHeaderTitle(appState.index),
-                style: textTheme.textTheme(screenWidth).displayMedium!.copyWith(
-                      color: AppColor.black,
-                    )),
-            if (!sp.isMobile(screenWidth)) ...{
-              Spacer(),
-              widget.controller != null
-                  ? SizedBox(
-                      width: sp.getWidth(350, screenWidth),
-                      height: 50,
-                      child: SearchBar(
-                        controller: widget.controller,
-                        onChanged: (newText) {
-                          appState.setSearchText(newText.toLowerCase());
-                        },
-                        textStyle: WidgetStatePropertyAll(AppTextTheme()
-                            .textTheme(screenWidth)
-                            .bodyLarge!
-                            .copyWith(color: AppColor.bgSideMenu)),
-                        leading: Padding(
-                          padding: EdgeInsets.only(right: 8.0),
-                          child: Icon(
-                            Icons.search,
-                            color: AppColor.bgSideMenu,
-                          ),
-                        ),
-                        trailing: widget.controller!.text.isNotEmpty
-                            ? [
-                                IconButton( 
-                                    onPressed: () {
-                                      widget.controller!.clear();
-                                      appState.setSearchText(""); 
-                                    },
-                                    icon: Icon(Icons.close))
-                              ]
-                            : null,
-                        hintText: widget.hintText,
-                        backgroundColor:
-                            WidgetStatePropertyAll(Colors.grey[100]),
-                        elevation: WidgetStatePropertyAll(0),
-                        shape: WidgetStatePropertyAll(RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10))),
-                      ),
-                    )
-                  : SizedBox(),
-              Row(
-                mainAxisSize: MainAxisSize.min,
+        child: appState.index == null
+            ? SizedBox()
+            : Row(
                 children: [
-                  for (Widget w in widget.actions)
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 5),
-                      child: w,
+                  Text(_getHeaderTitle(appState.index!),
+                      style: textTheme
+                          .textTheme(screenWidth)
+                          .displayMedium!
+                          .copyWith(
+                            color: AppColor.black,
+                          )),
+                  if (!sp.isMobile(screenWidth)) ...{
+                    Spacer(),
+                    widget.controller != null
+                        ? SizedBox(
+                            width: sp.getWidth(350, screenWidth),
+                            height: 50,
+                            child: SearchBar(
+                              controller: widget.controller,
+                              onChanged: (newText) {
+                                appState.setSearchText(newText.toLowerCase());
+                              },
+                              textStyle: WidgetStatePropertyAll(AppTextTheme()
+                                  .textTheme(screenWidth)
+                                  .bodyLarge!
+                                  .copyWith(color: AppColor.bgSideMenu)),
+                              leading: Padding(
+                                padding: EdgeInsets.only(right: 8.0),
+                                child: Icon(
+                                  Icons.search,
+                                  color: AppColor.bgSideMenu,
+                                ),
+                              ),
+                              trailing: widget.controller!.text.isNotEmpty
+                                  ? [
+                                      IconButton(
+                                          onPressed: () {
+                                            widget.controller!.clear();
+                                            appState.setSearchText("");
+                                          },
+                                          icon: Icon(Icons.close))
+                                    ]
+                                  : null,
+                              hintText: widget.hintText,
+                              backgroundColor:
+                                  WidgetStatePropertyAll(Colors.grey[100]),
+                              elevation: WidgetStatePropertyAll(0),
+                              shape: WidgetStatePropertyAll(
+                                  RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10))),
+                            ),
+                          )
+                        : SizedBox(),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        for (Widget w in widget.actions)
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 5),
+                            child: w,
+                          )
+                      ],
                     )
+                  }
                 ],
-              )
-            }
-          ],
-        ),
+              ),
       );
     });
   }
