@@ -1,9 +1,28 @@
-Lumin Business - Version 1.2.8
+Lumin Business - Version 1.2.9
 
-Welcome to our latest release! Here's what's new in Version 1.2.8:
+Welcome to our latest release! Here's what's new in Version 1.2.9:
 
-Hot fix:
-- Addresses a bug that prevents users from setting product quantity to zero.
-- Addresses a bug that prevents users from updating prodcut category when the initial product category hasn't been set
+New Features:
+- Users can set a pos location on each sale.
+
+Improvements and Bug Fixes:
+- UI and Performance: Minor improvements for a smoother experience.
+- Fxied a bug that miscalculates the order total
+
+Known Issues:
+Unsorted Transactions: The transaction list is currently not sorted.
+
+Work in Progress:
+Module Interoperability: Improving communication between different modules for a more seamless experience.
+
+Upcoming Features:
+Real-Time Summaries: Instant summaries from all modules.
+Customer Auto-Addition: Automatically add customers during sales.
+Product-Supplier Linking: Easily link products to suppliers.
+Expense Recording: Automatically record purchase orders as expenses.
+
+Upcoming Enhancements:
+Inventory Management: Enhanced product model for better inventory control.
+UI Optimizations: Improved design for mobile and tablet devices.
 
 Thank you for your continued support and feedback!

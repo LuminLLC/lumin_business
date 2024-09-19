@@ -19,6 +19,8 @@ class OpenOrder extends StatefulWidget {
 
 class _OpenOrderState extends State<OpenOrder> {
   final SizeAndSpacing sp = SizeAndSpacing();
+  String? posLocation;
+  String? locationError;
   bool isCompletedOrderClicked = false;
 
   @override
@@ -50,9 +52,7 @@ class _OpenOrderState extends State<OpenOrder> {
                 Icons.location_on,
                 color: Colors.white,
               ),
-              // errorText: transactionTypeError,
-              // hintText: "Select a transaction type",
-              // labelText: "Transaction Type",
+              errorText: locationError,
               hintStyle: TextStyle(
                 color:
                     Colors.grey[300], // Adjust this color to match your style
@@ -87,7 +87,14 @@ class _OpenOrderState extends State<OpenOrder> {
               color: Colors.white, // Text color inside the dropdown
               fontSize: 16.0, // Text size inside the dropdown
             ),
-            onChanged: (value) {},
+            onChanged: (value) {
+              if (locationError != null) {
+                setState(() {
+                  locationError = null;
+                });
+                widget.orderProvider.setOrderPos(value);
+              }
+            },
             items: widget.appState.businessInfo!.posLocations
                 .map<DropdownMenuItem<dynamic>>((dynamic value) {
               return DropdownMenuItem<dynamic>(
@@ -124,8 +131,8 @@ class _OpenOrderState extends State<OpenOrder> {
                             .productLookup(item.productID, context)
                             .name),
                         subtitle: Text("Quantity: ${item.quantity}"),
-                        trailing: Text(
-                            LuminUtll.formatCurrency(item.price * item.quantity)),
+                        trailing: Text(LuminUtll.formatCurrency(
+                            item.price * item.quantity)),
                       ),
                     ),
                   Divider(),
@@ -154,15 +161,21 @@ class _OpenOrderState extends State<OpenOrder> {
           onPressed: isCompletedOrderClicked
               ? null
               : () {
-                  setState(() {
-                    isCompletedOrderClicked = true;
-                  });
-                  widget.orderProvider
-                      .completeOrder(
-                          widget.appState.businessInfo!.businessId, context)
-                      .whenComplete(() {
-                    Navigator.pop(context);
-                  });
+                  if (widget.orderProvider.openOrder!.pos == null) {
+                    setState(() {
+                      locationError = "Please select a location";
+                    });
+                  } else {
+                    setState(() {
+                      isCompletedOrderClicked = true;
+                    });
+                    widget.orderProvider
+                        .completeOrder(
+                            widget.appState.businessInfo!.businessId, context)
+                        .whenComplete(() {
+                      Navigator.pop(context);
+                    });
+                  }
                 },
           child: Text(
             "Complete Order",

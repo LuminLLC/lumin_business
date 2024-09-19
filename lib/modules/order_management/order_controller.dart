@@ -81,6 +81,11 @@ class OrderProvider with ChangeNotifier {
     return total;
   }
 
+  void setOrderPos(String pos) {
+    openOrder!.pos = pos;
+    notifyListeners();
+  }
+
   Widget getOrderStatus(List<dynamic> items) {
     String status = items.first['status'];
     return Text(
