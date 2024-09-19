@@ -45,9 +45,9 @@ List<AccountingModel> dummyTransactionData = [
 class AccountingProvider with ChangeNotifier {
   String? photo;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  bool isAccountingFetched = true;
+  bool isAccountingFetched = false;
   String? newTransactionType;
-  List<AccountingModel> allTransactions = dummyTransactionData;
+  List<AccountingModel> allTransactions = [];
   List<String> transactionHeaders = [
     "ID",
     "Description",

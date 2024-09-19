@@ -33,7 +33,7 @@ List<LuminOrder> dummyOrders = [
 
 class OrderProvider with ChangeNotifier {
   final FirebaseFirestore _firestore = Config().firestoreEnv;
-  List<LuminOrder>? orders = dummyOrders;
+  List<LuminOrder>? orders;
   var uuid = Uuid();
   LuminOrder? openOrder;
   String? quantityError;
