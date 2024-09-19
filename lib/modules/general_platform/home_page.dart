@@ -55,7 +55,7 @@ class _HomePageState extends State<HomePage> {
     final double screenWidth = MediaQuery.of(context).size.width;
     return Consumer<AppState>(builder: (context, appState, _) {
       return Scaffold(
-        appBar: !sp.isDesktop(screenWidth)
+        appBar: appState.index == !sp.isDesktop(screenWidth)
             ? AppBar(
                 backgroundColor:
                     isSearchPressed ? Colors.grey[100] : AppColor.bgSideMenu,
@@ -87,36 +87,43 @@ class _HomePageState extends State<HomePage> {
                     ? SizedBox(
                         width: double.infinity,
                         height: 50,
-                        child: SearchBar(
-                          controller: searchController,
-                          onChanged: (newText) {
-                            appState.setSearchText(newText.toLowerCase());
-                          },
-                          textStyle: WidgetStatePropertyAll(AppTextTheme()
-                              .textTheme(screenWidth)
-                              .bodyLarge!
-                              .copyWith(color: AppColor.bgSideMenu)),
-                          leading: Padding(
-                            padding: EdgeInsets.only(right: 8.0),
-                            child: Icon(
-                              Icons.search,
-                              color: AppColor.bgSideMenu,
-                            ),
-                          ),
-                          hintText:
-                              "Search ${titles[appState.index].toLowerCase()}",
-                          backgroundColor:
-                              WidgetStatePropertyAll(Colors.grey[100]),
-                          elevation: WidgetStatePropertyAll(0),
-                          shape: WidgetStatePropertyAll(RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10))),
-                        ),
+                        child: appState.index == null
+                            ? null
+                            : SearchBar(
+                                controller: searchController,
+                                onChanged: (newText) {
+                                  appState.setSearchText(newText.toLowerCase());
+                                },
+                                textStyle: WidgetStatePropertyAll(AppTextTheme()
+                                    .textTheme(screenWidth)
+                                    .bodyLarge!
+                                    .copyWith(color: AppColor.bgSideMenu)),
+                                leading: Padding(
+                                  padding: EdgeInsets.only(right: 8.0),
+                                  child: Icon(
+                                    Icons.search,
+                                    color: AppColor.bgSideMenu,
+                                  ),
+                                ),
+                                hintText:
+                                    "Search ${titles[appState.index!].toLowerCase()}",
+                                backgroundColor:
+                                    WidgetStatePropertyAll(Colors.grey[100]),
+                                elevation: WidgetStatePropertyAll(0),
+                                shape: WidgetStatePropertyAll(
+                                    RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10))),
+                              ),
                       )
-                    : Text(
-                        titles[appState.index],
-                        style:
-                            AppTextTheme().textTheme(screenWidth).displaySmall,
-                      ),
+                    : appState.index == null
+                        ? SizedBox()
+                        : Text(
+                            titles[appState.index!],
+                            style: AppTextTheme()
+                                .textTheme(screenWidth)
+                                .displaySmall,
+                          ),
               )
             : null,
         drawer: isSearchPressed
@@ -126,41 +133,43 @@ class _HomePageState extends State<HomePage> {
                 : Menu(),
         key: Provider.of<PlatformMenuController>(context, listen: false)
             .scaffoldKey,
-        floatingActionButton: !sp.isDesktop(screenWidth) &&
-                appState.index > 0 &&
-                appState.index < 5
-            ? FloatingActionButton(
-                onPressed: () {
-                  showDialog(
-                      context: context,
-                      builder: (context) {
-                        switch (appState.index) {
-                          case 1:
+        floatingActionButton: appState.index == null
+            ? null
+            : !sp.isDesktop(screenWidth) &&
+                    appState.index! > 0 &&
+                    appState.index! < 5
+                ? FloatingActionButton(
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            switch (appState.index) {
+                              case 1:
+                                return AddRecord<AccountingProvider>(
+                                  recordType: RecordType.transaction,
+                                );
+                              case 2:
+                                return AddRecord<InventoryProvider>(
+                                  recordType: RecordType.product,
+                                );
+                              case 3:
+                                return AddRecord<CustomerProvider>(
+                                  recordType: RecordType.customer,
+                                );
+                              case 4:
+                                return AddRecord<SupplierProvider>(
+                                  recordType: RecordType.supplier,
+                                );
+                              default:
+                            }
                             return AddRecord<AccountingProvider>(
                               recordType: RecordType.transaction,
                             );
-                          case 2:
-                            return AddRecord<InventoryProvider>(
-                              recordType: RecordType.product,
-                            );
-                          case 3:
-                            return AddRecord<CustomerProvider>(
-                              recordType: RecordType.customer,
-                            );
-                          case 4:
-                            return AddRecord<SupplierProvider>(
-                              recordType: RecordType.supplier,
-                            );
-                          default:
-                        }
-                        return AddRecord<AccountingProvider>(
-                          recordType: RecordType.transaction,
-                        );
-                      });
-                },
-                child: Icon(Icons.add),
-              )
-            : null,
+                          });
+                    },
+                    child: Icon(Icons.add),
+                  )
+                : null,
         backgroundColor: AppColor.bgSideMenu,
         body: SafeArea(
           child: Row(
@@ -170,7 +179,9 @@ class _HomePageState extends State<HomePage> {
                 Container(width: screenWidth * 0.15, child: Menu()),
 
               /// Main Body Part
-              Expanded(child: _view[appState.index]),
+              appState.index == null
+                  ? Expanded(child: Center(child: CircularProgressIndicator.adaptive()))
+                  : Expanded(child: _view[appState.index!]),
             ],
           ),
         ),

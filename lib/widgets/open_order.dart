@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lumin_business/common/lumin_utll.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
-import 'package:lumin_business/modules/inventory/product_model.dart';
+import 'package:lumin_business/modules/order_management/lumin_order.dart';
 import 'package:lumin_business/modules/order_management/order_controller.dart';
 
 class OpenOrder extends StatefulWidget {
@@ -33,16 +33,17 @@ class _OpenOrderState extends State<OpenOrder> {
               )
             : Column(
                 children: [
-                  for (ProductModel p
-                      in widget.orderProvider.fetchOpenOrder().keys)
+                  for (OrderItem item
+                      in widget.orderProvider.fetchOpenOrder()!.orderItems)
                     SizedBox(
                       width: width * 0.3,
                       child: ListTile(
-                        title: Text(p.name),
-                        subtitle: Text(
-                            "Quantity: ${widget.orderProvider.fetchOpenOrder()[p]}"),
-                        trailing: Text(LuminUtll.formatCurrency(p.unitPrice *
-                            widget.orderProvider.fetchOpenOrder()[p]!)),
+                        title: Text(widget.orderProvider
+                            .productLookup(item.productID, context)
+                            .name),
+                        subtitle: Text("Quantity: ${item.quantity}"),
+                        trailing: Text(
+                            LuminUtll.formatCurrency(item.price * item.price)),
                       ),
                     ),
                   Divider(
@@ -51,13 +52,8 @@ class _OpenOrderState extends State<OpenOrder> {
                   ListTile(
                       title: Text("Total"),
                       trailing: Text(
-                        LuminUtll.formatCurrency(widget.orderProvider
-                            .fetchOpenOrder()
-                            .keys
-                            .map((e) =>
-                                e.unitPrice *
-                                widget.orderProvider.fetchOpenOrder()[e]!)
-                            .reduce((value, element) => value + element)),
+                        LuminUtll.formatCurrency(
+                            widget.orderProvider.openOrder!.orderTotal),
                       )),
                 ],
               ),

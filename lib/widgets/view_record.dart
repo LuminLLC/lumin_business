@@ -489,9 +489,17 @@ class _ViewRecordState<T extends ChangeNotifier> extends State<ViewRecord<T>> {
       ),
       Consumer<InventoryProvider>(builder: (context, inventoryProvider, _) {
         List<ProductCategory> categories = inventoryProvider.categories;
-        selectedProductCategory = categories
-            .toList()
-            .singleWhere((category) => category.name == p.category);
+        print(categories);
+        try {
+          selectedProductCategory = categories.toList().firstWhere(
+                (category) => category.name == p.category,
+                orElse: () => throw throw Exception('Category not found'),
+              );
+        } on Exception catch (e) {
+          print(e);
+          selectedProductCategory = null;
+        }
+
         return DropdownButtonFormField<ProductCategory>(
           hint: Text(
             "Select product category",

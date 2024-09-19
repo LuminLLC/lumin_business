@@ -1,6 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:lumin_business/common/lumin_utll.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/inventory/app_styles.dart';
 import 'package:lumin_business/modules/login/app_colors.dart';
@@ -41,64 +41,17 @@ class _SignupScreenState extends State<SignupScreen> {
     super.dispose();
   }
 
-  bool _validateName() {
-    if (_nameController.text.isEmpty) {
-      setState(() {
-        _nameError = "Please enter your name";
-      });
-      return false;
-    }
-    return true;
-  }
+  bool _validateForm() {
+    _nameError = LuminUtll.validateName(_nameController.text);
+    _emailError = LuminUtll.validateEmail(_emailController.text);
+    _passwordError = LuminUtll.validatePassword(_passwordController.text);
+    _confirmPasswordError = LuminUtll.validateConfirmPassword(
+        _passwordController.text, _confirmPasswordController.text);
 
-  bool _validateEmail() {
-    if (_emailController.text.isEmpty) {
-      setState(() {
-        _emailError = 'Please enter your email';
-      });
-      return false;
-    }
-    final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
-    if (!emailRegex.hasMatch(_emailController.text)) {
-      setState(() {
-        _emailError = 'Please enter a valid email';
-      });
-      return false;
-    }
-    return true;
-  }
-
-  // Password validation
-  bool _validatePassword() {
-    if (_passwordController.text.isEmpty) {
-      setState(() {
-        _passwordError = 'Please enter your password';
-      });
-      return false;
-    }
-    if (_passwordController.text.length < 6) {
-      setState(() {
-        _passwordError = 'Password must be at least 6 characters long';
-      });
-      return false;
-    }
-    return true;
-  }
-
-  bool _validateConfirmPassword() {
-    if (_confirmPasswordController.text.isEmpty) {
-      setState(() {
-        _confirmPasswordError = 'Please confirm your password';
-      });
-      return false;
-    }
-    if (_confirmPasswordController.text != _passwordController.text) {
-      setState(() {
-        _confirmPasswordError = 'Passwords do not match';
-      });
-      return false;
-    }
-    return true;
+    return _nameError == null &&
+        _emailError == null &&
+        _passwordError == null &&
+        _confirmPasswordError == null;
   }
 
   @override
@@ -200,7 +153,10 @@ class _SignupScreenState extends State<SignupScreen> {
                             decoration: InputDecoration(
                               errorText: _nameError,
                               border: InputBorder.none,
-                              prefixIcon: Icon(FontAwesomeIcons.person),
+                              prefixIcon: Icon(
+                                Icons.person,
+                                size: sp.getFontSize(25, width),
+                              ),
                               contentPadding: const EdgeInsets.only(top: 16.0),
                               hintText: 'Enter you name',
                               hintStyle: ralewayStyle.copyWith(
@@ -248,9 +204,9 @@ class _SignupScreenState extends State<SignupScreen> {
                             decoration: InputDecoration(
                               errorText: _emailError,
                               border: InputBorder.none,
-                              prefixIcon: IconButton(
-                                onPressed: () {},
-                                icon: Image.asset(AppIcons.emailIcon),
+                              prefixIcon: Icon(
+                                Icons.email,
+                                size: sp.getFontSize(25, width),
                               ),
                               contentPadding: const EdgeInsets.only(top: 16.0),
                               hintText: 'Enter Email',
@@ -308,9 +264,9 @@ class _SignupScreenState extends State<SignupScreen> {
                                 },
                                 icon: Image.asset(AppIcons.eyeIcon),
                               ),
-                              prefixIcon: IconButton(
-                                onPressed: () {},
-                                icon: Image.asset(AppIcons.lockIcon),
+                              prefixIcon: Icon(
+                                Icons.password,
+                                size: sp.getFontSize(25, width),
                               ),
                               contentPadding: const EdgeInsets.only(top: 16.0),
                               hintText: 'Enter Password',
@@ -368,9 +324,9 @@ class _SignupScreenState extends State<SignupScreen> {
                                 },
                                 icon: Image.asset(AppIcons.eyeIcon),
                               ),
-                              prefixIcon: IconButton(
-                                onPressed: () {},
-                                icon: Image.asset(AppIcons.lockIcon),
+                              prefixIcon: Icon(
+                                Icons.password,
+                                size: sp.getFontSize(25, width),
                               ),
                               contentPadding: const EdgeInsets.only(top: 16.0),
                               hintText: 'Re-enter Password',
@@ -388,15 +344,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           child: Consumer<LuminAuthProvider>(
                             builder: (context, luminAuth, _) => InkWell(
                               onTap: () async {
-                                bool isNameValid = _validateName();
-                                bool isEmailValid = _validateEmail();
-                                bool isPasswordValid = _validatePassword();
-                                bool isConfirmPasswordValid =
-                                    _validateConfirmPassword();
-                                if (isPasswordValid &&
-                                    isEmailValid &&
-                                    isNameValid &&
-                                    isConfirmPasswordValid) {
+                                if (_validateForm()) {
                                   setState(() {
                                     formSubmitted = true;
                                   });

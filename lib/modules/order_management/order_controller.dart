@@ -13,22 +13,40 @@ import 'package:uuid/uuid.dart';
 
 class OrderProvider with ChangeNotifier {
   final FirebaseFirestore _firestore = Config().firestoreEnv;
+  List<LuminOrder>? orders;
   var uuid = Uuid();
   LuminOrder? openOrder;
   String? quantityError;
 
-  Stream<DocumentSnapshot<Map<String, dynamic>>> getTodaysOrders(
-      String businessID) {
-    String todayDateString = DateFormat('yyyy-MM-dd').format(DateTime.now());
-    try {
-      return _firestore
-          .collection('businesses')
-          .doc(businessID)
-          .collection('orders')
-          .doc(todayDateString)
-          .snapshots();
-    } catch (e) {
-      return Stream.empty();
+  ProductModel productLookup(String id, BuildContext context) {
+    return Provider.of<InventoryProvider>(context, listen: false)
+        .getProductWithID(id);
+  }
+
+  Future<void> fetchOrders(String businessID) async {
+    if (orders == null) {
+      orders = [];
+      String today = DateFormat('yyyy-MM-dd').format(DateTime.now());
+      try {
+        final DocumentSnapshot<Map<String, dynamic>> snapshot = await _firestore
+            .collection('businesses')
+            .doc(businessID)
+            .collection('orders')
+            .doc(today)
+            .get();
+
+        if (snapshot.exists) {
+          print(snapshot.data());
+          for (Map<String, dynamic> element
+              in snapshot.data()!.values.toList()) {
+            orders!.add(LuminOrder.fromMap(element));
+          }
+        }
+      } on Exception catch (e) {
+        print("here");
+        print(e);
+      }
+      notifyListeners();
     }
   }
 
@@ -52,22 +70,25 @@ class OrderProvider with ChangeNotifier {
   }
 
   Future<void> completeOrder(String businessID, BuildContext context) async {
-    notifyListeners();
-    for (ProductModel p in openOrder!.orderDetails.keys) {
-      await Provider.of<InventoryProvider>(context, listen: false)
-          .decreaseProductQuantity(p, openOrder!.orderDetails[p]!, businessID);
+    for (OrderItem item in openOrder!.orderItems) {
+      ProductModel p = productLookup(item.productID, context);
+      if (!verifyQuantity(p, item.quantity)) {
+        setQuantityError("Quantity not available for ${p.name}");
+        return;
+      } else {
+        await Provider.of<InventoryProvider>(context, listen: false)
+            .decreaseProductQuantity(p, item.quantity, businessID);
+      }
     }
-    await addOrderToHistory(businessID, "fulfilled");
+    openOrder!.setOrderStatus("fulfilled");
+    await addOrderToHistory(businessID);
     await addOrdertoAccounts(businessID, context);
     openOrder = null;
     notifyListeners();
   }
 
-  Map<ProductModel, int> fetchOpenOrder() {
-    if (openOrder == null) {
-      return {};
-    }
-    return openOrder!.orderDetails;
+  LuminOrder? fetchOpenOrder() {
+    return openOrder;
   }
 
   Future<void> addOrdertoAccounts(
@@ -84,10 +105,8 @@ class OrderProvider with ChangeNotifier {
             businessID);
   }
 
-  Future<void> addOrderToHistory(String businessID, String status) async {
+  Future<void> addOrderToHistory(String businessID) async {
     String todayDateString = DateFormat('yyyy-MM-dd').format(DateTime.now());
-    String position = "1";
-    Map<String, List<Map<String, dynamic>>> order = {};
     final DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
         await _firestore
             .collection("businesses")
@@ -97,54 +116,31 @@ class OrderProvider with ChangeNotifier {
             .get();
 
     if (documentSnapshot.exists) {
-      position = (documentSnapshot.data()!.length + 1).toString();
-      for (ProductModel p in openOrder!.orderDetails.keys) {
-        if (!order.containsKey(position)) {
-          order[position] = [];
-        }
-        order[position]!.add({
-          "product": p.name,
-          "salesID": openOrder!.orderId,
-          "quantity": openOrder!.orderDetails[p],
-          "unitPrice": p.unitPrice,
-          "totalPrice": p.unitPrice * openOrder!.orderDetails[p]!,
-          "status": status
-        });
-        // position = (int.parse(position) + 1).toString();
-      }
-      print(order);
       _firestore
           .collection("businesses")
           .doc(businessID)
           .collection("orders")
           .doc(todayDateString)
-          .update(order);
+          .update({
+        DateTime.now().microsecondsSinceEpoch.toString(): openOrder!.toMap()
+      });
     } else {
-      for (ProductModel p in openOrder!.orderDetails.keys) {
-        if (!order.containsKey(position)) {
-          order[position] = [];
-        }
-        order[position]!.add({
-          "product": p.name,
-          "quantity": openOrder!.orderDetails[p],
-          "unitPrice": p.unitPrice,
-          "salesID": openOrder!.orderId,
-          "totalPrice": p.unitPrice * openOrder!.orderDetails[p]!,
-          "status": status
-        });
-        // position = (int.parse(position) + 1).toString();
-      }
       _firestore
           .collection("businesses")
           .doc(businessID)
           .collection("orders")
           .doc(todayDateString)
-          .set(order);
+          .set({
+        DateTime.now().microsecondsSinceEpoch.toString(): openOrder!.toMap()
+      });
     }
+    orders!.add(openOrder!);
+    notifyListeners();
   }
 
   Future<void> clearOpenOrder(String businessID) async {
-    await addOrderToHistory(businessID, "canceled");
+    openOrder!.setOrderStatus("canceled");
+    await addOrderToHistory(businessID);
     openOrder = null;
     notifyListeners();
   }
@@ -156,11 +152,18 @@ class OrderProvider with ChangeNotifier {
 
   addToOrder(ProductModel p, int quantity) {
     if (openOrder == null) {
-      openOrder = LuminOrder(orderId: uuid.v1(), orderDetails: {p: quantity});
-    } else if (openOrder!.orderDetails.containsKey(p)) {
-      openOrder!.orderDetails[p] = openOrder!.orderDetails[p]! + quantity;
+      openOrder = LuminOrder(orderId: uuid.v1(), orderItems: [
+        OrderItem(productID: p.id!, quantity: quantity, price: p.unitPrice)
+      ]);
+    } else if (openOrder!.productIDs.contains(p.id)) {
+      openOrder!.orderItems.forEach((element) {
+        if (element.productID == p.id) {
+          element.quantity += quantity;
+        }
+      });
     } else {
-      openOrder!.orderDetails[p] = quantity;
+      openOrder!.orderItems.add(
+          OrderItem(productID: p.id!, quantity: quantity, price: p.unitPrice));
     }
     notifyListeners();
   }

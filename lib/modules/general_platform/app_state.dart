@@ -15,7 +15,7 @@ class AppState with ChangeNotifier {
   String searchText = "";
   BusinessModel? businessInfo;
   LuminUser? user;
-  int index = 0;
+  int? index = null;
 
   void masterClearData(BuildContext context) {
     searchText = "";
@@ -89,6 +89,11 @@ class AppState with ChangeNotifier {
           accounts: temp.data()!['accounts'],
         );
         user!.access = businessInfo!.accounts[user!.email];
+        if (user!.access != "admin") {
+          setIndex(2);
+        } else {
+          setIndex(0);
+        }
         notifyListeners();
       } catch (e) {
         print("Error: $e");
@@ -120,7 +125,7 @@ class AppState with ChangeNotifier {
           businessId: temp.data()!['business_id'],
         );
 
-        fetchBusiness(user!.businessId);
+        await fetchBusiness(user!.businessId);
       } on Exception catch (e) {
         print(e);
       }
@@ -131,7 +136,7 @@ class AppState with ChangeNotifier {
 
   Future<void> signOut() async {
     await FirebaseAuth.instance.signOut();
-    index = 0;
+    index = null;
     user = null;
     businessInfo = null;
     notifyListeners();

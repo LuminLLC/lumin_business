@@ -59,7 +59,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
             if (sp.isDesktop(screenWidth))
               HeaderWidget(
                 actions: [
-                  orderProvider.fetchOpenOrder().length != 0
+                  orderProvider.openOrder != null
                       ? IconButton(
                           onPressed: () {
                             showDialog(
