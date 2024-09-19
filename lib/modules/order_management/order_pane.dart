@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lumin_business/common/lumin_utll.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
+import 'package:lumin_business/modules/order_management/lumin_order.dart';
 import 'package:lumin_business/modules/order_management/order_controller.dart';
 import 'package:provider/provider.dart';
 
@@ -12,7 +13,7 @@ class OrderPane extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final double height = MediaQuery.of(context).size.height;
+    final double height = MediaQuery.of(context).size.height;
     final double width = MediaQuery.of(context).size.width;
     return Consumer2<OrderProvider, AppState>(
         builder: (context, orderProvider, appState, _) {
@@ -55,9 +56,58 @@ class OrderPane extends StatelessWidget {
                             onTap: () {
                               showDialog(
                                   context: context,
-                                  builder: (context) {
+                                  builder: (context) { 
                                     return AlertDialog(
-                                      title: Text("Order Details"),
+                                      title: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          ListTile(
+                                            title: Text(
+                                                "Order ID: ${orderProvider.orders![index].orderId}"),
+                                            trailing: Text(
+                                              "${orderProvider.orders![index].status ?? ""}",
+                                              style: GoogleFonts.dmSans(
+                                                  fontSize:
+                                                      sp.getFontSize(15, width),
+                                                  color: orderProvider
+                                                              .orders![index]
+                                                              .status ==
+                                                          "fulfilled"
+                                                      ? Colors.green
+                                                      : Colors.red),
+                                            ),
+                                            subtitle: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: 8.0),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    "Customer: ${orderProvider.orders![index].customer}",
+                                                    style: GoogleFonts.dmSans(
+                                                        fontSize:
+                                                            sp.getFontSize(
+                                                                15, width)),
+                                                  ),
+                                                  SizedBox(
+                                                    height: sp.getHeight(
+                                                        5, height, width),
+                                                  ),
+                                                  Text(
+                                                    "POS Location: ${orderProvider.orders![index].pos}",
+                                                    style: GoogleFonts.dmSans(
+                                                        fontSize:
+                                                            sp.getFontSize(
+                                                                15, width)),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                       content: SizedBox(
                                         width: sp.getWidth(600, width),
                                         child: SingleChildScrollView(
@@ -65,14 +115,22 @@ class OrderPane extends StatelessWidget {
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
-                                              Text(orderProvider
-                                                  .orders![index].orderId),
-                                              Text(orderProvider
-                                                      .orders![index].status ??
-                                                  "Unkown"),
-                                              for (var item in orderProvider
-                                                  .orders![index].orderItems)
+                                              ListTile(
+                                                minVerticalPadding: 0,
+                                                leading: Text("Items",
+                                                    style: GoogleFonts.dmSans(
+                                                        fontSize:
+                                                            sp.getFontSize(
+                                                                20, width))),
+                                              ),
+                                              Divider(),
+                                              for (OrderItem item
+                                                  in orderProvider
+                                                      .orders![index]
+                                                      .orderItems)
                                                 ListTile(
+                                                  leading: Text(
+                                                      "${orderProvider.orders![index].orderItems.indexOf(item) + 1}"),
                                                   title: Text(
                                                       "${orderProvider.productLookup(item.productID, context).name}"),
                                                   subtitle: Text(
@@ -80,7 +138,7 @@ class OrderPane extends StatelessWidget {
                                                   trailing: Text(
                                                       "${LuminUtll.formatCurrency(item.itemTotal)}"),
                                                 ),
-                                              Divider(),
+                                              Divider(), 
                                               ListTile(
                                                 title: Text("Total"),
                                                 trailing: Text(

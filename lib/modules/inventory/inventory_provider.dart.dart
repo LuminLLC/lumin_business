@@ -22,7 +22,7 @@ List<ProductCategory> dummyCategories = [
 
 List<ProductModel> dummyProductData = [
   ProductModel(
-      id: "1",
+      id: "BC23P45",
       name: "Laptop",
       quantity: 15,
       category: "Electronics",
@@ -30,7 +30,7 @@ List<ProductModel> dummyProductData = [
       description: "",
       unitCost: 10),
   ProductModel(
-      id: "2",
+      id: "AO6P142",
       name: "Smartphone",
       quantity: 30,
       category: "Electronics",
@@ -109,10 +109,9 @@ class InventoryProvider with ChangeNotifier {
   File? photo;
   Map<ProductModel, int> openOrder = {};
   String? quantityError;
-  bool isProductFetched = false;
-  List<ProductModel> allProdcuts = [];
-  List<ProductCategory> categories = [];
-  Map<String, List<ProductModel>> productMap = {};
+  bool isProductFetched = true;
+  List<ProductModel> allProdcuts = dummyProductData; //[];
+  List<ProductCategory> categories = dummyCategories;//[]; 
   List<String> productHeaders = [
     "ID",
     "Name",

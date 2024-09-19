@@ -12,6 +12,7 @@ class BusinessModel {
   final String businessAddress;
   final String contactNumber;
   final String businessType;
+  final List<dynamic> posLocations;
   final String businessDescription;
   final Map<String, dynamic> accounts;
 
@@ -21,6 +22,7 @@ class BusinessModel {
     required this.businessLogo,
     required this.adminEmail,
     required this.businessAddress,
+    required this.posLocations,
     required this.contactNumber,
     required this.businessType,
     required this.businessDescription,

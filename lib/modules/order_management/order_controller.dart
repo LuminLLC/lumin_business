@@ -11,9 +11,29 @@ import 'package:lumin_business/modules/order_management/lumin_order.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
+List<LuminOrder> dummyOrders = [
+  LuminOrder(
+      orderId: "1234",
+      orderItems: [
+        OrderItem(productID: "AO6P142", quantity: 2, price: 100.0),
+        OrderItem(productID: "BC23P45", quantity: 1, price: 50.0),
+      ],
+      pos: "Store",
+      status: "fulfilled"),
+  LuminOrder(
+      orderId: "1235",
+      orderItems: [
+        OrderItem(productID: "AO6P142", quantity: 2, price: 100.0),
+        OrderItem(productID: "BC23P45", quantity: 1, price: 50.0),
+      ],
+      customer: "Saint Janney",
+      pos: "Store",
+      status: "fulfilled"),
+];
+
 class OrderProvider with ChangeNotifier {
   final FirebaseFirestore _firestore = Config().firestoreEnv;
-  List<LuminOrder>? orders;
+  List<LuminOrder>? orders = dummyOrders;
   var uuid = Uuid();
   LuminOrder? openOrder;
   String? quantityError;
