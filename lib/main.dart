@@ -13,6 +13,7 @@ import 'package:lumin_business/modules/login/login_screen.dart';
 import 'package:lumin_business/modules/login/signup_screen.dart';
 import 'package:lumin_business/modules/login/uplaod_data.dart';
 import 'package:lumin_business/modules/order_management/order_controller.dart';
+import 'package:lumin_business/modules/settings/settings_provider.dart';
 import 'package:lumin_business/modules/suppliers/supplier_provider.dart';
 import 'package:lumin_business/services/connectivity_provider.dart';
 import 'package:provider/provider.dart';
@@ -30,6 +31,8 @@ Future<void> main() async {
   );
   runApp(MultiProvider(providers: [
     Provider<ConnectivityProvider>(create: (_) => ConnectivityProvider()),
+    ChangeNotifierProvider<SettingsProvider>(
+        create: (context) => SettingsProvider()),
     ChangeNotifierProvider<AccountingProvider>(
         create: (context) => AccountingProvider()),
     ChangeNotifierProvider<LuminAuthProvider>(

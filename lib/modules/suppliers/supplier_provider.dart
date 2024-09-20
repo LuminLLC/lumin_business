@@ -110,8 +110,8 @@ List<SupplierModel> dummySupplierData = [
 
 class SupplierProvider with ChangeNotifier {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  List<SupplierModel> allSuppliers = [];
-  bool isSuppliersFetched = false;
+  List<SupplierModel> allSuppliers = dummySupplierData;
+  bool isSuppliersFetched = true;
   List<String> supplierHeaders = [
     "ID",
     "Name",
