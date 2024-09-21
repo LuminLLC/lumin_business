@@ -18,7 +18,7 @@ class OrderPane extends StatelessWidget {
     return Consumer2<OrderProvider, AppState>(
         builder: (context, orderProvider, appState, _) {
       if (appState.businessInfo != null) {
-        orderProvider.fetchOrders(appState.businessInfo!.businessId);
+        orderProvider.fetchTodaysOrders(appState.businessInfo!.businessId);
       }
 
       return Column(
@@ -38,9 +38,9 @@ class OrderPane extends StatelessWidget {
             ],
           ),
           Divider(),
-          orderProvider.orders == null
+          orderProvider.todayOrders == null
               ? CircularProgressIndicator()
-              : orderProvider.orders!.isEmpty
+              : orderProvider.todayOrders!.isEmpty
                   ? Text(
                       "No Orders",
                       style: GoogleFonts.dmSans(
@@ -49,7 +49,7 @@ class OrderPane extends StatelessWidget {
                   : Expanded(
                       child: ListView.builder(
                         padding: EdgeInsets.zero,
-                        itemCount: orderProvider.orders!.length,
+                        itemCount: orderProvider.todayOrders!.length,
                         itemBuilder: (context, index) {
                           return ListTile(
                             leading: Text("${index + 1}"),
@@ -64,14 +64,14 @@ class OrderPane extends StatelessWidget {
                                         children: [
                                           ListTile(
                                             title: Text(
-                                                "Order ID: ${orderProvider.orders![index].orderId}"),
+                                                "Order ID: ${orderProvider.todayOrders![index].orderId}"),
                                             trailing: Text(
-                                              "${orderProvider.orders![index].status ?? ""}",
+                                              "${orderProvider.todayOrders![index].status ?? ""}",
                                               style: GoogleFonts.dmSans(
                                                   fontSize:
                                                       sp.getFontSize(15, width),
                                                   color: orderProvider
-                                                              .orders![index]
+                                                              .todayOrders![index]
                                                               .status ==
                                                           "fulfilled"
                                                       ? Colors.green
@@ -85,7 +85,7 @@ class OrderPane extends StatelessWidget {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    "Customer: ${orderProvider.orders![index].customer}",
+                                                    "Customer: ${orderProvider.todayOrders![index].customer}",
                                                     style: GoogleFonts.dmSans(
                                                         fontSize:
                                                             sp.getFontSize(
@@ -96,7 +96,7 @@ class OrderPane extends StatelessWidget {
                                                         5, height, width),
                                                   ),
                                                   Text(
-                                                    "POS Location: ${orderProvider.orders![index].pos}",
+                                                    "POS Location: ${orderProvider.todayOrders![index].pos}",
                                                     style: GoogleFonts.dmSans(
                                                         fontSize:
                                                             sp.getFontSize(
@@ -126,11 +126,11 @@ class OrderPane extends StatelessWidget {
                                               Divider(),
                                               for (OrderItem item
                                                   in orderProvider
-                                                      .orders![index]
+                                                      .todayOrders![index]
                                                       .orderItems)
                                                 ListTile(
                                                   leading: Text(
-                                                      "${orderProvider.orders![index].orderItems.indexOf(item) + 1}"),
+                                                      "${orderProvider.todayOrders![index].orderItems.indexOf(item) + 1}"),
                                                   title: Text(
                                                       "${orderProvider.productLookup(item.productID, context).name}"),
                                                   subtitle: Text(
@@ -142,7 +142,7 @@ class OrderPane extends StatelessWidget {
                                               ListTile(
                                                 title: Text("Total"),
                                                 trailing: Text(
-                                                    "${LuminUtll.formatCurrency(orderProvider.orders![index].orderTotal)}"),
+                                                    "${LuminUtll.formatCurrency(orderProvider.todayOrders![index].orderTotal)}"),
                                               ),
                                             ],
                                           ),
@@ -152,7 +152,7 @@ class OrderPane extends StatelessWidget {
                                   });
                             },
                             title: Text(
-                              "${LuminUtll.formatCurrency(orderProvider.orders![index].orderTotal)}",
+                              "${LuminUtll.formatCurrency(orderProvider.todayOrders![index].orderTotal)}",
                               style: GoogleFonts.dmSans(
                                   fontSize: sp.getFontSize(15, width)),
                             ),

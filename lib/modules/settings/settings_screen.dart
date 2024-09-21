@@ -6,7 +6,6 @@ import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
 import 'package:lumin_business/modules/general_platform/header_widget.dart';
 import 'package:lumin_business/modules/settings/settings_provider.dart';
-import 'package:lumin_business/widgets/general_list_tile.dart';
 import 'package:provider/provider.dart';
 
 class SettingsScreen extends StatefulWidget {

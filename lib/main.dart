@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/accounting/accounting_provider.dart';
 import 'package:lumin_business/modules/customers/customer_provider.dart';
+import 'package:lumin_business/modules/dashboard/dashboard_provider.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
 import 'package:lumin_business/modules/general_platform/menu_controller.dart';
 import 'package:lumin_business/modules/inventory/inventory_provider.dart.dart';
@@ -35,6 +36,8 @@ Future<void> main() async {
         create: (context) => SettingsProvider()),
     ChangeNotifierProvider<AccountingProvider>(
         create: (context) => AccountingProvider()),
+    ChangeNotifierProvider<DashboardProvider>(
+        create: (context) => DashboardProvider()),
     ChangeNotifierProvider<LuminAuthProvider>(
         create: (context) => LuminAuthProvider()),
     ChangeNotifierProvider<SupplierProvider>(

@@ -1,5 +1,3 @@
-
-
 class OrderItem {
   String productID;
   int quantity;
@@ -34,6 +32,7 @@ class OrderItem {
 
 class LuminOrder {
   dynamic orderId;
+
   List<OrderItem> orderItems;
   String? status;
   String? pos;

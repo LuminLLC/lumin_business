@@ -33,7 +33,8 @@ List<LuminOrder> dummyOrders = [
 
 class OrderProvider with ChangeNotifier {
   final FirebaseFirestore _firestore = Config().firestoreEnv;
-  List<LuminOrder>? orders;
+  List<LuminOrder>? todayOrders;
+
   var uuid = Uuid();
   LuminOrder? openOrder;
   String? quantityError;
@@ -43,9 +44,35 @@ class OrderProvider with ChangeNotifier {
         .getProductWithID(id);
   }
 
-  Future<void> fetchOrders(String businessID) async {
-    if (orders == null) {
-      orders = [];
+  Future<Map<String, List<LuminOrder>>> fetchAllOrders(
+      String businessID) async {
+    Map<String, List<LuminOrder>> allOrders = {};
+    try {
+      final QuerySnapshot<Map<String, dynamic>> snapshot = await _firestore
+          .collection('businesses')
+          .doc(businessID)
+          .collection('orders')
+          .get();
+
+      if (snapshot.docs.isNotEmpty) {
+        for (QueryDocumentSnapshot<Map<String, dynamic>> element
+            in snapshot.docs) {
+          allOrders[element.id] = [];
+          for (var order in element.data().values) {
+            allOrders[element.id]!.add(LuminOrder.fromMap(order));
+          }
+        }
+      }
+     
+      return allOrders;
+    } on Exception catch (e) {
+      return allOrders;
+    }
+  }
+
+  Future<void> fetchTodaysOrders(String businessID) async {
+    if (todayOrders == null) {
+      todayOrders = [];
       String today = DateFormat('yyyy-MM-dd').format(DateTime.now());
       try {
         final DocumentSnapshot<Map<String, dynamic>> snapshot = await _firestore
@@ -59,7 +86,7 @@ class OrderProvider with ChangeNotifier {
           print(snapshot.data());
           for (Map<String, dynamic> element
               in snapshot.data()!.values.toList()) {
-            orders!.add(LuminOrder.fromMap(element));
+            todayOrders!.add(LuminOrder.fromMap(element));
           }
         }
       } on Exception catch (e) {
@@ -159,7 +186,7 @@ class OrderProvider with ChangeNotifier {
         DateTime.now().microsecondsSinceEpoch.toString(): openOrder!.toMap()
       });
     }
-    orders!.add(openOrder!);
+    todayOrders!.add(openOrder!);
     notifyListeners();
   }
 
