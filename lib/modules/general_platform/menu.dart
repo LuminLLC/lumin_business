@@ -141,9 +141,9 @@ class _MenuState extends State<Menu> {
     final double screenHeight = MediaQuery.of(context).size.height;
     return Consumer2<AppState, OrderProvider>(
         builder: (context, appState, orderProvider, _) {
-      if (appState.businessInfo != null) {
-        orderProvider.fetchTodaysOrders(appState.businessInfo!.businessId);
-      }
+      // if (appState.businessInfo != null) {
+      //   orderProvider.fetchTodaysOrders(appState.businessInfo!.businessId);
+      // }
       _getMenuItems(context, appState, screenWidth);
       return Container(
         color: AppColor.bgSideMenu,

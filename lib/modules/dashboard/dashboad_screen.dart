@@ -87,13 +87,17 @@ class _DashboadScreenState extends State<DashboadScreen> {
                 child: RowToColumn(
                   isDesktop: sp.isDesktop(screenWidth),
                   children: [
-                    Container(
-                      height: screenHeight * 0.8,
-                      width: sp.isDesktop(screenWidth)
-                          ? screenWidth / 2.5
-                          : screenWidth,
-                      child: Chart(),
-                    ), //LineChartSample1()),
+                    Consumer<AccountingProvider>(
+                      builder: (context, accountingProvider, _) => Container(
+                        height: screenHeight * 0.8,
+                        width: sp.isDesktop(screenWidth)
+                            ? screenWidth / 2.5
+                            : screenWidth,
+                        child: Chart(
+                          dataMap: accountingProvider.lastSevenDaysTransactions,
+                        ),
+                      ),
+                    ),
                     Container(
                       decoration: BoxDecoration(
                         color: AppColor.bgColor,
@@ -108,10 +112,9 @@ class _DashboadScreenState extends State<DashboadScreen> {
                       child: Column(
                         children: [
                           Text("Best selling product"),
-                             Text("Best selling product"),
+                          Text("Best selling product"),
                           Text("Most frequent customer"),
                           Text("Largest spend customer"),
-
                         ],
                       ),
                     )

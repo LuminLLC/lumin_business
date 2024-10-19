@@ -1,10 +1,22 @@
+import 'dart:math';
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 
 class Chart extends StatelessWidget {
+  final Map<String, double> dataMap;
+
   final SizeAndSpacing sp = SizeAndSpacing();
-  Chart();
+  Chart({required this.dataMap});
+
+  double getMaxValue(List<double> numbers) {
+    if (numbers.isEmpty) {
+      throw ArgumentError("The list is empty.");
+    }
+
+    return numbers.reduce((a, b) => a > b ? a : b);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +29,7 @@ class Chart extends StatelessWidget {
           barGroups: barGroups,
           gridData: const FlGridData(show: false),
           alignment: BarChartAlignment.spaceAround,
-          maxY: 20,
+          maxY: getMaxValue(dataMap.values.toList()) + 5,
         ),
       ),
     );
@@ -52,37 +64,10 @@ class Chart extends StatelessWidget {
       fontWeight: FontWeight.bold,
       fontSize: 12,
     );
-    String text;
-    switch (value.toInt()) {
-      case 0:
-        text = 'Jan';
-        break;
-      case 1:
-        text = 'Feb';
-        break;
-      case 2:
-        text = 'Mar';
-        break;
-      case 3:
-        text = 'Apr';
-        break;
-      case 4:
-        text = 'May';
-        break;
-      case 5:
-        text = 'Jun';
-        break;
-      case 6:
-        text = 'Jul';
-        break;
-      default:
-        text = '';
-        break;
-    }
     return SideTitleWidget(
       axisSide: meta.axisSide,
       space: 4,
-      child: Text(text, style: style),
+      child: Text(dataMap.keys.elementAt(value.toInt()), style: style),
     );
   }
 
@@ -119,81 +104,100 @@ class Chart extends StatelessWidget {
         end: Alignment.topCenter,
       );
 
-  List<BarChartGroupData> get barGroups => [
-        BarChartGroupData(
-          x: 0,
-          barRods: [
-            BarChartRodData(
-              toY: 8,
-              gradient: _barsGradient,
-            )
-          ],
-          showingTooltipIndicators: [0],
-        ),
-        BarChartGroupData(
-          x: 1,
-          barRods: [
-            BarChartRodData(
-              toY: 10,
-              gradient: _barsGradient,
-            )
-          ],
-          showingTooltipIndicators: [0],
-        ),
-        BarChartGroupData(
-          x: 2,
-          barRods: [
-            BarChartRodData(
-              toY: 14,
-              gradient: _barsGradient,
-            )
-          ],
-          showingTooltipIndicators: [0],
-        ),
-        BarChartGroupData(
-          x: 3,
-          barRods: [
-            BarChartRodData(
-              toY: 15,
-              gradient: _barsGradient,
-            )
-          ],
-          showingTooltipIndicators: [0],
-        ),
-        BarChartGroupData(
-          x: 4,
-          barRods: [
-            BarChartRodData(
-              toY: 13,
-              gradient: _barsGradient,
-            )
-          ],
-          showingTooltipIndicators: [0],
-        ),
-        BarChartGroupData(
-          x: 5,
-          barRods: [
-            BarChartRodData(
-              toY: 10,
-              gradient: _barsGradient,
-            )
-          ],
-          showingTooltipIndicators: [0],
-        ),
-        BarChartGroupData(
-          x: 6,
-          barRods: [
-            BarChartRodData(
-              toY: 16,
-              gradient: _barsGradient,
-            )
-          ],
-          showingTooltipIndicators: [0],
-        ),
-      ];
+  // List<BarChartGroupData> get barGroups => [
+  //       BarChartGroupData(
+  //         x: 0,
+  //         barRods: [
+  //           BarChartRodData(
+  //             toY: 8,
+  //             gradient: _barsGradient,
+  //           )
+  //         ],
+  //         showingTooltipIndicators: [0],
+  //       ),
+  //       BarChartGroupData(
+  //         x: 1,
+  //         barRods: [
+  //           BarChartRodData(
+  //             toY: 10,
+  //             gradient: _barsGradient,
+  //           )
+  //         ],
+  //         showingTooltipIndicators: [0],
+  //       ),
+  //       BarChartGroupData(
+  //         x: 2,
+  //         barRods: [
+  //           BarChartRodData(
+  //             toY: 14,
+  //             gradient: _barsGradient,
+  //           )
+  //         ],
+  //         showingTooltipIndicators: [0],
+  //       ),
+  //       BarChartGroupData(
+  //         x: 3,
+  //         barRods: [
+  //           BarChartRodData(
+  //             toY: 15,
+  //             gradient: _barsGradient,
+  //           )
+  //         ],
+  //         showingTooltipIndicators: [0],
+  //       ),
+  //       BarChartGroupData(
+  //         x: 4,
+  //         barRods: [
+  //           BarChartRodData(
+  //             toY: 13,
+  //             gradient: _barsGradient,
+  //           )
+  //         ],
+  //         showingTooltipIndicators: [0],
+  //       ),
+  //       BarChartGroupData(
+  //         x: 5,
+  //         barRods: [
+  //           BarChartRodData(
+  //             toY: 10,
+  //             gradient: _barsGradient,
+  //           )
+  //         ],
+  //         showingTooltipIndicators: [0],
+  //       ),
+  //       BarChartGroupData(
+  //         x: 6,
+  //         barRods: [
+  //           BarChartRodData(
+  //             toY: 16,
+  //             gradient: _barsGradient,
+  //           )
+  //         ],
+  //         showingTooltipIndicators: [0],
+  //       ),
+  //     ];
+
+  List<BarChartGroupData> get barGroups {
+    List<BarChartGroupData> barGroups = [];
+    dataMap.forEach((key, value) {
+      barGroups.add(BarChartGroupData(
+        x: dataMap.keys.toList().indexOf(key),
+        barRods: [
+          BarChartRodData(
+            toY: value,
+            gradient: _barsGradient,
+          )
+        ],
+        showingTooltipIndicators: [0],
+      ));
+    });
+    return barGroups;
+  }
 }
 
 class BarChartSample3 extends StatefulWidget {
+  final Map<String, double> dataMap;
+  BarChartSample3({required this.dataMap});
   @override
   State<StatefulWidget> createState() => BarChartSample3State();
 }
@@ -203,7 +207,9 @@ class BarChartSample3State extends State<BarChartSample3> {
   Widget build(BuildContext context) {
     return AspectRatio(
       aspectRatio: 1.6,
-      child: Chart(),
+      child: Chart(
+        dataMap: widget.dataMap,
+      ),
     );
   }
 }
