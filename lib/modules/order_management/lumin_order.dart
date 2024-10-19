@@ -79,11 +79,16 @@ class LuminOrder {
     return {
       "orderID": this.orderId,
       "pos": this.pos,
-      "customer": this.customer,
+      "customer": "this.customer",
       "orderDetails": [
         for (OrderItem item in this.orderItems) item.toMap(),
       ],
       "status": this.status,
     };
+  }
+
+  @override
+  String toString() {
+    return "Order ID: $orderId, Order Items: $orderItems, Status: $status, POS: $pos, Customer: $customer";
   }
 }

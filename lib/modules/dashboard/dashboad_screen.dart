@@ -1,10 +1,9 @@
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:lumin_business/common/app_colors.dart';
 import 'package:lumin_business/common/lumin_utll.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
+import 'package:lumin_business/custom_chart.dart';
 import 'package:lumin_business/modules/accounting/accounting_provider.dart';
-import 'package:lumin_business/modules/dashboard/chart.dart';
 import 'package:lumin_business/modules/dashboard/dashboard_provider.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
 import 'package:lumin_business/modules/general_platform/stat_card.dart';
@@ -89,14 +88,32 @@ class _DashboadScreenState extends State<DashboadScreen> {
                   isDesktop: sp.isDesktop(screenWidth),
                   children: [
                     Container(
-                        height: screenHeight * 0.8,
-                        width: sp.isDesktop(screenWidth)
-                            ? screenWidth / 2.5
-                            : screenWidth,
-                        child: LineChartSample1()),
+                      height: screenHeight * 0.8,
+                      width: sp.isDesktop(screenWidth)
+                          ? screenWidth / 2.5
+                          : screenWidth,
+                      child: Chart(),
+                    ), //LineChartSample1()),
                     Container(
-                      color: Colors.blue,
+                      decoration: BoxDecoration(
+                        color: AppColor.bgColor,
+                        borderRadius: BorderRadius.circular(30),
+                        shape: BoxShape.rectangle,
+                        border: Border.all(
+                          color: AppColor.blue,
+                          width: 1,
+                        ),
+                      ),
                       width: screenWidth / 2.5,
+                      child: Column(
+                        children: [
+                          Text("Best selling product"),
+                             Text("Best selling product"),
+                          Text("Most frequent customer"),
+                          Text("Largest spend customer"),
+
+                        ],
+                      ),
                     )
                   ],
                 ),

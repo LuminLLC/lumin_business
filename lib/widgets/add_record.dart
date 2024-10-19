@@ -434,7 +434,9 @@ class _AddRecordState<T extends ChangeNotifier> extends State<AddRecord<T>> {
         onTap: () async {
           await showCalendarDatePicker2Dialog(
             context: context,
-            config: CalendarDatePicker2WithActionButtonsConfig(),
+            config: CalendarDatePicker2WithActionButtonsConfig(
+             lastDate: DateTime.now()
+            ),
             dialogSize: const Size(325, 400),
             value: date,
             borderRadius: BorderRadius.circular(15),

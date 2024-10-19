@@ -44,7 +44,7 @@ class CSVModule {
     uploadInput.onChange.listen((event) async {
       final file = uploadInput.files?.first;
       if (file != null) {
-        print("object");
+      
         final reader = FileReader();
         reader.readAsText(file);
         reader.onLoadEnd.listen((event) {

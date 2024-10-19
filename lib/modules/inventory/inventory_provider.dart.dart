@@ -109,9 +109,9 @@ class InventoryProvider with ChangeNotifier {
   File? photo;
   Map<ProductModel, int> openOrder = {};
   String? quantityError;
-  bool isProductFetched = true;
-  List<ProductModel> allProdcuts =  dummyProductData;
-  List<ProductCategory> categories =  dummyCategories; 
+  bool isProductFetched = false;
+  List<ProductModel> allProdcuts = []; //dummyProductData;
+  List<ProductCategory> categories = []; // dummyCategories;
   List<String> productHeaders = [
     "ID",
     "Name",
@@ -140,7 +140,7 @@ class InventoryProvider with ChangeNotifier {
     }
   }
 
-   ProductModel  getProductWithID (String id){
+  ProductModel getProductWithID(String id) {
     return allProdcuts.firstWhere((element) => element.id == id);
   }
 

@@ -16,7 +16,6 @@ import 'package:lumin_business/modules/login/uplaod_data.dart';
 import 'package:lumin_business/modules/order_management/order_controller.dart';
 import 'package:lumin_business/modules/settings/settings_provider.dart';
 import 'package:lumin_business/modules/suppliers/supplier_provider.dart';
-import 'package:lumin_business/services/connectivity_provider.dart';
 import 'package:provider/provider.dart';
 import 'modules/general_platform/home_page.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -31,7 +30,6 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(MultiProvider(providers: [
-    Provider<ConnectivityProvider>(create: (_) => ConnectivityProvider()),
     ChangeNotifierProvider<SettingsProvider>(
         create: (context) => SettingsProvider()),
     ChangeNotifierProvider<AccountingProvider>(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
-import 'package:lumin_business/modules/inventory/product_model.dart'; 
+import 'package:lumin_business/modules/inventory/product_model.dart';
 import 'package:lumin_business/modules/order_management/order_controller.dart';
 
 class SetOrderQuantity extends StatefulWidget {
@@ -46,7 +46,9 @@ class _SetOrderQuantityState extends State<SetOrderQuantity> {
             Text(
               "Quantity: ${widget.product.quantity}",
               style: TextStyle(
-                  color: Colors.red, fontSize: sp.getFontSize(14, width)),
+                  color:
+                      widget.product.quantity < 10 ? Colors.red : Colors.green,
+                  fontSize: sp.getFontSize(14, width)),
             ),
           ],
         ),

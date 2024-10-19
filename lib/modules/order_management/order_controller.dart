@@ -63,9 +63,9 @@ class OrderProvider with ChangeNotifier {
           }
         }
       }
-     
+
       return allOrders;
-    } on Exception catch (e) {
+    } on Exception {
       return allOrders;
     }
   }
@@ -159,33 +159,38 @@ class OrderProvider with ChangeNotifier {
 
   Future<void> addOrderToHistory(String businessID) async {
     String todayDateString = DateFormat('yyyy-MM-dd').format(DateTime.now());
-    final DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
-        await _firestore
+    try {
+      final DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
+          await _firestore
+              .collection("businesses")
+              .doc(businessID)
+              .collection("orders")
+              .doc(todayDateString)
+              .get();
+
+      if (documentSnapshot.exists) {
+        _firestore
             .collection("businesses")
             .doc(businessID)
             .collection("orders")
             .doc(todayDateString)
-            .get();
-
-    if (documentSnapshot.exists) {
-      _firestore
-          .collection("businesses")
-          .doc(businessID)
-          .collection("orders")
-          .doc(todayDateString)
-          .update({
-        DateTime.now().microsecondsSinceEpoch.toString(): openOrder!.toMap()
-      });
-    } else {
-      _firestore
-          .collection("businesses")
-          .doc(businessID)
-          .collection("orders")
-          .doc(todayDateString)
-          .set({
-        DateTime.now().microsecondsSinceEpoch.toString(): openOrder!.toMap()
-      });
+            .update({
+          DateTime.now().microsecondsSinceEpoch.toString(): openOrder!.toMap()
+        });
+      } else {
+        _firestore
+            .collection("businesses")
+            .doc(businessID)
+            .collection("orders")
+            .doc(todayDateString)
+            .set({
+          DateTime.now().microsecondsSinceEpoch.toString(): openOrder!.toMap()
+        });
+      }
+    } catch (e) {
+      print(e);
     }
+    print(openOrder!.toMap());
     todayOrders!.add(openOrder!);
     notifyListeners();
   }

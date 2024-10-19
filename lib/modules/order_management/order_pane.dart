@@ -17,10 +17,6 @@ class OrderPane extends StatelessWidget {
     final double width = MediaQuery.of(context).size.width;
     return Consumer2<OrderProvider, AppState>(
         builder: (context, orderProvider, appState, _) {
-      if (appState.businessInfo != null) {
-        orderProvider.fetchTodaysOrders(appState.businessInfo!.businessId);
-      }
-
       return Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -56,7 +52,7 @@ class OrderPane extends StatelessWidget {
                             onTap: () {
                               showDialog(
                                   context: context,
-                                  builder: (context) { 
+                                  builder: (context) {
                                     return AlertDialog(
                                       title: Column(
                                         crossAxisAlignment:
@@ -71,7 +67,8 @@ class OrderPane extends StatelessWidget {
                                                   fontSize:
                                                       sp.getFontSize(15, width),
                                                   color: orderProvider
-                                                              .todayOrders![index]
+                                                              .todayOrders![
+                                                                  index]
                                                               .status ==
                                                           "fulfilled"
                                                       ? Colors.green
@@ -138,7 +135,7 @@ class OrderPane extends StatelessWidget {
                                                   trailing: Text(
                                                       "${LuminUtll.formatCurrency(item.itemTotal)}"),
                                                 ),
-                                              Divider(), 
+                                              Divider(),
                                               ListTile(
                                                 title: Text("Total"),
                                                 trailing: Text(

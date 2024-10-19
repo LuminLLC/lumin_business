@@ -5,6 +5,7 @@ import 'package:lumin_business/common/app_text_theme.dart';
 import 'package:lumin_business/common/size_and_spacing.dart';
 import 'package:lumin_business/modules/general_platform/app_state.dart';
 import 'package:lumin_business/modules/general_platform/menu_controller.dart';
+import 'package:lumin_business/modules/order_management/order_controller.dart';
 import 'package:lumin_business/modules/order_management/order_pane.dart';
 
 import 'package:provider/provider.dart';
@@ -138,7 +139,11 @@ class _MenuState extends State<Menu> {
     Provider.of<AppState>(context, listen: false).fetchUser(context);
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
-    return Consumer<AppState>(builder: (context, appState, _) {
+    return Consumer2<AppState, OrderProvider>(
+        builder: (context, appState, orderProvider, _) {
+      if (appState.businessInfo != null) {
+        orderProvider.fetchTodaysOrders(appState.businessInfo!.businessId);
+      }
       _getMenuItems(context, appState, screenWidth);
       return Container(
         color: AppColor.bgSideMenu,
@@ -217,7 +222,7 @@ class _MenuState extends State<Menu> {
               Container(
                   margin: EdgeInsets.only(
                     left: sp.getWidth(10, screenWidth),
-                  ),    
+                  ),
                   width: !sp.isDesktop(screenWidth) ? screenWidth / 1.5 : null,
                   height: screenHeight * 0.6,
                   child: OrderPane()),
